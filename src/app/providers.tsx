@@ -1,0 +1,33 @@
+"use client";
+
+import { WagmiConfig, createConfig } from "wagmi";
+import { bsc } from "viem/chains";
+import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { ThemeProvider } from "next-themes";
+
+const chains = [bsc];
+const projectId = "c4e75039af63deadc1923378815c5bec";
+
+const metadata = {
+  appName: "Vintage&Rare NFT",
+  appDescription:
+    "Vintage&Rare NFT is allows you to create an NFT of your musical instruments and accesories.",
+};
+
+const wagmiConfig = createConfig(
+  getDefaultConfig({
+    chains,
+    walletConnectProjectId: projectId,
+    ...metadata,
+  })
+);
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider attribute="class">
+      <WagmiConfig config={wagmiConfig}>
+        <ConnectKitProvider>{children}</ConnectKitProvider>
+      </WagmiConfig>
+    </ThemeProvider>
+  );
+}
