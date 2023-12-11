@@ -15,6 +15,7 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'cool': 'url("/Graphics/Home Page - 4 Categories/Background/v01_wave-09 copy.jpg")',
         'homesquare': 'url("/Graphics/Home Page - 4 Categories/Background/col.png")',
+        "home": 'url("/background/bg-home-1.png")',
         
       },
     },
@@ -22,6 +23,7 @@ const config: Config = {
   plugins: [require("daisyui")],
   daisyui: {
     base: false,
+    themes:[],
   }
 }
 export default config

@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="">
+    <html lang="en" className="dark:bg-[#191820]">
+      <body className="dark:bg-home bg-home bg-cover">
         <Providers>
           <Header />
           <main className="flex-grow">{children}</main>
