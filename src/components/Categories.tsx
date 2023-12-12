@@ -53,9 +53,9 @@ function Category(props: {
       <Image
         src={bg}
         alt="background image"
-        width={380}
-        height={200}
-        className="pointer-events-none"
+        width={400}
+        height={100}
+        className="absolute top-0 pointer-events-none"
       />
       <div className="absolute top-0 left-[calc(50%-60px)] z-10">
         <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
