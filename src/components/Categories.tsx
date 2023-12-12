@@ -12,7 +12,7 @@ export default function Categories() {
             </p>
             <div className='container flex flex-row flex-nowrap items-center justify-between px-8 pt-4 pb-8 h-52 '>
 
-                <Link href={""} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-4 bg-cover text-center content-center align-bottom border-2 border-gray-600 mx-4 h-40 '>
+                <Link href={"/create/acoustic-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-4 bg-cover text-center content-center align-bottom border-2 border-gray-600 mx-4 h-40 '>
                     <div className='flex flex-2 h-36 justify-center '>
                         <Image
                             src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
@@ -27,7 +27,7 @@ export default function Categories() {
                         <p className='font-semibold text-xl '>Acoustic</p>
                     </div>
                 </Link>
-                <Link href={""} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
+                <Link href={"/create/electric bass"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center'>
                         <Image
                             src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
@@ -41,7 +41,7 @@ export default function Categories() {
                         <p className='font-semibold text-xl '>Electric Bass</p>
                     </div>
                 </Link>
-                <Link href={""} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-2 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
+                <Link href={"/create/electric-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-2 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center'>
                         <Image
                             src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
@@ -55,7 +55,7 @@ export default function Categories() {
                         <p className='font-semibold text-xl '>Electric Guitar</p>
                     </div>
                 </Link>
-                <Link href={""} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-1 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
+                <Link href={"/create/amps-effects"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-1 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center '>
                         <Image
                             src={"/Graphics/Home Page - 4 Categories/Icons/Amps.png"}
