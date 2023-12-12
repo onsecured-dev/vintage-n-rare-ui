@@ -27,7 +27,7 @@ export default function Categories() {
                         <p className='font-semibold text-xl '>Acoustic</p>
                     </div>
                 </Link>
-                <Link href={"/create/electric bass"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
+                <Link href={"/create/electric-bass"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center'>
                         <Image
                             src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
