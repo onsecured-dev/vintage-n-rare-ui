@@ -1,12 +1,11 @@
 import Image from "next/image";
-import Header from "@/components/Header";
 import Categories from "@/components/Categories";
 import thumbnail from "@/../public/Graphics/thumbnail.jpeg";
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 ">
-      <div className="z-10 max-w-7xl w-full items-stretch justify-between font-mono text-sm lg:flex columns-2">
-        <div className=" w-6/12 max-h-max items-start">
+    <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24 ">
+      <div className="z-10 max-w-7xl w-full items-start justify-between font-mono text-sm flex md:flex-row flex-col">
+        <div className=" md:w-6/12 max-h-max items-start">
           <p className="text-6xl font-bold">
             Define, Collect and Sell Super Rare NFT
           </p>
