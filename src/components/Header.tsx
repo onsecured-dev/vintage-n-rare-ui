@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ConnectKitButton } from "@/components/wrapper/ConnectKitButton";
 import ThemeToggle from "./layout/ThemeToggle";
-import { FaChevronDown } from "react-icons/fa";
 import MenuNavLink from "./layout/MenuNavLink";
 
 const logoPath = "/Graphics/Menu Bar LOGO/V_R Logo.png";
