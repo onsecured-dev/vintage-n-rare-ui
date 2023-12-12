@@ -12,8 +12,8 @@ const logoPath = '/Graphics/Favicon logo/Asset 1.png'
 
 const Footer = () => {
   return (
-    <footer className="mt-12 bg-dark pt-8">
-      <nav className="flex w-full flex-col items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
+    <footer className="mt-12 bg-dark pt-8 items-center ">
+      <nav className="flex max-w-screen-2xl flex-col items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
         <div className="pb-4">
           <Link href="/">
             <Image

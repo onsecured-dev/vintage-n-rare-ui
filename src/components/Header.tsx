@@ -12,7 +12,12 @@ const Header = () => {
   const setIsOpen = (val: any) => true;
 
   return (
-    <header className="flex w-full flex-row items-center justify-between px-8 pt-4 pb-8">
+    <header className="flex flex-row self-center max-w-7xl items-center  md:mx-auto md:flex-row">
+      {/* <div className="flex flex-row flex-nowrap justify-between px-8 pt-4 pb-8">
+
+      </div> */}
+      {/* max-w-screen-2xl */}
+
       {/* <div className="container "
       ><Image
       src={logoPath}
@@ -24,7 +29,7 @@ const Header = () => {
     </div> */}
 
       {/* <div className="hidden flex-row items-center gap-x-4 md:flex"> */}
-      <nav className="flex flex-grow flex-row items-center  gap-x-8">
+      <nav className="flex  flex-1 flex-grow flex-row items-center gap-x-8 py-2  md:mx-auto md:flex-row">
         <Link href="/">
           <Image
             src={logoPath}
@@ -60,7 +65,7 @@ const Header = () => {
           </div>
         </p> */}
         <div className="group relative w-20 inline-block z-50">
-          <button className="text-white font-semibold py-2 px-4 w-20  rounded-md hover:text-blue-600 lg:w-auto">
+          <button className="text-lg font-semibold py-2 px-4 w-20  rounded-md hover:text-blue-600 lg:w-auto">
             Create
           </button>
           <div className="hidden group-hover:block absolute z-10 bg-gray-800 p-2 mt-4 space-y-2 left-0 rounded-md">
@@ -75,7 +80,7 @@ const Header = () => {
 
         <Link
           href="/amps"
-          className="w-20 text-center text-lg font-semibold hover:text-blue-600 lg:w-auto"
+          className="w-20 text-center text-lg font-semibold hover:text-blue-600 lg:w-auto "
         >
           Explore
         </Link>
@@ -87,7 +92,7 @@ const Header = () => {
         {/* </div> */}
       </nav>
 
-      <nav className="flex flex-grow flex-row items-end justify-end gap-x-4">
+      <nav className="flex  flex-1 flex-grow flex-row items-end justify-end gap-x-4 ">
         <div className="hidden flex-row items-center gap-x-8 md:flex">
           <div>
             <ConnectKitButton />
