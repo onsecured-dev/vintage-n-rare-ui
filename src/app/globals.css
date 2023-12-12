@@ -27,3 +27,8 @@
       transform: translateX(10%); 
     }
   }
+@layer base{
+  body{
+    @apply bg-white dark:bg-[#191820];
+  }
+}

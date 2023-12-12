@@ -23,6 +23,12 @@ const config: Config = {
         "swave": 'url("/Graphics/Home Page -  2 floating Icons/Sound Waves.png")',
         
       },
+      colors:{
+        "action-bg": "#1F1F2C",
+        "primary-border": "#E5E5E5",
+        "primary-border-dark": "#28303F",
+        "primary-text": "#3749E9"
+      }
     },
   },
   plugins: [require("daisyui")],
