@@ -7,9 +7,6 @@ import MenuNavLink from "./layout/MenuNavLink";
 const logoPath = "/Graphics/Menu Bar LOGO/V_R Logo.png";
 
 const Header = () => {
-  // const [isOpen, setIsOpen] = useState(false)
-  const setIsOpen = (val: any) => true;
-
   return (
     <header className="flex w-full flex-row justify-between px-8 pt-4 pb-8 self-center max-w-7xl items-center  md:mx-auto md:flex-row">
       <nav className="flex flex-1 flex-grow flex-row items-center  gap-x-8 py-2 md:mx-auto md:flex-row">
@@ -40,13 +37,11 @@ const Header = () => {
         />
 
         <Link
-          href="/amps"
+          href="/explore"
           className="w-20 text-center text-lg font-semibold hover:text-blue-600 lg:w-auto "
         >
           Explore
         </Link>
-
-        {/* </div> */}
       </nav>
 
       <nav className="flex  flex-1 flex-grow flex-row items-end justify-end gap-x-4 ">
