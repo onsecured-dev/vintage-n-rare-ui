@@ -5,15 +5,15 @@ import { GrInstagram } from "react-icons/gr";
 import { RiMessengerFill } from "react-icons/ri";
 import { FaTelegramPlane } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
-import { TiSocialYoutubeCircular, TiSocialTwitter, TiSocialYoutube  } from "react-icons/ti";
+import { TiSocialYoutubeCircular, TiSocialTwitter, TiSocialYoutube } from "react-icons/ti";
 import { SlSocialInstagram } from "react-icons/sl";
 
 const logoPath = '/Graphics/Favicon logo/Asset 1.png'
 
 const Footer = () => {
   return (
-    <footer className="mt-12 bg-dark pt-8">
-      <nav className="flex w-full flex-col items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
+    <footer className="mt-12 bg-dark pt-8 items-center ">
+      <nav className="flex max-w-screen-2xl flex-col items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
         <div className="pb-4">
           <Link href="/">
             <Image
@@ -21,23 +21,24 @@ const Footer = () => {
               alt="Logo"
               width={602 / 5}
               height={173 / 5}
+              className=" invert dark:invert-0"
             />
             {/* Vintage and Rare the Musical */}
           </Link>
           <div className="mt-2 flex flex-row justify-between my-4 mx-2">
-            
-            
-            <TiSocialYoutubeCircular style={{marginHorizontal:'6px'}} size={'1.75em'} />
-            <TiSocialTwitter style={{marginHorizontal:'6px'}} size={'1.75em'}/>
-            <TiSocialYoutube  style={{marginHorizontal:'6px'}} size={'1.75em'}/>
-            <SlSocialInstagram style={{marginHorizontal:'6px'}} size={'1.75em'} />
+
+
+            <TiSocialYoutubeCircular style={{ marginHorizontal: '6px' }} size={'1.75em'} />
+            <TiSocialTwitter style={{ marginHorizontal: '6px' }} size={'1.75em'} />
+            <TiSocialYoutube style={{ marginHorizontal: '6px' }} size={'1.75em'} />
+            <SlSocialInstagram style={{ marginHorizontal: '6px' }} size={'1.75em'} />
           </div>
         </div>
         <div>
           <p className="text-white-900 my-1 hidden text-center text-lg font-semibold md:block md:text-left">
             Vintage and Rare
           </p>
-          
+
           <Link
             href="https://vintageandrare.com/"
             className="my-4 block text-center font-light hover:underline md:text-left"
@@ -116,11 +117,11 @@ const Footer = () => {
             Subscribe to us
           </p>
           <p className="mt-2 hidden whitespace-pre md:block">
-            
-            
+
+
             Subscribe to our newsletter to get the latest news
           </p>
-          <input className="enabled:hover:border-gray-800 disabled:opacity-75 rounded-full my-2 mx-2 py-2 px-2 text-black block " />
+          <input className="enabled:hover:border-gray-800 disabled:opacity-75 rounded-full my-2 mx-2 py-2 px-2 text-black block invert dark:invert-0" />
 
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>

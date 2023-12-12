@@ -2,3 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+.box-sway {
+    /* width: 50px;
+    height: 50px; */
+    /* background-color: blue; */
+    animation: sway 8s infinite alternate ease-in-out; 
+  }
+  
+  @keyframes sway {
+    to {
+      transform: translateX(10%); 
+    }
+  }
+
+.minibox-sway {
+    width: 50px;
+    height: 50px;
+    /* background-color: blue; */
+    animation: sway 8s infinite alternate ease-in-out; 
+  }
+  
+  @keyframes sway {
+    to {
+      transform: translateX(10%); 
+    }
+  }
