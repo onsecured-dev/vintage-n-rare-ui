@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ConnectKitButton } from "@/components/wrapper/ConnectKitButton";
 import ThemeToggle from "./layout/ThemeToggle";
+import { FaChevronDown } from "react-icons/fa";
+import MenuNavLink from "./layout/MenuNavLink";
 
 const logoPath = "/Graphics/Menu Bar LOGO/V_R Logo.png";
 
@@ -28,37 +30,15 @@ const Header = () => {
         >
           Home
         </Link>
-        <div className="group relative w-20 inline-block z-50">
-          <button className="text-lg font-semibold py-2 px-4 w-20  rounded-md hover:text-blue-600 lg:w-auto">
-            Create
-          </button>
-          <div className="hidden group-hover:block absolute z-10 bg-gray-800 p-2 mt-4 space-y-2 left-0 rounded-md">
-            <Link
-              href="#"
-              className="w-max block px-4 py-2 text-white hover:bg-blue-950 border-b-2 border-gray-600"
-            >
-              Acoustic Guitars
-            </Link>
-            <Link
-              href="#"
-              className="block px-4 py-2 text-white hover:bg-blue-950 border-b-2 border-gray-600"
-            >
-              Electric Bass
-            </Link>
-            <Link
-              href="#"
-              className="block px-4 py-2 text-white hover:bg-blue-950 border-b-2 border-gray-600"
-            >
-              Electric Guitar
-            </Link>
-            <Link
-              href="#"
-              className="block px-4 py-2 text-white hover:bg-blue-950 border-b-2 border-gray-600"
-            >
-              Amps & Effects
-            </Link>
-          </div>
-        </div>
+        <MenuNavLink
+          title="Create"
+          links={[
+            { href: "/create/acoustic-guitar", name: "Acoustic Guitars" },
+            { href: "/create/electric-bass", name: "Electric Bass" },
+            { href: "/create/electric-guitar", name: "Electric Guitar" },
+            { href: "/create/amps-effects", name: "Amps & Effects" },
+          ]}
+        />
 
         <Link
           href="/amps"
