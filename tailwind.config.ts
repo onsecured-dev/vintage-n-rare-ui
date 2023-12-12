@@ -19,6 +19,8 @@ const config: Config = {
         'cool-4': 'url("/Graphics/Home Page - 4 Categories/Background/v01_wave-16.jpg")',
         'homesquare': 'url("/Graphics/Home Page - 4 Categories/Background/col.png")',
         "home": 'url("/background/bg-home-1.png")',
+        "mnote": 'url("/Graphics/Home Page -  2 floating Icons/Music Notes.png")',
+        "swave": 'url("/Graphics/Home Page -  2 floating Icons/Sound Waves.png")',
         
       },
     },
