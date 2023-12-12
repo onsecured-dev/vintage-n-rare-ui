@@ -15,7 +15,7 @@ export default function Categories() {
                 <Link href={"/create/acoustic-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-4 bg-cover text-center content-center align-bottom border-2 border-gray-600 mx-4 h-40 '>
                     <div className='flex flex-2 h-36 justify-center '>
                         <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
+                            src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
                             alt="Logo"
                             width={602 / 5}
                             height={173 / 5}
@@ -30,7 +30,7 @@ export default function Categories() {
                 <Link href={"/create/electric-bass"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center'>
                         <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
+                            src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
                             alt="Logo"
                             width={602 / 5}
                             height={173 / 5}
@@ -44,7 +44,7 @@ export default function Categories() {
                 <Link href={"/create/electric-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-2 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
                     <div className='flex flex-2 h-36 justify-center'>
                         <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
+                            src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
                             alt="Logo"
                             width={602 / 5}
                             height={173 / 5}
