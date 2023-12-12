@@ -1,87 +1,64 @@
-import Image from 'next/image'
-import Header from '@/components/Header'
-import Link from 'next/link'
+import classNames from "classnames";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Categories() {
-    return (
-        <div className='container flex flex-col flex-nowrap items-start justify-between px-8 pt-4 pb-8 max-h-56 '>
-
-
-            <p className="text-3xl font-bold ml-12">
-                Categories
-            </p>
-            <div className='container flex flex-row flex-nowrap items-center justify-between px-8 pt-4 pb-8 h-52 '>
-
-                <Link href={"/create/acoustic-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-4 bg-cover text-center content-center align-bottom border-2 border-gray-600 mx-4 h-40 '>
-                    <div className='flex flex-2 h-36 justify-center '>
-                        <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
-                            alt="Logo"
-                            width={602 / 5}
-                            height={173 / 5}
-                        // style={{ alignSelf: 'center', borderWidth: 2, borderColor: 'purple' }}
-                        // className=" self-center"
-                        />
-                    </div>
-                    <div className='text-center bg-gray-800 opacity-75 rounded-b-3xl'>
-                        <p className='font-semibold text-xl '>Acoustic</p>
-                    </div>
-                </Link>
-                <Link href={"/create/electric-bass"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-3 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
-                    <div className='flex flex-2 h-36 justify-center'>
-                        <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Guitar.png"}
-                            alt="Logo"
-                            width={602 / 5}
-                            height={173 / 5}
-                        // className=" invert dark:invert-0"
-                        />
-                    </div>
-                    <div className='text-center bg-gray-800 opacity-75 rounded-b-3xl'>
-                        <p className='font-semibold text-xl '>Electric Bass</p>
-                    </div>
-                </Link>
-                <Link href={"/create/electric-guitar"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-2 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
-                    <div className='flex flex-2 h-36 justify-center'>
-                        <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Bass.png"}
-                            alt="Logo"
-                            width={602 / 5}
-                            height={173 / 5}
-                        // className=" invert dark:invert-0"
-                        />
-                    </div>
-                    <div className='text-center bg-gray-800 opacity-75 rounded-b-3xl'>
-                        <p className='font-semibold text-xl '>Electric Guitar</p>
-                    </div>
-                </Link>
-                <Link href={"/create/amps-effects"} className='rounded-3xl flex-1 flex flex-col flex-nowrap bg-cool-1 bg-cover text-center mx-4 h-40 border-2 border-gray-600 '>
-                    <div className='flex flex-2 h-36 justify-center '>
-                        <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Amps.png"}
-                            alt="Logo"
-                            width={602 / 5}
-                            height={173 / 5}
-                        // style={{ alignSelf: 'center', borderWidth: 2, borderColor: 'green' }}
-                        // className=" invert dark:invert-0"
-                        />
-                        <Image
-                            src={"/Graphics/Home Page - 4 Categories/Icons/Effects.png"}
-                            alt="Logo"
-                            width={602 / 5}
-                            height={173 / 5}
-                        // style={{ alignSelf: 'center', borderWidth: 2, borderColor: 'purple' }}
-                        // className=" invert dark:invert-0"
-                        />
-                    </div>
-                    <div className='text-center bg-gray-800 opacity-75 rounded-b-3xl'>
-                        <p className='font-semibold text-xl '>Amps & Effects</p>
-                    </div>
-                </Link>
-            </div>
-
-        </div>
-
-    )
+  return (
+    <div className="container flex flex-col flex-nowrap items-start justify-between px-8 pt-4 pb-8 max-h-56 ">
+      <p className="text-3xl font-bold ml-12">Categories</p>
+      <div className="container flex flex-row flex-nowrap items-center justify-between px-8 pt-4 pb-8 h-52 ">
+        <Category
+          name="Acoustic Guitar"
+          icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
+          href="/create/acoustic-guitar"
+          bg="bg-cool-4"
+        />
+        <Category
+          name="Electric Bass"
+          icon="/Graphics/Home Page - 4 Categories/Icons/Guitar.png"
+          href="/create/electric-bass"
+          bg="bg-cool-2"
+        />
+        <Category
+          name="Electric Guitar"
+          icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
+          href="/create/electric-guitar"
+          bg="bg-cool-3"
+        />
+        <Category
+          name="Amps & Effects"
+          icon="/Graphics/Home Page - 4 Categories/Icons/Amps.png"
+          href="/create/amps-effects"
+          bg="bg-cool-1"
+        />
+      </div>
+    </div>
+  );
 }
 
+function Category(props: {
+  name: string;
+  icon: string;
+  href: string;
+  bg: string;
+}) {
+  const { name, icon, href, bg } = props;
+  return (
+    <Link
+      href={href}
+      className={classNames(
+        "relative group rounded-3xl flex-1 flex flex-col bg-cover justify-end border-2 border-gray-600 mx-4 h-40 overflow-clip",
+        bg
+      )}
+    >
+      <div className="absolute top-0 left-[calc(50%-60px)] z-10">
+        <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
+      </div>
+      <div className="bg-gray-800/20 py-2 group-hover:bg-gray-800/70 group-hover:py-10 transition-all duration-300 z-20">
+        <p className="font-semibold text-xl text-white text-center transition-all duration-300">
+          {name}
+        </p>
+      </div>
+    </Link>
+  );
+}
