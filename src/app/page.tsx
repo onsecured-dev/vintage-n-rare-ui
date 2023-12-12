@@ -21,12 +21,15 @@ export default function Home() {
             <button className="inline-flex w-12 text-center text-lg rounded-xl  border-4 px-8 py-2 my-2 mx-1 border-white font-semibold text-white shadow-sm  hover:bg-blue-600 lg:w-auto">Create</button>
           </div>
         </div>
-        <div className='border-2 px-6 border-white w-5/12 max-h-fit py-6  items-end rounded-xl bg-homesquare bg-cover'>
-          {/* <div className='border-2 border-white'>
-            <p>hola lol</p>
-          </div> */}
+        <div className='border-8 border-white w-5/12 max-h-fit py-6 px-6 items-end rounded-xl bg-cool-3 bg-cover box-sway'>
+          {/* <div className='rounded-xl border-8 bg-cool-3 bg-cover'>
 
-          {/* <p>col 2</p> */}
+          </div> */}
+        </div>
+        <div className='border-8 border-white w-5/12 max-h-fit py-6 mt-6 px-6 items-end rounded-xl bg-cool-3 bg-cover minibox-sway'>
+          {/* <div className='rounded-xl border-8 bg-cool-3 bg-cover'>
+
+          </div> */}
         </div>
       </div>
       <Categories />
