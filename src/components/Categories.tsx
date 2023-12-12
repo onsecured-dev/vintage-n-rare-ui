@@ -11,25 +11,25 @@ export default function Categories() {
           name="Acoustic Guitar"
           icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/acoustic-guitar"
-          bg="bg-cool-4"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-09 copy.jpg"
         />
         <Category
           name="Electric Bass"
           icon="/Graphics/Home Page - 4 Categories/Icons/Guitar.png"
           href="/create/electric-bass"
-          bg="bg-cool-2"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-10 copy.jpg"
         />
         <Category
           name="Electric Guitar"
           icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/electric-guitar"
-          bg="bg-cool-3"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-14 copy.jpg"
         />
         <Category
           name="Amps & Effects"
           icon="/Graphics/Home Page - 4 Categories/Icons/Amps.png"
           href="/create/amps-effects"
-          bg="bg-cool-1"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-16.jpg"
         />
       </div>
     </div>
@@ -47,10 +47,16 @@ function Category(props: {
     <Link
       href={href}
       className={classNames(
-        "relative group rounded-3xl flex-1 flex flex-col bg-cover justify-end border-2 border-gray-600 mx-4 h-40 overflow-clip",
-        bg
+        "relative group rounded-3xl flex-1 flex flex-col bg-cover justify-end border-2 border-gray-600 mx-4 h-40 overflow-clip"
       )}
     >
+      <Image
+        src={bg}
+        alt="background image"
+        width={380}
+        height={200}
+        className="pointer-events-none"
+      />
       <div className="absolute top-0 left-[calc(50%-60px)] z-10">
         <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
       </div>
