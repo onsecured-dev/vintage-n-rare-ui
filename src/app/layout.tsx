@@ -18,14 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark:bg-[#191820]">
-      <body className="dark:bg-home bg-home bg-cover">
-        <Providers>
+    <html lang="en">
+      <Providers>
+        <body className="dark:bg-home bg-home bg-cover">
           <Header />
           <main className="flex-grow">{children}</main>
           <Footer />
-        </Providers>
-      </body>
+        </body>
+      </Providers>
     </html>
   );
 }
