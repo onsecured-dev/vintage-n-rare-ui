@@ -1,13 +1,15 @@
 import Image from "next/image";
 import Categories from "@/components/Categories";
 import thumbnail from "@/../public/Graphics/thumbnail.jpeg";
+import classNames from "classnames";
+import { type Metadata } from "next";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24 ">
-      <div className="z-10 max-w-7xl w-full items-start justify-between font-mono text-sm flex md:flex-row flex-col">
+      <div className="z-10 max-w-7xl w-full items-start justify-between text-sm flex md:flex-row flex-col">
         <div className=" md:w-6/12 max-h-max items-start">
           <p className="text-6xl font-bold">
-            Define, Collect and Sell Super Rare NFT
+            Create your Instrument&apos;s Certificate of Authenticity
           </p>
           <p className="text-lg my-8">
             Our mission is to establish and develop the ultimate
@@ -16,10 +18,22 @@ export default function Home() {
             for dedicated builders of fine instruments.
           </p>
           <div className="flex-row items-start justify-between my-8">
-            <button className="inline-flex bg-blue-800 w-12 text-center text-lg rounded-xl border-4 border-white px-8 py-2 my-2 mx-1 font-semibold text-white shadow-sm  hover:bg-transparent lg:w-auto">
+            <button
+              className={classNames(
+                "bg-primary-text hover:border-white hover:bg-transparent border-primary-text",
+                "text-white hover:text-primary-text dark:hover:text-white",
+                "w-[150px] text-center rounded-xl border-2 font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
+              )}
+            >
               Explore now
             </button>
-            <button className="inline-flex w-12 text-center text-lg rounded-xl  border-4 px-8 py-2 my-2 mx-1 border-white font-semibold text-white shadow-sm  hover:bg-blue-600 lg:w-auto">
+            <button
+              className={classNames(
+                "hover:bg-primary-text bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text",
+                "hover:text-white text-primary-text dark:text-white",
+                "w-[150px] text-center rounded-xl border-2  font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
+              )}
+            >
               Create
             </button>
           </div>
@@ -37,3 +51,9 @@ export default function Home() {
     </main>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Vintage&Rare NFT",
+  description:
+    "Create your Instrument's Certificate of Authenticity, powered by Vintage and Rare",
+};
