@@ -1,7 +1,18 @@
+import AGuitarForm from "@/components/create/AGuitarForm";
+import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
+
 export default function CreatePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <section className="container">Breadcrumbs here</section>
+    <main className="flex min-h-screen flex-col items-center">
+      <section className="container max-w-7xl px-2 sm:px-12">
+        <PageBreadcrumbs />
+      </section>
+      <section className="container max-w-7xl px-12">
+        <h1 className="text-4xl font-semibold py-10 whitespace-pre-wrap">
+          Add Acoustic Guitar
+        </h1>
+        <AGuitarForm />
+      </section>
     </main>
   );
 }

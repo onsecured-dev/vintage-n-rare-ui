@@ -28,13 +28,18 @@ export default function DrawerButton() {
         )}
       >
         <li className="py-2 text-center w-full text-lg">
-          <Link href="/" className="w-full block text-center">
+          <Link
+            onClick={() => setIsOpen(false)}
+            href="/"
+            className="w-full block text-center"
+          >
             Home
           </Link>
         </li>
         <li className="py-2 text-center w-full text-lg">Create</li>
         <li className="py-2 text-center w-full text-sm bg-primary-text/30">
           <Link
+            onClick={() => setIsOpen(false)}
             href="/create/acoustic-guitar"
             className="w-full block text-center"
           >
@@ -43,6 +48,7 @@ export default function DrawerButton() {
         </li>
         <li className="py-2 text-center w-full text-sm bg-primary-text/30">
           <Link
+            onClick={() => setIsOpen(false)}
             href="/create/electric-bass"
             className="w-full block text-center"
           >
@@ -51,6 +57,7 @@ export default function DrawerButton() {
         </li>
         <li className="py-2 text-center w-full text-sm bg-primary-text/30">
           <Link
+            onClick={() => setIsOpen(false)}
             href="/create/electric-guitar"
             className="w-full block text-center"
           >
@@ -59,6 +66,7 @@ export default function DrawerButton() {
         </li>
         <li className="py-2 text-center w-full text-sm bg-primary-text/30">
           <Link
+            onClick={() => setIsOpen(false)}
             href="/create/amps-effects"
             className="w-full block text-center"
           >

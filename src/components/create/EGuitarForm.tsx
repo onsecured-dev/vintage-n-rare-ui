@@ -14,19 +14,20 @@ export default function BassForm() {
       bodyMaterial: "",
       finish: "",
       finishMaterial: "",
-      radius: "",
-      weight: "",
       tuners: "",
+      bridge: "",
+      electronics: "",
+      bracePattern: "",
+      ssSaddle: "",
+      neckFingerboard: "",
+      neckProfile: "",
+      neckDepth: "",
+      fingerboardRadius: "",
       scaleLength: "",
       nutWidth: "",
-      neckProfile: "",
-      neckThickness: "",
-      potCodes: "",
-      electronics: "",
-      pickupImpedance: "",
-      neckFingerboard: "",
       case: "",
       mods: "",
+      bzRosewood: false,
     },
   });
   const onSubmit = (data: any) => {
@@ -144,9 +145,9 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Weight"
+          title="Bridge"
           type="text"
-          {...register("weight")}
+          {...register("bridge")}
           placeholder=""
         />
         <Input
@@ -156,9 +157,15 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Radius"
+          title="Brace Pattern"
           type="text"
-          {...register("radius")}
+          {...register("bracePattern")}
+          placeholder=""
+        />
+        <Input
+          title="String Spacing at Saddle"
+          type="text"
+          {...register("ssSaddle")}
           placeholder=""
         />
       </div>
@@ -217,6 +224,18 @@ export default function BassForm() {
             Other important details
           </span>
         </label>
+        <div className="form-control max-w-fit">
+          <label className="label">
+            <span className="label-text text-base text-black dark:text-white">
+              Contains Brazilian Rosewood
+            </span>
+            <input
+              type="checkbox"
+              {...register("bzRosewood")}
+              className="checkbox ml-4 border-black dark:border-white/70 "
+            />
+          </label>
+        </div>
         <Input title="Case" type="text" {...register("case")} placeholder="" />
         <Input
           title="Modifications/Repairs"

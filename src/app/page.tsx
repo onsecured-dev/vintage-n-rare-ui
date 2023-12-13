@@ -8,7 +8,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24 ">
       <div className="z-10 max-w-7xl w-full items-start justify-between text-sm flex md:flex-row flex-col">
         <div className=" md:w-6/12 max-h-max items-start">
-          <p className="text-6xl font-bold">
+          <p className="text-4xl md:text-6xl font-bold">
             Create your Instrument&apos;s Certificate of Authenticity
           </p>
           <p className="text-lg my-8">
