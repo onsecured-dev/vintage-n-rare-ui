@@ -5,7 +5,7 @@ import ThemeToggle from "./layout/ThemeToggle";
 import MenuNavLink from "./layout/MenuNavLink";
 import { IoMenu } from "react-icons/io5";
 import DrawerButton from "./layout/DrawerButton";
-const logoPath = "/Graphics/Menu Bar LOGO/V_R Logo.png";
+const logoPath = "/Graphics/Menu Bar LOGO/v_logo.png";
 
 const Header = () => {
   return (
@@ -15,8 +15,8 @@ const Header = () => {
           <Image
             src={logoPath}
             alt="Logo"
-            width={602 / 2.5}
-            height={173 / 2.5}
+            width={300 / 3}
+            height={300 / 3}
             className=" invert dark:invert-0"
           />
         </Link>
