@@ -17,7 +17,7 @@ const logoPath = "/Graphics/Menu Bar LOGO/v_logo.png";
 const Footer = () => {
   return (
     <footer className="mt-12 bg-dark pt-8 items-center  ">
-      <nav className="flex flex-col max-w-screen-2xl items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
+      <nav className="flex flex-col max-w-screen-2xl items-center md:items-start justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
         <div className="pb-4 flex flex-col items-center">
           <Link href="/">
             <Image
@@ -97,16 +97,22 @@ const Footer = () => {
         <div className="h-0 md:h-56">
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
-        <div className="h-0 md:h-56">
+        <div className=" md:h-56">
           <p className="text-white-900 my-1 text-center text-lg font-semibold md:text-left">
             Subscribe to us
           </p>
           <p className="mt-2 hidden whitespace-pre md:block">
-
-
             Subscribe to our newsletter to get the latest news
           </p>
-          <input className="enabled:hover:border-gray-800 disabled:opacity-75 rounded-full my-2 mx-2 py-2 px-2 text-black block invert dark:invert-0" />
+          <div className="join pt-1">
+            <input
+              className="join-item input input-bordered rounded-full"
+              type="email"
+            />
+            <button className="btn bg-primary-text hover:bg-primary-text/70 join-item rounded-r-full text-white">
+              Submit
+            </button>
+          </div>
         </div>
         {/* <p className="mt-2 whitespace-pre md:hidden">
           Need support? Don't email us at:
