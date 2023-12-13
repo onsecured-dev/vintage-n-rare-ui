@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Providers } from "./providers";
+import classNames from "classnames";
 
-const inter = Inter({ subsets: ["latin"] });
+const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body className="dark:bg-home bg-home bg-cover">
+        <body
+          className={classNames(
+            dmSans.className,
+            "dark:bg-home bg-home bg-cover"
+          )}
+        >
           <Header />
           <main className="flex-grow">{children}</main>
           <Footer />
