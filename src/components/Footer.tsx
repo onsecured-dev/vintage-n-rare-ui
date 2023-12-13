@@ -27,9 +27,11 @@ const Footer = () => {
               height={300 / 2.5}
               className=" invert dark:invert-0"
             />
-            {/* Vintage and Rare the Musical */}
           </Link>
-          <div className="mt-2 flex flex-row justify-between my-4 mx-2 gap-4  w-full">
+          <div className="text-xs dark:text-white/60">
+            Integrating Web3 technology into Web2 businesses
+          </div>
+          <div className="mt-2 flex flex-row justify-center my-4 mx-2 gap-4  w-full">
             <TiSocialYoutubeCircular size={"1.75em"} />
             <TiSocialTwitter size={"1.75em"} />
             <TiSocialYoutube size={"1.75em"} />
@@ -104,7 +106,7 @@ const Footer = () => {
           <a href="mailto:support@vintageandrare.com">support@vintageandrare.com</a>
         </p> */}
       </nav>
-      <div className="pb-5 mt-2 mb-2 text-center text-sm text-slate-700">
+      <div className="pb-5 mt-2 mb-2 text-center text-sm text-slate-700 dark:text-white/50">
         <p>2023 by Vintage and Rare. All rights Reserved.</p>
       </div>
     </footer>
