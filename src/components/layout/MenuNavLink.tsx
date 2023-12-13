@@ -30,15 +30,15 @@ export default function MenuNavLink(props: {
             <li
               key={`nav-${title}-${index}`}
               className={classNames(
-                "min-w-[200px] border-primary-border",
+                "min-w-[200px] border-primary-border mt-0",
                 isLast ? "border-0" : "border-b-[1px]"
               )}
             >
-              <div className="group/menu flex flex-row items-center w-max py-3">
+              <div className="group/menu flex flex-row items-center w-max py-3 bg-transparent hover:bg-transparent">
                 <div className="w-0 group-hover/menu:w-3 h-[2px] transition-all duration-300 bg-primary-text" />
                 <Link
                   href={link.href}
-                  className="w-max group-hover/menu:text-primary-text text-base"
+                  className="w-max group-hover/menu:text-primary-text text-base hover:bg-transparent"
                 >
                   {link.name}
                 </Link>
