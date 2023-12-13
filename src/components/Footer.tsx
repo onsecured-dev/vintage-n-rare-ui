@@ -66,28 +66,24 @@ const Footer = () => {
           <Link
             href="/create/acoustic-guitar"
             className="my-4 block text-center font-light hover:underline md:text-left"
-            target={"_blank"}
           >
             Acoustic Guitar
           </Link>
           <Link
             href="/create/amps-effects"
             className="my-4 block text-center font-light hover:underline md:text-left"
-            target={"_blank"}
           >
             Amps & Effects
           </Link>
           <Link
             href="/create/electric-bass"
             className="my-4 block text-center font-light hover:underline md:text-left"
-            target={"_blank"}
           >
             Electric Bass
           </Link>
           <Link
             href="/create/electric-guitar"
             className="my-4 block text-center font-light hover:underline md:text-left"
-            target={"_blank"}
           >
             Electric Guitar
           </Link>
