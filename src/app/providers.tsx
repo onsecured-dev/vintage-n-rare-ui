@@ -4,6 +4,7 @@ import { WagmiConfig, createConfig } from "wagmi";
 import { bsc, bscTestnet } from "viem/chains";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { ThemeProvider } from "next-themes";
+import TRPCProvider from "@/app/_trpc/Provider";
 
 const chains = [bscTestnet];
 const projectId = "c4e75039af63deadc1923378815c5bec";
@@ -25,9 +26,11 @@ const wagmiConfig = createConfig(
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class">
-      <WagmiConfig config={wagmiConfig}>
-        <ConnectKitProvider>{children}</ConnectKitProvider>
-      </WagmiConfig>
+      <TRPCProvider>
+        <WagmiConfig config={wagmiConfig}>
+          <ConnectKitProvider>{children}</ConnectKitProvider>
+        </WagmiConfig>
+      </TRPCProvider>
     </ThemeProvider>
   );
 }
