@@ -166,6 +166,15 @@ export default function BassForm() {
           {...register("reverbOther")}
           placeholder=""
         />
+      </div>
+      <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
+        <label className="whitespace-pre-wrap pb-4">
+          <span className="font-bold text-xl">Other</span>
+          {"\n"}
+          <span className="text-sm dark:text-white/70 text-black/70">
+            Other informationa about your amp or effects
+          </span>
+        </label>
         <Input
           title="Modifications/Repairs"
           type="text"

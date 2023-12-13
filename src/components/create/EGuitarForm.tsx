@@ -6,28 +6,28 @@ import Input from "./Inputs";
 export default function BassForm() {
   const { register, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
-      model: "",
-      year: new Date().getFullYear(),
       brand: "",
-      serial: "",
-      handedness: "right",
-      bodyMaterial: "",
+      model: "",
       finish: "",
+      handedness: "right",
+      year: new Date().getFullYear(),
+      bodyMaterial: "",
       finishMaterial: "",
-      tuners: "",
-      bridge: "",
-      electronics: "",
-      bracePattern: "",
-      ssSaddle: "",
       neckFingerboard: "",
-      neckProfile: "",
-      neckDepth: "",
-      fingerboardRadius: "",
+      radius: "",
+      weight: "",
+      tuners: "",
       scaleLength: "",
       nutWidth: "",
+      neckProfile: "",
+      serial: "",
+      neckThickness: "",
+      electronics: "",
+      potCodes: "",
+      pickupImpedance: "",
+      bzRosewood: false,
       case: "",
       mods: "",
-      bzRosewood: false,
     },
   });
   const onSubmit = (data: any) => {
@@ -145,27 +145,27 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Bridge"
-          type="text"
-          {...register("bridge")}
-          placeholder=""
-        />
-        <Input
           title="Electronics"
           type="text"
           {...register("electronics")}
           placeholder=""
         />
         <Input
-          title="Brace Pattern"
+          title="Weight"
           type="text"
-          {...register("bracePattern")}
+          {...register("weight")}
           placeholder=""
         />
         <Input
-          title="String Spacing at Saddle"
+          title="Potentiometer Codes"
           type="text"
-          {...register("ssSaddle")}
+          {...register("potCodes")}
+          placeholder=""
+        />
+        <Input
+          title="Pickup Impedance"
+          type="text"
+          {...register("pickupImpedance")}
           placeholder=""
         />
       </div>
@@ -190,15 +190,15 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Neck Depth"
+          title="Neck Thickness"
           type="text"
-          {...register("neckDepth")}
+          {...register("neckThickness")}
           placeholder=""
         />
         <Input
-          title="Fingerboard Radius"
+          title="Radius"
           type="text"
-          {...register("fingerboardRadius")}
+          {...register("radius")}
           placeholder=""
         />
 
