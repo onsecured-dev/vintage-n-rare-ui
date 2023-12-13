@@ -28,8 +28,8 @@ const Footer = () => {
               className=" invert dark:invert-0"
             />
           </Link>
-          <div className="text-xs dark:text-white/60">
-            Integrating Web3 technology into Web2 businesses
+          <div className="text-xs dark:text-white/60 text-center whitespace-pre-wrap">
+            Integrating Web3 technology into{"\n"} Web2 businesses
           </div>
           <div className="mt-2 flex flex-row justify-center my-4 mx-2 gap-4  w-full">
             <TiSocialYoutubeCircular size={"1.75em"} />
@@ -94,19 +94,18 @@ const Footer = () => {
 
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
-        <div className="h-0 md:h-56">
-          {/* <Web3Button label="Connect" icon="hide" /> */}
-        </div>
-        <div className=" md:h-56">
-          <p className="text-white-900 my-1 text-center text-lg font-semibold md:text-left">
-            Subscribe to us
-          </p>
-          <p className="mt-2 hidden whitespace-pre md:block">
-            Subscribe to our newsletter to get the latest news
-          </p>
-          <div className="join pt-1">
+        {/* <div className="h-0 md:h-56"></div> */}
+        <div className="form-control md:h-56 md:w-[30vw] lg:w-auto">
+          <label className="whitespace-pre-wrap pb-2">
+            <span className="font-bold text-xl">Subscribe</span>
+            {"\n"}
+            <span className="text-sm dark:text-white/70 text-black/70">
+              Subscribe to our newsletter to get the latest news
+            </span>
+          </label>
+          <div className="join">
             <input
-              className="join-item input input-bordered rounded-full"
+              className="join-item input input-bordered rounded-full bg-transparent border-black dark:border-white/50 md:max-w-[150px] lg:max-w-max"
               type="email"
             />
             <button className="btn bg-primary-text hover:bg-primary-text/70 join-item rounded-r-full text-white">
