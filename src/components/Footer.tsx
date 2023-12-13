@@ -96,7 +96,15 @@ const Footer = () => {
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
         <div className="h-0 md:h-56">
-          {/* <Web3Button label="Connect" icon="hide" /> */}
+          <p className="text-white-900 my-1 text-center text-lg font-semibold md:text-left">
+            Subscribe to us
+          </p>
+          <p className="mt-2 hidden whitespace-pre md:block">
+
+
+            Subscribe to our newsletter to get the latest news
+          </p>
+          <input className="enabled:hover:border-gray-800 disabled:opacity-75 rounded-full my-2 mx-2 py-2 px-2 text-black block invert dark:invert-0" />
         </div>
         {/* <p className="mt-2 whitespace-pre md:hidden">
           Need support? Don't email us at:
