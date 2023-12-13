@@ -10,7 +10,7 @@ export default function CreatePage() {
           Add Electric Bass
         </h1>
       </section>
-      <section className="container">
+      <section className="container max-w-7xl">
         <BassForm />
       </section>
     </main>
