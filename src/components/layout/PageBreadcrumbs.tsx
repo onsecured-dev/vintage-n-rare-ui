@@ -4,6 +4,10 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Fragment } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import classNames from "classnames";
+
+const invalidPaths = ["create"];
+
 export default function PageBreadcrumbs() {
   const path = usePathname();
 
@@ -14,11 +18,20 @@ export default function PageBreadcrumbs() {
       {pathItems.map((item, i) => {
         if (!item) return null;
         const isLast = pathItems.length - 1 == i;
+        const notLink = invalidPaths.includes(item);
+        console.log({ item, isLast, invalidPaths, notLink });
         return (
           <Fragment key={`breadcrumbs-${i}`}>
             <div className="text-slate-500 dark:text-white/70 text-md">
-              {isLast ? (
-                <span className="capitalize text-primary-text font-bold">
+              {isLast || notLink ? (
+                <span
+                  className={classNames(
+                    "capitalize text-primary-text font-bold",
+                    notLink
+                      ? "text-slate-500 dark:text-white/70 pointer-events-none"
+                      : "text-primary-text"
+                  )}
+                >
                   {item}
                 </span>
               ) : (
