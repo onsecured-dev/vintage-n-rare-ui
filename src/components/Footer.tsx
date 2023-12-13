@@ -5,36 +5,38 @@ import { GrInstagram } from "react-icons/gr";
 import { RiMessengerFill } from "react-icons/ri";
 import { FaTelegramPlane } from "react-icons/fa";
 import { HiMenuAlt2 } from "react-icons/hi";
-import { TiSocialYoutubeCircular, TiSocialTwitter, TiSocialYoutube } from "react-icons/ti";
+import {
+  TiSocialYoutubeCircular,
+  TiSocialTwitter,
+  TiSocialYoutube,
+} from "react-icons/ti";
 import { SlSocialInstagram } from "react-icons/sl";
 
-const logoPath = '/Graphics/Favicon logo/Asset 1.png'
+const logoPath = "/Graphics/Menu Bar LOGO/v_logo.png";
 
 const Footer = () => {
   return (
     <footer className="mt-12 bg-dark pt-8 items-center  ">
-      <nav className="flex max-w-screen-2xl items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
-        <div className="pb-4 ">
+      <nav className="flex flex-col max-w-screen-2xl items-center justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
+        <div className="pb-4 flex flex-col items-center">
           <Link href="/">
             <Image
               src={logoPath}
               alt="Logo"
-              width={602 / 5}
-              height={173 / 5}
+              width={300 / 2.5}
+              height={300 / 2.5}
               className=" invert dark:invert-0"
             />
             {/* Vintage and Rare the Musical */}
           </Link>
-          <div className="mt-2 flex flex-row justify-between my-4 mx-2  w-full">
-
-
-            <TiSocialYoutubeCircular style={{ marginHorizontal: '6px' }} size={'1.75em'} />
-            <TiSocialTwitter style={{ marginHorizontal: '6px' }} size={'1.75em'} />
-            <TiSocialYoutube style={{ marginHorizontal: '6px' }} size={'1.75em'} />
-            <SlSocialInstagram style={{ marginHorizontal: '6px' }} size={'1.75em'} />
+          <div className="mt-2 flex flex-row justify-between my-4 mx-2 gap-4  w-full">
+            <TiSocialYoutubeCircular size={"1.75em"} />
+            <TiSocialTwitter size={"1.75em"} />
+            <TiSocialYoutube size={"1.75em"} />
+            <SlSocialInstagram size={"1.75em"} />
           </div>
         </div>
-        <div className=" h-56">
+        <div className=" md:h-56">
           <p className="text-white-900 my-1 hidden text-center text-lg font-semibold md:block md:text-left">
             Vintage and Rare
           </p>
@@ -52,11 +54,8 @@ const Footer = () => {
           >
             Explore
           </Link>
-
-
-
         </div>
-        <div className=" h-56">
+        <div className=" md:h-56">
           <p className="text-white-900 my-1 text-center text-lg font-semibold md:text-left">
             Create
           </p>
@@ -93,14 +92,10 @@ const Footer = () => {
 
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
-        <div className=" h-56">
-
-
+        <div className="h-0 md:h-56">
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
-        <div className=" h-56">
-
-
+        <div className="h-0 md:h-56">
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
         {/* <p className="mt-2 whitespace-pre md:hidden">
