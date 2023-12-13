@@ -21,7 +21,7 @@ export default function MenuNavLink(props: {
         <FaChevronDown />
       </button>
       <ul
-        className="menu menu-sm dropdown-content dark:bg-action-bg bg-white space-y-2 left-0 rounded-md border-[1px] dark:border-0 border-primary-border p-0"
+        className="menu menu-sm dropdown-content dark:bg-action-bg bg-white left-0 rounded-md border-[1px] dark:border-0 border-primary-border p-0 space-y-0"
         tabIndex={0}
       >
         {links.map((link, index) => {
@@ -30,11 +30,11 @@ export default function MenuNavLink(props: {
             <li
               key={`nav-${title}-${index}`}
               className={classNames(
-                "min-w-[200px] border-primary-border mt-0",
+                "min-w-[200px] border-primary-border",
                 isLast ? "border-0" : "border-b-[1px]"
               )}
             >
-              <div className="group/menu flex flex-row items-center w-max py-3 bg-transparent hover:bg-transparent">
+              <div className="group/menu flex flex-row items-center py-3 bg-transparent hover:bg-transparent w-full">
                 <div className="w-0 group-hover/menu:w-3 h-[2px] transition-all duration-300 bg-primary-text" />
                 <Link
                   href={link.href}
