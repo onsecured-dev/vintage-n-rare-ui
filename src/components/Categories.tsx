@@ -53,8 +53,7 @@ function Category(props: {
       <Image
         src={bg}
         alt="background image"
-        width={400}
-        height={100}
+        fill
         className="absolute top-0 pointer-events-none"
       />
       <div className="absolute top-0 left-[calc(50%-60px)] z-10">
