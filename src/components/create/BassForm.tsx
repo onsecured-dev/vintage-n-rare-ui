@@ -183,19 +183,6 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Neck Depth"
-          type="text"
-          {...register("neckDepth")}
-          placeholder=""
-        />
-        <Input
-          title="Fingerboard Radius"
-          type="text"
-          {...register("fingerboardRadius")}
-          placeholder=""
-        />
-
-        <Input
           title="Scale Length"
           type="text"
           {...register("scaleLength")}
