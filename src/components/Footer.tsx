@@ -18,7 +18,7 @@ const Footer = () => {
   return (
     <footer className="mt-12 bg-dark pt-8 items-center  ">
       <nav className="flex flex-col max-w-screen-2xl items-center md:items-start justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
-        <div className="pb-4 flex flex-col items-center">
+        <div className="pb-4 flex flex-col items-center md:items-start">
           <Link href="/">
             <Image
               src={logoPath}
@@ -28,10 +28,10 @@ const Footer = () => {
               className=" invert dark:invert-0"
             />
           </Link>
-          <div className="text-xs dark:text-white/60 text-center whitespace-pre-wrap">
-            Integrating Web3 technology into{"\n"} Web2 businesses
+          <div className="text-xs dark:text-white/60 text-center md:text-left whitespace-pre-wrap">
+            Integrating Web3 technology into{"\n"}Web2 businesses
           </div>
-          <div className="mt-2 flex flex-row justify-center my-4 mx-2 gap-4  w-full">
+          <div className="mt-2 flex flex-row justify-center md:justify-start my-4 gap-4  w-full">
             <TiSocialYoutubeCircular size={"1.75em"} />
             <TiSocialTwitter size={"1.75em"} />
             <TiSocialYoutube size={"1.75em"} />
@@ -92,7 +92,7 @@ const Footer = () => {
         </div>
         {/* <div className="h-0 md:h-56"></div> */}
         <div className="form-control md:h-56 md:w-[30vw] lg:w-auto">
-          <label className="whitespace-pre-wrap pb-2">
+          <label className="whitespace-pre-wrap pb-2 text-center md:text-left">
             <span className="font-bold text-xl">Subscribe</span>
             {"\n"}
             <span className="text-sm dark:text-white/70 text-black/70">
