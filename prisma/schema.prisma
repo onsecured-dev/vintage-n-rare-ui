@@ -9,3 +9,102 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// models
+
+model Bass {
+  id                   String @id @default(uuid())
+  bodyMaterial         String
+  brand                String
+  case                 String
+  electronics          String
+  fingerboardRadius    String
+  finish               String
+  finishMaterial       String
+  model                String
+  modificationsRepairs String
+  neckDepth            String
+  neckFingerboard      String
+  neckProfile          String
+  nutWidth             String
+  radius               String
+  scaleLength          String
+  serialNumber         String
+  tuners               String
+  weight               String
+  yearMade             String
+}
+
+model ElectricGuitar {
+  id                        String @id @default(uuid())
+  bodyMaterial              String
+  brand                     String
+  case                      String
+  containsBrazilianRosewood String
+  electronics               String
+  finish                    String
+  finishMaterial            String
+  handedness                String
+  instrumentType            String
+  madeInYear                String
+  model                     String
+  modificationsRepairs      String
+  neckFingerboard           String
+  neckProfile               String
+  neckThickness             String
+  nutWidth                  String
+  pickupImpedance           String
+  potCodes                  String
+  radius                    String
+  scaleLength               String
+  tuners                    String
+  weight                    String
+}
+
+model AmpFx {
+  id             String @id @default(uuid())
+  brand          String
+  choke          String
+  circuit        String
+  finish         String
+  instrument     String
+  madeInYear     String
+  model          String
+  power          String
+  preamp         String
+  rectifier      String
+  reverbOther    String
+  serialNumber   String
+  speaker        String
+  speakerCodes   String
+  transformersOT String
+  transformersPT String
+  wattage        String
+}
+
+model AcousticGuitar {
+  id                        String @id @default(uuid())
+  backAndSides              String
+  bracePattern              String
+  brand                     String
+  bridge                    String
+  case                      String
+  containsBrazilianRosewood String
+  electronics               String
+  fingerboardRadius         String
+  finish                    String
+  finishMaterial            String
+  handedness                String
+  madeInYear                String
+  model                     String
+  modificationsRepairs      String
+  neckDepth                 String
+  neckFingerboard           String
+  neckProfile               String
+  nutWidth                  String
+  scaleLength               String
+  serialNumber              String
+  stringSpacingAtSaddle     String
+  top                       String
+  tuners                    String
+}
