@@ -288,7 +288,7 @@ export default function BassForm() {
           className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
           type="submit"
         >
-          Mint
+          Create Metadata
         </button>
         <button type="reset" onClick={() => reset()}>
           Cancel
