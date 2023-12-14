@@ -38,14 +38,10 @@ export default function Home() {
             </button>
           </div>
         </div>
-        <div className=" p-4 z-10 dark:bg-transparent border-[1px] dark:border-white bg-gray-400/50 w-5/12 max-h-fit items-end rounded-3xl box-sway">
+        <div className="hidden md:block p-4 z-10 dark:bg-transparent border-[1px] dark:border-white bg-gray-400/50 w-5/12 max-h-fit items-end rounded-3xl box-sway">
           <Image src={thumbnail} alt="guitar thumbnail" />
         </div>
-        <div className="p-2 z-0 dark:bg-white bg-gray-400/50 max-h-fit py-6 mt-6 px-6 items-end rounded-xl bg-mnote bg-cover minibox-sway">
-          {/* <div className='rounded-xl border-8 bg-cool-3 bg-cover'>
-
-          </div> */}
-        </div>
+        {/* <div className="hidden md:block p-2 z-0 dark:bg-white bg-gray-400/50 max-h-fit py-6 mt-6 px-6 items-end rounded-xl bg-mnote bg-cover minibox-sway"></div> */}
       </div>
       <Categories />
     </main>

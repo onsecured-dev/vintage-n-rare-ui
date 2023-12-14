@@ -52,7 +52,7 @@ export default function BassForm() {
           <span className="font-bold text-xl">Basic Information</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Enter the basic information about your bass
+            Enter the basic information about your instrument
           </span>
         </label>
         <Input
@@ -115,7 +115,7 @@ export default function BassForm() {
           <span className="font-bold text-xl">Body Details</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Details of the finish of your bass
+            Details of the finish of your instrument
           </span>
         </label>
 
@@ -173,7 +173,7 @@ export default function BassForm() {
           <span className="font-bold text-xl">Neck/Bridge/Tuner Details</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Details of the neck, bridge and tuners of your bass
+            Details of the neck, bridge and tuners of your instrument
           </span>
         </label>
         <Input

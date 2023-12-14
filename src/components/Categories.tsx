@@ -131,9 +131,9 @@ function Category(props: {
           fill
           className="absolute top-0 pointer-events-none"
         />
-        <div className="absolute top-0 left-[calc(50%-60px)] z-10">
+        {/* <div className="absolute top-0 left-[calc(50%-60px)] z-10">
           <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
-        </div>
+        </div> */}
         <div className="bg-gray-800/20 py-2 group-hover:bg-gray-800/70 group-hover:py-10 transition-all duration-300 z-20">
           <p className="font-semibold text-xl text-white text-center transition-all duration-300">
             {name}
