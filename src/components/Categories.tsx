@@ -51,25 +51,25 @@ export default function Categories() {
           name="Acoustic Guitar"
           icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/acoustic-guitar"
-          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-09 copy.jpg"
+          bg="/background/v01_wave-05.jpg"
         />
         <Category
           name="Electric Bass"
           icon="/Graphics/Home Page - 4 Categories/Icons/Guitar.png"
           href="/create/electric-bass"
-          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-10 copy.jpg"
+          bg="/background/v01_wave-04.jpg"
         />
         <Category
           name="Electric Guitar"
           icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/electric-guitar"
-          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-14 copy.jpg"
+          bg="/background/v01_wave-03.jpg"
         />
         <Category
           name="Amps & Effects"
           icon="/Graphics/Home Page - 4 Categories/Icons/Amps.png"
           href="/create/amps-effects"
-          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-16.jpg"
+          bg="/background/v01_wave-06.jpg"
         />
       </div>
       <div className="flex flex-row items-center justify-center gap-4 w-full text-xs">
@@ -118,27 +118,25 @@ function Category(props: {
 }) {
   const { name, icon, href, bg } = props;
   return (
-    <div className="px-4 min-w-[calc(100vw-80px)] md:min-w-[320px] flex">
+    <div className="px-4 min-w-[calc(100vw-80px)] md:min-w-[320px] flex snap-center">
       <Link
         href={href}
         className={classNames(
-          "relative flex-grow group rounded-3xl flex-1 flex flex-col bg-cover justify-end border-2 border-gray-600 h-40 overflow-clip snap-center"
+          "relative flex-grow group rounded-3xl flex-1 items-center border-2 border-gray-600 h-40 overflow-clip"
         )}
       >
         <Image
           src={bg}
           alt="background image"
           fill
-          className="absolute top-0 pointer-events-none"
+          className="absolute top-0 pointer-events-none w-full object-cover z-10"
         />
         {/* <div className="absolute top-0 left-[calc(50%-60px)] z-10">
           <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
         </div> */}
-        <div className="bg-gray-800/20 py-2 group-hover:bg-gray-800/70 group-hover:py-10 transition-all duration-300 z-20">
-          <p className="font-semibold text-xl text-white text-center transition-all duration-300">
-            {name}
-          </p>
-        </div>
+        <p className="relative font-semibold text-xl text-white text-center transition-all duration-300 text-shadow z-20 group-hover:text-2xl  group-hover:text-white-shadow group-hover:bg-black/50 w-full h-full flex flex-col justify-center">
+          {name}
+        </p>
       </Link>
     </div>
   );
