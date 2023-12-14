@@ -156,9 +156,15 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Radius"
+          title="Potentiometer Codes"
           type="text"
-          {...register("radius")}
+          {...register("potCodes")}
+          placeholder=""
+        />
+        <Input
+          title="Pickup Impedance"
+          type="text"
+          {...register("pickupImpedance")}
           placeholder=""
         />
       </div>
@@ -183,18 +189,11 @@ export default function BassForm() {
           placeholder=""
         />
         <Input
-          title="Neck Depth"
+          title="Neck Thickness"
           type="text"
-          {...register("neckDepth")}
+          {...register("neckThickness")}
           placeholder=""
         />
-        <Input
-          title="Fingerboard Radius"
-          type="text"
-          {...register("fingerboardRadius")}
-          placeholder=""
-        />
-
         <Input
           title="Scale Length"
           type="text"
@@ -205,6 +204,12 @@ export default function BassForm() {
           title="Nut Width"
           type="text"
           {...register("nutWidth")}
+          placeholder=""
+        />
+        <Input
+          title="Radius"
+          type="text"
+          {...register("radius")}
           placeholder=""
         />
       </div>
