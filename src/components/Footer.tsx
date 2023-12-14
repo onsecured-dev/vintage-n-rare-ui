@@ -16,7 +16,7 @@ const logoPath = "/Graphics/Menu Bar LOGO/v_logo.png";
 
 const Footer = () => {
   return (
-    <footer className="mt-12 bg-dark pt-8 items-center  ">
+    <footer className="bg-dark pt-8 items-center  ">
       <nav className="flex flex-col max-w-screen-2xl items-center md:items-start justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
         <div className="pb-4 flex flex-col items-center md:items-start">
           <Link href="/">
