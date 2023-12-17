@@ -14,6 +14,8 @@ datasource db {
 
 model Bass {
   id                   String @id @default(uuid())
+  NFTCID               String
+  NFTId                String
   bodyMaterial         String
   brand                String
   case                 String
@@ -37,6 +39,8 @@ model Bass {
 
 model ElectricGuitar {
   id                        String @id @default(uuid())
+  NFTCID                    String
+  NFTId                     String
   bodyMaterial              String
   brand                     String
   case                      String
@@ -63,6 +67,8 @@ model ElectricGuitar {
 
 model AmpFx {
   id             String @id @default(uuid())
+  NFTCID         String
+  NFTId          String
   brand          String
   choke          String
   circuit        String
@@ -84,6 +90,8 @@ model AmpFx {
 
 model AcousticGuitar {
   id                        String @id @default(uuid())
+  NFTCID                    String
+  NFTId                     String
   backAndSides              String
   bracePattern              String
   brand                     String
