@@ -6,7 +6,7 @@ import { Fragment } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import classNames from "classnames";
 
-const invalidPaths = ["create"];
+const invalidPaths: Array<string> = [];
 
 export default function PageBreadcrumbs() {
   const path = usePathname();

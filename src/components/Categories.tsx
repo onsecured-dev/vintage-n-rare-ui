@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { GiPlainCircle } from "react-icons/gi";
 
-export default function Categories() {
+export default function Categories(props: { isList?: boolean }) {
+  const { isList } = props;
   const [currentView, setCurrentView] = useState(0);
   const [inViewAmount, setInViewAmount] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,14 +28,23 @@ export default function Categories() {
     window.addEventListener("resize", handleResize);
   }, [setInViewAmount, containerRef]);
 
-  console.log({ inViewAmount, currentView });
   return (
-    <div className="container flex flex-col flex-nowrap items-start justify-between pt-4 pb-8">
-      <p className="text-3xl font-bold md:ml-12 text-center md:text-left w-full">
+    <div className="flex flex-col flex-nowrap items-start justify-between pt-4 pb-8">
+      <p
+        className={classNames(
+          "text-3xl font-bold  text-center md:text-left w-full",
+          isList ? "" : "md:ml-12"
+        )}
+      >
         Categories
       </p>
       <div
-        className="container flex flex-row flex-nowrap items-center justify-between gap-0 pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar"
+        className={classNames(
+          "flex flex-row items-center pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar",
+          isList
+            ? "w-full flex-wrap gap-4 justify-center md:justify-evenly"
+            : "flex-nowrap justify-between gap-0 container"
+        )}
         onScroll={(e) => {
           const currentFullWidth = e.currentTarget.scrollWidth;
           const itemOffset = currentFullWidth / 4;
@@ -72,7 +82,12 @@ export default function Categories() {
           bg="/background/v01_wave-06.jpg"
         />
       </div>
-      <div className="flex flex-row items-center justify-center gap-4 w-full text-xs">
+      <div
+        className={classNames(
+          "flex flex-row items-center justify-center gap-4 w-full text-xs",
+          isList ? "hidden" : ""
+        )}
+      >
         <GiPlainCircle
           className={classNames(
             inViewAmount >= 1 && inViewAmount < 4 ? "block" : "hidden",
