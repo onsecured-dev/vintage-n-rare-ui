@@ -7,7 +7,7 @@ import {
   AmpFxObject,
 } from "../util/util";
 
-async function createGuitar(guitar: GuitarObject) {
+export const createGuitar = async (guitar: GuitarObject) => {
   try {
     const result = await prisma.electricGuitar.create({
       data: {
@@ -20,7 +20,7 @@ async function createGuitar(guitar: GuitarObject) {
   }
 }
 
-async function getAllElectricGuitars() {
+export const getAllElectricGuitars = async () => {
   try {
     const result = await prisma.electricGuitar.findMany();
     return result;
@@ -29,7 +29,7 @@ async function getAllElectricGuitars() {
   }
 }
 
-async function getElectricGuitarById(id: string) {
+export const  getElectricGuitarById = async (id: string) => {
   try {
     const result = await prisma.electricGuitar.findUnique({
       where: { id },
@@ -40,7 +40,7 @@ async function getElectricGuitarById(id: string) {
   }
 }
 
-async function createBass(bass: BassObject) {
+export const createBass = async(bass: BassObject) => {
   try {
     const result = await prisma.bass.create({
       data: {
@@ -53,7 +53,7 @@ async function createBass(bass: BassObject) {
   }
 }
 
-async function getAllBass() {
+export const getAllBass = async () => {
   try {
     const result = await prisma.bass.findMany();
     return result;
@@ -62,7 +62,7 @@ async function getAllBass() {
   }
 }
 
-async function getBassById(id: string) {
+export const getBassById = async (id: string) => {
   try {
     const result = await prisma.bass.findUnique({
       where: { id },
@@ -73,7 +73,7 @@ async function getBassById(id: string) {
   }
 }
 
-async function createAcoustic(acoustic: AcousticObject) {
+export const  createAcoustic = async (acoustic: AcousticObject) => {
   try {
     const result = await prisma.acousticguitar.create({
       data: {
@@ -86,7 +86,7 @@ async function createAcoustic(acoustic: AcousticObject) {
   }
 }
 
-async function getAllAcoustic() {
+export const getAllAcoustic= async () => {
   try {
     const result = await prisma.Acoustic.findMany();
     return result;
@@ -95,7 +95,7 @@ async function getAllAcoustic() {
   }
 }
 
-async function getAcousticById(id: string) {
+export const getAcousticById = async (id: string) => {
   try {
     const result = await prisma.Acoustic.findUnique({
       where: { id },
@@ -106,7 +106,7 @@ async function getAcousticById(id: string) {
   }
 }
 
-async function createAmpFx(ampFx: AmpFxObject) {
+export const createAmpFx = async (ampFx: AmpFxObject) => {
   try {
     const result = await prisma.ampfx.create({
       data: {
@@ -118,8 +118,7 @@ async function createAmpFx(ampFx: AmpFxObject) {
     await prisma.$disconnect();
   }
 }
-
-async function getAllAmpFx() {
+export const getAllAmpFx = async () => {
   try {
     const result = await prisma.AmpFx.findMany();
     return result;
@@ -128,7 +127,7 @@ async function getAllAmpFx() {
   }
 }
 
-async function getAmpFxById(id: string) {
+export const getAmpFxById = async (id: string) => {
   try {
     const result = await prisma.AmpFx.findUnique({
       where: { id },
@@ -139,17 +138,3 @@ async function getAmpFxById(id: string) {
   }
 }
 
-module.exports = {
-  getAllElectricGuitars,
-  getElectricGuitarById,
-  createGuitar,
-  createBass,
-  createAcoustic,
-  createAmpFx,
-  getAllBass,
-  getBassById,
-  getAllAcoustic,
-  getAcousticById,
-  getAllAmpFx,
-  getAmpFxById,
-};
