@@ -57,7 +57,7 @@ export default function PreviewCard(props: {
   return (
     <div
       className={classNames(
-        "dark:card-bg border-primary-border dark:border-primary-border-dark rounded-2xl px-4 pt-5 pb-4",
+        "dark:card-bg bg-white card-shadow border-primary-border dark:border-primary-border-dark rounded-2xl px-4 pt-5 pb-4 border-[1.5px]",
         "max-w-[80vw] sm:max-w-[calc(50%-32px)] lg:max-w-[calc(33.33%-32px)] w-full",
         "hover:translate-y-[-10px] transition-transform duration-300"
       )}
@@ -90,12 +90,12 @@ export default function PreviewCard(props: {
           />
         </div>
       </div>
-      <div className="flex flex-row items-center justify-between">
-        <div>
+      <div className="flex flex-col items-center justify-center gap-1">
+        <div className="text-sm">
           Creator:&nbsp;{shortAddress(instrument?.[1]?.result || zeroAddress)}
         </div>
         <Link
-          className="main-secondary-btn w-auto rounded-full px-8 text-sm"
+          className="main-secondary-btn w-auto rounded-full px-8 text-sm text-disabled-text border-primary-border"
           href={`${props.type}/${props.id}`}
         >
           <span>View</span>
