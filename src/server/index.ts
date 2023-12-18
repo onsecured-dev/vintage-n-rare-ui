@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { publicProcedure, router, createTRPCRouter } from "./trpc";
+import { publicProcedure, router } from "./trpc";
 import { NFTStorage, File } from "nft.storage";
 import { TRPCError } from "@trpc/server";
 import {
@@ -38,7 +38,7 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_KEY)
+      if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
           message: "NFT_STORAGE_KEY is not set",
@@ -425,7 +425,11 @@ export const appRouter = router({
       console.log(cid);
 
       // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
+      // get CID
+      const CID = cid.url.replace("ipfs://", "");
+      /// add to DB - pending Table
+      // db.create('pending', id: CID, data: JSON.stringify(input.object))
+      return CID;
     }),
 
   getTest: publicProcedure.query(async () => {
@@ -437,13 +441,14 @@ export const appRouter = router({
       z.object({
         nftid: z.string(), // typeof == `0x{hex stuff}
         nftmetadataCID: z.string(), // typeof == `Qm{base58 stuff}`
-        nftObject: z.any(), // not sure
         nftType: z.string()
       })
     )
     .mutation(async ({ input }) => {
       // get data associated with CID (preferable JSON)
+      // const data = JSON.parse( db.get('pending',cid) )
       // actually save the data to the database
+      // "{alskdfja;d}"
       switch (input.nftType) {
         case "guitar":
           await createGuitar(input.nftObject)

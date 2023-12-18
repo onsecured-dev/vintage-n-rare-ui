@@ -13,9 +13,9 @@ datasource db {
 // models
 
 model Bass {
-  id                   String @id @default(uuid())
+  // id                   String @id @default(uuid())
   NFTCID               String
-  NFTId                String
+  NFTId                Int      @id
   bodyMaterial         String
   brand                String
   case                 String
@@ -35,12 +35,13 @@ model Bass {
   tuners               String
   weight               String
   yearMade             String
+  updatedAt            DateTime @updatedAt
 }
 
 model ElectricGuitar {
-  id                        String @id @default(uuid())
+  // id                        String @id @default(uuid())
   NFTCID                    String
-  NFTId                     String
+  NFTId                     Int      @id
   bodyMaterial              String
   brand                     String
   case                      String
@@ -63,12 +64,13 @@ model ElectricGuitar {
   scaleLength               String
   tuners                    String
   weight                    String
+  updatedAt                 DateTime @updatedAt
 }
 
 model AmpFx {
-  id             String @id @default(uuid())
+  // id             String @id @default(uuid())
   NFTCID         String
-  NFTId          String
+  NFTId          Int      @id
   brand          String
   choke          String
   circuit        String
@@ -86,12 +88,14 @@ model AmpFx {
   transformersOT String
   transformersPT String
   wattage        String
+  updatedAt      DateTime @updatedAt
 }
 
 model AcousticGuitar {
-  id                        String @id @default(uuid())
+  // id                        String @id @default(uuid())
+  updatedAt                 DateTime @updatedAt
   NFTCID                    String
-  NFTId                     String
+  NFTId                     Int      @id
   backAndSides              String
   bracePattern              String
   brand                     String
@@ -115,4 +119,9 @@ model AcousticGuitar {
   stringSpacingAtSaddle     String
   top                       String
   tuners                    String
+}
+
+model Pending {
+  cid  String @id
+  data Json
 }

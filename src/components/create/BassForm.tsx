@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 import {
@@ -15,6 +15,7 @@ import NFTAbi from "@/data/abi/NFTAbi";
 import { zeroAddress } from "viem";
 import LoadingModal from "./LoadingModal";
 import { useRef } from "react";
+import { trpc } from '@/app/_trpc/client'
 
 type BassFormValues = {
   image: FileList | null;
@@ -72,8 +73,25 @@ export default function BassForm() {
         mods: "Minor paint touchups on headstock",
       },
     });
-  const onSubmit = (data: any) => {
+
+  const {
+    mutate: createNFT,
+    data,
+    isLoading,
+  } = trpc.createBass.useMutation();
+  // trpc..createNFTData.useMutation();
+
+
+  const onSubmit: SubmitHandler<BassFormValues> = (data) => {
+    if (!data.image || data.image.length !== 1) return;
     console.log({ submitData: data });
+    const baseImg = data.image[0];
+    if (!baseImg) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(baseImg);
+    reader.onload = () => {
+      const base64 = reader.result?.toString();
+    }
   };
 
   const { data: bassMetadata } = {
