@@ -15,8 +15,9 @@ export default function DragDropFileInput(props: {
       shouldTouch: boolean;
     }
   ) => void;
+  value: FileList | null;
 }) {
-  const { setValue, name } = props;
+  const { setValue, name, value } = props;
   const [isDragged, setIsDragged] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -24,7 +25,7 @@ export default function DragDropFileInput(props: {
     <div
       className={classNames(
         "group/fileInput",
-        "dark:bg-action-bg bg-slate-200 w-full rounded-xl flex flex-col items-center py-20",
+        "dark:bg-action-bg bg-slate-200 w-full rounded-xl flex flex-col items-center overflow-hidden max-h-[360px]",
         isDragged ? "text-primary-text/60" : ""
       )}
       onClick={() => {
@@ -48,9 +49,21 @@ export default function DragDropFileInput(props: {
           });
       }}
     >
-      <RiUploadCloud2Line className=" text-[128px] opacity-60 group-hover/fileInput:text-primary-text/70" />
-      <div className="opacity-60 font-bold pt-6">Drag your image to upload</div>
-      <div className="opacity-60 font-light">PNG, GIF, WebP. Max 15MB</div>
+      {value?.length == 1 && value[0] ? (
+        <img
+          src={URL.createObjectURL(value[0])}
+          className="h-full w-auto object-cover"
+          alt="img to upload"
+        />
+      ) : (
+        <div className="py-20 flex flex-col items-center">
+          <RiUploadCloud2Line className=" text-[128px] opacity-60 group-hover/fileInput:text-primary-text/70" />
+          <div className="opacity-60 font-bold pt-6">
+            Drag your image to upload
+          </div>
+          <div className="opacity-60 font-light">PNG, GIF, WebP. Max 15MB</div>
+        </div>
+      )}
       <input
         className="hidden"
         type="file"

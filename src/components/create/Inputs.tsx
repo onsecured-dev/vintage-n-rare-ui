@@ -1,17 +1,24 @@
 "use client";
 
-import { HTMLInputTypeAttribute } from "react";
+import {
+  ForwardedRef,
+  HTMLInputTypeAttribute,
+  MutableRefObject,
+  forwardRef,
+} from "react";
 
-export default function Input(props: {
-  title: string;
-  type: HTMLInputTypeAttribute;
-  placeholder: string;
-  ref: React.Ref<HTMLInputElement>;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  onBlur: React.FocusEventHandler<HTMLInputElement>;
-  name: string;
-}) {
-  const { title, type, placeholder, ref, onChange, onBlur, name } = props;
+const Input = forwardRef(function MidInput(
+  props: {
+    title: string;
+    type: HTMLInputTypeAttribute;
+    placeholder: string;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    onBlur: React.FocusEventHandler<HTMLInputElement>;
+    name: string;
+  },
+  ref: ForwardedRef<HTMLInputElement>
+) {
+  const { title, type, placeholder, onChange, onBlur, name } = props;
   return (
     <div className="form-control">
       <label className="label">
@@ -29,4 +36,6 @@ export default function Input(props: {
       />
     </div>
   );
-}
+});
+
+export default Input;

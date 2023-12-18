@@ -16,7 +16,7 @@ export const appRouter = router({
     year: z.number().lte(new Date().getFullYear()),
     brand: z.string().min(5),
   })).query(
-    async ({ input }) => {
+    async({input}) => {
       console.log('do stuff with input', input)
     }
   ),
@@ -186,7 +186,7 @@ export const appRouter = router({
   pushNFTtoDb: publicProcedure.input(z.object({
     nftid: z.string(), // typeof == `0x{hex stuff}
     nftmetadataCID: z.string(), // typeof == `Qm{base58 stuff}`
-  })).mutation(async ({ input }) => {
+  })).mutation(async ({input}) => {
     // get data associated with CID (preferable JSON)
     // actually save the data to the database
   }),

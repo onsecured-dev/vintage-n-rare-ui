@@ -3,35 +3,84 @@ import { useForm } from "react-hook-form";
 import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 
+type BassFormValues = {
+  image: FileList | null;
+  model: string;
+  year: number;
+  brand: string;
+  serial: string;
+  handedness: "left" | "right";
+  bodyMaterial: string;
+  finish: string;
+  finishMaterial: string;
+  radius: string;
+  weight: string;
+  tuners: string;
+  scaleLength: string;
+  nutWidth: string;
+  neckProfile: string;
+  neckThickness: string;
+  potCodes: string;
+  electronics: string;
+  pickupImpedance: string;
+  neckFingerboard: string;
+  case: string;
+  mods: string;
+};
+
 export default function BassForm() {
-  const { register, handleSubmit, setValue, reset } = useForm({
-    defaultValues: {
-      model: "",
-      year: new Date().getFullYear(),
-      brand: "",
-      serial: "",
-      handedness: "right",
-      bodyMaterial: "",
-      finish: "",
-      finishMaterial: "",
-      radius: "",
-      weight: "",
-      tuners: "",
-      scaleLength: "",
-      nutWidth: "",
-      neckProfile: "",
-      neckThickness: "",
-      potCodes: "",
-      electronics: "",
-      pickupImpedance: "",
-      neckFingerboard: "",
-      case: "",
-      mods: "",
-    },
-  });
+  const { register, handleSubmit, setValue, reset, watch } =
+    useForm<BassFormValues>({
+      defaultValues: {
+        image: null,
+        model: "Jazzmaster",
+        year: 1965,
+        brand: "Fender",
+        serial: "1234abcd",
+        handedness: "right",
+        bodyMaterial: "Alder Ash Basswood",
+        finish: "Lake Placid Blue",
+        finishMaterial: "nitrocellulose lacquer",
+        radius: "9.5 in",
+        weight: "8.6 lbs",
+        tuners: "N/A",
+        scaleLength: "64.77 cm",
+        nutWidth: "42 mm",
+        neckProfile: "Mid '60s 'C'",
+        neckThickness: "21.8 mm",
+        potCodes: "CTS 1 MOhm",
+        electronics: "Pickups VintageStyle '60s Single-Coil Jazzmaster",
+        pickupImpedance: "8K Ohms",
+        neckFingerboard: "Maple 4 bolt Glass Urethane",
+        case: "Not included",
+        mods: "Minor paint touchups on headstock",
+      },
+    });
   const onSubmit = (data: any) => {
     console.log({ submitData: data });
   };
+
+  register("image", {
+    required: true,
+    validate: {
+      lessThan15MB: (fileList) => {
+        if (!fileList || fileList.length !== 1) return false;
+        return (
+          (fileList[0]?.size || 1000000000) / 1024 / 1024 < 10 ||
+          "File size must be less than 15MB"
+        );
+      },
+      imageFormat: (fileList) => {
+        if (!fileList || fileList.length !== 1) return false;
+        // validate that image format is any image format using regex
+        return (
+          /^image\/(jpeg|png|gif|bmp|svg\+xml)$/i.test(
+            fileList[0]?.type || ""
+          ) || "File must be an image"
+        );
+      },
+    },
+  });
   return (
     <form
       className="flex flex-row flex-wrap gap-4 justify-between"
@@ -45,14 +94,18 @@ export default function BassForm() {
             Image must be less than 15 MB in size
           </span>
         </label>
-        <DragDropFileInput name="image" setValue={setValue} />
+        <DragDropFileInput
+          name="image"
+          setValue={setValue}
+          value={watch("image")}
+        />
       </div>
       <div className="md:max-w-[45%] w-full">
         <label className="whitespace-pre-wrap pb-4">
           <span className="font-bold text-xl">Basic Information</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Enter the basic information about your bass
+            Enter the basic information about your instrument
           </span>
         </label>
         <Input
@@ -115,7 +168,7 @@ export default function BassForm() {
           <span className="font-bold text-xl">Body Details</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Details of the finish of your bass
+            Details of the finish of your instrument
           </span>
         </label>
 
@@ -173,7 +226,7 @@ export default function BassForm() {
           <span className="font-bold text-xl">Neck/Bridge/Tuner Details</span>
           {"\n"}
           <span className="text-sm dark:text-white/70 text-black/70">
-            Details of the neck, bridge and tuners of your bass
+            Details of the neck, bridge and tuners of your instrument
           </span>
         </label>
         <Input
@@ -235,7 +288,7 @@ export default function BassForm() {
           className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
           type="submit"
         >
-          Mint
+          Create Metadata
         </button>
         <button type="reset" onClick={() => reset()}>
           Cancel

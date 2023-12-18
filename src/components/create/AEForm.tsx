@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 
-export default function BassForm() {
+export default function AmpsEffectForm() {
   const { register, handleSubmit, setValue, reset } = useForm({
     defaultValues: {
       instrument: "",
