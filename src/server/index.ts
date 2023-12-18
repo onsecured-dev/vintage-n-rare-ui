@@ -8,6 +8,7 @@ import {
   NFTBassObject,
   NFTGuitarObject,
 } from "../util/util";
+import { createAcoustic, createAmpFx, createBass, createGuitar } from "../util/queries";
 
 export const appRouter = router({
   getIds: publicProcedure.query(async () => {
@@ -437,11 +438,29 @@ export const appRouter = router({
         nftid: z.string(), // typeof == `0x{hex stuff}
         nftmetadataCID: z.string(), // typeof == `Qm{base58 stuff}`
         nftObject: z.any(), // not sure
+        nftType: z.string()
       })
     )
     .mutation(async ({ input }) => {
       // get data associated with CID (preferable JSON)
       // actually save the data to the database
+      switch (input.nftType) {
+        case "guitar":
+          await createGuitar(input.nftObject)
+          break;
+        case "bass":
+          await createBass(input.nftObject)
+          break;
+        case "acoustic":
+          await createAcoustic(input.nftObject)
+          break;
+        case "ampfx":
+          await createAmpFx(input.nftObject)
+          break;
+      
+        default:
+          break;
+      }
     }),
 });
 
