@@ -58,16 +58,16 @@ export default function PreviewCard(props: {
     <div
       className={classNames(
         "dark:card-bg border-primary-border dark:border-primary-border-dark rounded-2xl px-4 pt-5 pb-4",
-        "max-w-[70vw] sm:max-w-[calc(50%-32px)] lg:max-w-[calc(33%-32px)]",
+        "max-w-[80vw] sm:max-w-[calc(50%-32px)] lg:max-w-[calc(33.33%-32px)] w-full",
         "hover:translate-y-[-10px] transition-transform duration-300"
       )}
     >
       <div className="flex flex-row justify-between items-center">
         <div
-          className="tooltip max-w-[60%] text-left overflow-hidden text-ellipsis"
+          className="tooltip max-w-[60%] text-left text-ellipsis"
           data-tip={parsedMetadata.name}
         >
-          <div className="tooltip text-xl font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
+          <div className="text-xl font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
             {parsedMetadata.name}
           </div>
         </div>

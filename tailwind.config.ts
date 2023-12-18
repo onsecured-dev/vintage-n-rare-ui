@@ -25,9 +25,11 @@ const config: Config = {
       },
       colors:{
         "action-bg": "#1F1F2C",
+        "pending-bg": "#F7F7F7",
         "primary-border": "#E5E5E5",
         "primary-border-dark": "#28303F",
-        "primary-text": "#3749E9"
+        "primary-text": "#3749E9",
+        "disabled-text": "#565660",
       }
     },
   },

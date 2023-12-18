@@ -12,10 +12,8 @@ export default function Home() {
             Create your Instrument&apos;s Certificate of Authenticity
           </p>
           <p className="text-lg my-8">
-            Our mission is to establish and develop the ultimate
-            network/community designed for enthusiasts and retailers of vintage,
-            rare and antique musical instruments, as well as an online network
-            for dedicated builders of fine instruments.
+            Facilitating the creation of Certificates of Authenticity for
+            vintage boutique musical instruments on the Binance Smart Chain.
           </p>
           <div className="flex-row items-start justify-between my-8">
             <button
