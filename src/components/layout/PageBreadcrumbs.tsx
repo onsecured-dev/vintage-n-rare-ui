@@ -25,9 +25,9 @@ export default function PageBreadcrumbs() {
               {isLast || notLink ? (
                 <span
                   className={classNames(
-                    "capitalize text-sm md:text-base text-primary-text font-bold",
+                    "capitalize text-sm md:text-base text-primary-text font-bold pointer-events-none",
                     notLink
-                      ? "text-slate-500 dark:text-white/70 pointer-events-none"
+                      ? "text-slate-500 dark:text-white/70 "
                       : "text-primary-text"
                   )}
                 >
