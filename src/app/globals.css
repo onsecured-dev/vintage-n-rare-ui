@@ -50,4 +50,18 @@
   .text-white-shadow{
     text-shadow: 1px 0px 5px rgba(255, 255, 255, 0.7);
   }
+  
+  .card-bg{
+    background: linear-gradient(156.67deg, rgba(112, 112, 114, 0.4) 0.07%, rgba(100, 97, 113, 0.148) 99.07%);
+  }
+}
+
+@layer components{
+
+  .main-btn {
+    @apply bg-primary-text hover:border-white hover:bg-transparent border-primary-text text-white hover:text-primary-text dark:hover:text-white w-[150px] text-center rounded-xl border-2 font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300;
+  }
+  .main-secondary-btn {
+    @apply hover:bg-primary-text bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text hover:text-white text-primary-text dark:text-white w-[150px] text-center rounded-xl border-2  font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300;
+  }
 }
