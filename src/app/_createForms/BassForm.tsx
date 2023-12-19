@@ -17,6 +17,9 @@ import LoadingModal from "@/components/create/LoadingModal";
 import { useRef } from "react";
 import { trpc } from "../_trpc/client";
 import classNames from "classnames";
+// import nodemailer from 'nodemailer';
+import { OrderNowModal } from "@/components/create/OrderNowModal";
+
 
 type BassFormValues = {
   image: FileList | null;
@@ -46,6 +49,7 @@ type BassFormValues = {
 
 export default function BassForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const modalOrdRef = useRef<HTMLDialogElement>(null);
   const { register, handleSubmit, setValue, reset, watch, getValues } =
     useForm<BassFormValues>({
       defaultValues: {
@@ -159,6 +163,14 @@ export default function BassForm() {
         loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
+      />
+      <OrderNowModal
+        name="order-now-modal"
+        close={() => modalOrdRef.current?.close()}
+        ref={modalOrdRef}
+        instrumentData={getValues()}
+      // loading={isMinting || metadataStatus === "pending"}
+
       />
       <form
         className="flex flex-row flex-wrap gap-4 justify-between"
@@ -375,29 +387,29 @@ export default function BassForm() {
         <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">
           <button
             className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
+            type="button"
+            onClick={(e) => {
+              // const values = getValues()
+              // console.log('values: ', values)
+              modalOrdRef.current?.showModal();
+
+              // reset();
+            }}
+          >
+            Order Now
+          </button>
+          <button
+            className={classNames(
+              "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
+              "hover:text-white text-primary-text dark:text-white",
+              "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
+            )}
             type="submit"
             onClick={(e) => {
               modalRef.current?.showModal();
             }}
           >
             Create Metadata
-          </button>
-          <button
-            className={classNames(
-              "hover:dark:bg-gray-700 bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text",
-              "hover:text-white text-primary-text dark:text-white",
-              "w-full max-w-[225px] text-center rounded-full border-2  font-semibold px-8 py-4 my-2 mx-1 shadow-sm transition-colors duration-300"
-            )}
-            type="button"
-            onClick={(e) => {
-              const values = getValues()
-              console.log('values: ', values)
-              console.log("ordered now");
-
-              // reset();
-            }}
-          >
-            Order Now
           </button>
           {/* <button type="reset" onClick={() => reset()}>
             Cancel
