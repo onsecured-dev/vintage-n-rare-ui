@@ -7,6 +7,12 @@ import { FaChevronRight } from "react-icons/fa";
 import classNames from "classnames";
 
 const invalidPaths: Array<string> = [];
+const explorePaths: Array<string> = [
+  "acoustic-guitar",
+  "electric-guitar",
+  "electric-bass",
+  "amps-effects",
+];
 
 export default function PageBreadcrumbs() {
   const path = usePathname();
@@ -19,6 +25,7 @@ export default function PageBreadcrumbs() {
         if (!item) return null;
         const isLast = pathItems.length - 1 == i;
         const notLink = invalidPaths.includes(item);
+        const isExplore = explorePaths.includes(item);
         return (
           <Fragment key={`breadcrumbs-${i}`}>
             <div className="text-slate-500 dark:text-white/70 text-md">
@@ -35,7 +42,13 @@ export default function PageBreadcrumbs() {
                 </span>
               ) : (
                 <Link
-                  href={i == 0 ? "/" : "/" + item}
+                  href={
+                    i == 0
+                      ? "/"
+                      : isExplore
+                      ? "/explore?instruments=" + item
+                      : "/" + item
+                  }
                   className="capitalize text-sm md:text-base font-bold hover:underline underline-offset-4 hover:text-primary-text/60"
                 >
                   {item.replace(/-/g, " ")}
