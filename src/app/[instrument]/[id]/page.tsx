@@ -5,6 +5,7 @@ import LikeButton from "@/components/explore/LikeButton";
 import UserAvatar from "@/components/items/DetailAvatar";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
 import { previewData } from "@/data/placeholder";
+import { InstrumentCategory, categoryDetails } from "@/util/util";
 import shortAddress, { slugToName } from "@/utils/w3String";
 import classNames from "classnames";
 import Image from "next/image";
@@ -16,6 +17,7 @@ export default function InstrumentPage({
 }: {
   params: { instrument: string; id: string };
 }) {
+  
   const nftItem = previewData.find(
     (item) => item.type === params.instrument && item.id === parseInt(params.id)
   );
@@ -56,10 +58,22 @@ export default function InstrumentPage({
               <div role="tablist" className="tabs tabs-bordered">
                 <button
                   role="tab"
-                  className="tab tab-active [--fallback-bc:theme(colors.primary-text)] text-white border-primary-text"
+                  className="tab tab-active font-semibold [--fallback-bc:theme(colors.primary-text)] text-white border-primary-text hover:text-primary-text"
                 >
                   Details
                 </button>
+                {/* <button
+                  role="tab"
+                  className="tab tab-active font-semibold [--fallback-bc:theme(colors.primary-text)] text-white border-primary-text hover:text-primary-text"
+                >
+                  Bids
+                </button>
+                <button
+                  role="tab"
+                  className="tab tab-active font-semibold [--fallback-bc:theme(colors.primary-text)] text-white border-primary-text hover:text-primary-text"
+                >
+                  History
+                </button> */}
               </div>
               <div className="h-2 w-full flex-1 border-b-[2px] border-disabled-text/50" />
             </div>
@@ -91,7 +105,7 @@ export default function InstrumentPage({
               <MainProperty label="Model" value={nftItem.model} />
               <MainProperty label="Year" value={nftItem.year.toString()} />
               <MainProperty label="Serial" value={nftItem.serial} />
-              <MainProperty label="Handedness" value={"Right"} />
+              {params.instrument != InstrumentCategory.AmpsEffects ? <MainProperty label="Handedness" value={"Right"} /> : null }
               <MainProperty label="Finish" value={"-"} />
             </div>
             <div className="flex flex-row items-center border-b-2 border-disabled-text/50 pb-4 gap-4">
@@ -102,34 +116,45 @@ export default function InstrumentPage({
                 </span>
               </h3>
             </div>
-            <ul className="grid grid-cols-2">
-              <SecondaryProperty label="Body Type" value="N/A" />
-              <SecondaryProperty label="Body Material" value="N/A" />
-              <SecondaryProperty label="Finish Material" value="N/A" />
-              <SecondaryProperty label="Body Color" value="N/A" />
-              <SecondaryProperty label="Neck Material" value="N/A" />
-              <SecondaryProperty label="Neck Shape" value="N/A" />
-              <SecondaryProperty label="Fingerboard Material" value="N/A" />
-              <SecondaryProperty label="Fingerboard Radius" value="N/A" />
-              <SecondaryProperty label="Neck Fingerboard" value="N/A" />
-              <SecondaryProperty label="Scale Length" value="N/A" />
-              <SecondaryProperty label="Nut Width" value="N/A" />
-              <SecondaryProperty label="Weight" value="N/A" />
-              <SecondaryProperty label="Tuners" value="N/A" />
-              {/* <SecondaryProperty label="Neck Profile" value="N/A" />
-              <SecondaryProperty label="Neck Thickness" value="N/A" />
-              <SecondaryProperty label="Electronics" value="N/A" />
-              <SecondaryProperty label="Pot. Opcodes" value="N/A" />
-              <SecondaryProperty label="Pickup Impedance" value="N/A" />
-              <SecondaryProperty label="Has Brazilian Rosewood" value="N/A" />
-              <SecondaryProperty label="Case" value="N/A" />
-              <SecondaryProperty label="Modifications or Repairs" value="N/A" /> */}
+            
+            <ul className="grid xl:grid-cols-2 grid-cols-1">
+            <PropertyManager instrument={params.instrument}
+            // data={data}
+            />
+              
             </ul>
           </div>
         </div>
       </section>
     </main>
   );
+}
+
+function PropertyManager(props: {instrument:string}) {
+  // @todo receive data
+
+  // switch statement with key instrument categories guitar, bass, acoustic, amps-effects
+  // InstrumentCategory
+  // categoryDetails[InstrumentCategory.Acoustic]
+  // return (
+  //   <div>
+  //     {categoryDetails[InstrumentCategory.Acoustic].map((item:any) => {
+  //       return <div>{item.label}</div>
+  //     })
+
+  switch (props.instrument) {
+    case InstrumentCategory.Guitar:
+      return categoryDetails.Guitar.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+    case InstrumentCategory.Bass:
+      return categoryDetails.Bass.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+    case InstrumentCategory.Acoustic:
+      return categoryDetails.Acoustic.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+    case InstrumentCategory.AmpsEffects:
+      return categoryDetails.AmpsEffects.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+    default:
+      return <></>
+  
+  }
 }
 
 function MainProperty(props: { label: string; value: string }) {
@@ -152,8 +177,8 @@ function SecondaryProperty(props: { label: string; value: string }) {
     <li className="border-b-2 border-primary-border-dark py-4 pl-4">
       <div className="flex flex-row items-center gap-4">
         <div className="text-sm font-semibold w-1/3">{label}</div>
-        <div className="text-sm">{value}</div>
         <div className="text-sm font-semibold w-1/3">-</div>
+        <div className="text-sm">{value}</div>
       </div>
     </li>
   );
