@@ -48,11 +48,6 @@ export default function Categories(props: { isList?: boolean }) {
         onScroll={(e) => {
           const currentFullWidth = e.currentTarget.scrollWidth;
           const itemOffset = currentFullWidth / 4;
-          console.log({
-            currentFullWidth,
-            itemOffset,
-            scrollLeft: e.currentTarget.scrollLeft,
-          });
           setCurrentView(Math.ceil(e.currentTarget.scrollLeft / itemOffset));
         }}
         ref={containerRef}
