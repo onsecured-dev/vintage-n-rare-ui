@@ -87,14 +87,3 @@
 }
 
 
-@media (max-width: 560px) {
-  .ccontainer {
-    flex-direction: column; /* Ensure it's a column */
-    /* Reset any styles that need to change for smaller screens */
-  }
-
-  .ccontainer > * {
-    margin-bottom: 2rem; /* Add a bottom margin for items */
-    /* Additional styling for items if needed */
-  }
-}
