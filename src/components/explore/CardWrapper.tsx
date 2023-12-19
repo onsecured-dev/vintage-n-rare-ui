@@ -14,77 +14,25 @@ import { IoIosSearch } from "react-icons/io";
 import { useContractReads } from "wagmi";
 import { useImmer } from "use-immer";
 
-export default function CardWrapper(props: { children: React.ReactNode }) {
-  const [tagSelected, setTagSelected] = useImmer<Array<string>>([]);
-  const [sortedBy, setSortedBy] = useState<string>("");
-  const { data: nfts } = useContractReads({
-    contracts: [
-      {
-        address: electricBass,
-        abi: NFTAbi,
-        functionName: "totalSupply",
-      },
-      {
-        address: electricGuitars,
-        abi: NFTAbi,
-        functionName: "totalSupply",
-      },
-      {
-        address: acousticGuitars,
-        abi: NFTAbi,
-        functionName: "totalSupply",
-      },
-      {
-        address: ampsEffects,
-        abi: NFTAbi,
-        functionName: "totalSupply",
-      },
-    ],
-  });
+type SearchParams = {
+  query: string;
+  instrument: string;
+};
 
-  const parsedNFTInfo = {
-    totalBass: nfts?.[0]?.result || 0n,
-    totalElectricGuitar: nfts?.[1]?.result || 0n,
-    totalAcousticGuitar: nfts?.[2]?.result || 0n,
-    totalAmpsEffects: nfts?.[3]?.result || 0n,
-  };
-  const totalInstruments = parseInt(
-    (
-      parsedNFTInfo.totalBass +
-      parsedNFTInfo.totalElectricGuitar +
-      parsedNFTInfo.totalAcousticGuitar +
-      parsedNFTInfo.totalAmpsEffects
-    ).toString()
-  );
+export default function CardWrapper(props: {
+  children: React.ReactNode;
+  totalItems: number;
+  loadedItems: number;
+  onSearch: (vals: SearchParams) => void;
+  onSort: (vals: string) => void;
+  sortedBy?: string;
+}) {
+  const { totalItems, loadedItems, onSearch, onSort, sortedBy } = props;
+  const [tagSelected, setTagSelected] = useImmer<Array<string>>([]);
+  const [searchString, setSearchString] = useState<string>("");
+
   return (
     <div className="px-8">
-      {/* <div className="flex flex-row items-center gap-4 pb-8 px-4">
-        <TagSearch
-          name="All"
-          onClick={() => setTagSelected("All")}
-          selected={tagSelected === "All"}
-        />
-        <TagSearch
-          name="Electric Guitar"
-          onClick={() => setTagSelected("Electric Guitar")}
-          selected={tagSelected === "Electric Guitar"}
-        />
-        <TagSearch
-          name="Electric Bass"
-          onClick={() => setTagSelected("Electric Bass")}
-          selected={tagSelected === "Electric Bass"}
-        />
-        <TagSearch
-          name="Amps & Effects"
-          onClick={() => setTagSelected("Amps & Effects")}
-          selected={tagSelected === "Amps & Effects"}
-        />
-        <TagSearch
-          name="Acoustic Guitar"
-          onClick={() => setTagSelected("Acoustic Guitar")}
-          selected={tagSelected === "Acoustic Guitar"}
-        />
-      </div> */}
       <div className="grid grid-cols-12">
         <div className="hidden md:block col-span-3 pr-4">
           <div className="form-control">
@@ -96,6 +44,8 @@ export default function CardWrapper(props: { children: React.ReactNode }) {
               <input
                 type="text"
                 placeholder="Search NFT"
+                onChange={(e) => setSearchString(e.target.value)}
+                value={searchString}
                 className="input input-bordered w-full pr-10 bg-transparent dark:bg-inherit border-primary-border placeholder:text-black/60 dark:placeholder:text-white/60"
                 onFocus={(e) => e.currentTarget.select()}
               />
@@ -109,66 +59,83 @@ export default function CardWrapper(props: { children: React.ReactNode }) {
                 name="Electric Guitar"
                 onChange={() =>
                   setTagSelected((t) => {
-                    if (t.includes("Electric Guitar")) {
-                      t.filter((e) => e !== "Electric Guitar");
+                    const index = t.indexOf("electric-guitar");
+                    if (index > -1) {
+                      t.splice(index, 1);
                       return;
                     }
-                    t.push("Electric Guitar");
+                    t.push("electric-guitar");
                     return;
                   })
                 }
-                checked={tagSelected.includes("Electric Guitar")}
+                checked={tagSelected.includes("electric-guitar")}
               />
               <SearchCheckbox
                 name="Acoustic Guitar"
                 onChange={() =>
                   setTagSelected((t) => {
-                    if (t.includes("Acoustic Guitar")) {
-                      t.filter((e) => e !== "Acoustic Guitar");
+                    const index = t.indexOf("acoustic-guitar");
+                    if (index > -1) {
+                      t.splice(index, 1);
                       return;
                     }
-                    t.push("Acoustic Guitar");
+                    t.push("acoustic-guitar");
                     return;
                   })
                 }
-                checked={tagSelected.includes("Acoustic Guitar")}
+                checked={tagSelected.includes("acoustic-guitar")}
               />
               <SearchCheckbox
                 name="Electric Bass"
                 onChange={() =>
                   setTagSelected((t) => {
-                    if (t.includes("Electric Bass")) {
-                      t.filter((e) => e !== "Electric Bass");
+                    const index = t.indexOf("electric-bass");
+                    if (index > -1) {
+                      t.splice(index, 1);
                       return;
                     }
-                    t.push("Electric Bass");
+                    t.push("electric-bass");
                     return;
                   })
                 }
-                checked={tagSelected.includes("Electric Bass")}
+                checked={tagSelected.includes("electric-bass")}
               />
               <SearchCheckbox
                 name="Amps & Effects"
                 onChange={() =>
                   setTagSelected((t) => {
-                    if (t.includes("Amps & Effects")) {
-                      t.filter((e) => e !== "Amps & Effects");
+                    const index = t.indexOf("amps-effects");
+                    if (index > -1) {
+                      t.splice(index, 1);
                       return;
                     }
-                    t.push("Amps & Effects");
+                    t.push("amps-effects");
                     return;
                   })
                 }
-                checked={tagSelected.includes("Amps & Effects")}
+                checked={tagSelected.includes("amps-effects")}
               />
             </div>
           </div>
           <hr />
+          <div className="flex flex-row items-center justify-center">
+            <button
+              className="main-btn"
+              onClick={() => {
+                onSearch({
+                  instrument: tagSelected.join(","),
+                  query: searchString,
+                });
+              }}
+            >
+              Search
+            </button>
+          </div>
         </div>
-        <div className="flex flex-row flex-wrap items-center justify-evenly gap-4 col-span-12 md:col-span-9">
+        <div className="flex flex-row flex-wrap items-center justify-evenly gap-4 col-span-12 md:col-span-9 w-full">
           <div className="flex flex-col sm:flex-row items-center justify-between pb-2 sm:pb-8 px-4 w-full gap-1">
             <div>
-              Showing 1 - 10 of {totalInstruments.toLocaleString()} results
+              Showing 1 - {loadedItems} of {totalItems.toLocaleString()} results
             </div>
             <div>
               <div className="dropdown dropdown-hover">
@@ -187,7 +154,7 @@ export default function CardWrapper(props: { children: React.ReactNode }) {
                   className="p-2 big-shadow menu dropdown-content dark:bg-base-100 bg-white rounded-box w-52 z-20"
                 >
                   <li>
-                    <button onClick={() => setSortedBy("")}>Any</button>
+                    <button onClick={() => onSort("")}>Any</button>
                   </li>
                   <li>
                     <div className="w-full py-2 text-disabled-text hover:bg-transparent pointer-events-none">
@@ -195,24 +162,24 @@ export default function CardWrapper(props: { children: React.ReactNode }) {
                     </div>
                     <button
                       className="ml-4"
-                      onClick={() => setSortedBy("acoustic-guitars-first")}
+                      onClick={() => onSort("acoustic-guitar")}
                     >
                       Acoustics First
                     </button>
                     <button
                       className="ml-4"
-                      onClick={() => setSortedBy("electric-guitars-first")}
+                      onClick={() => onSort("electric-guitar")}
                     >
                       Electrics First
                     </button>
                   </li>
                   <li>
-                    <button onClick={() => setSortedBy("basses-first")}>
+                    <button onClick={() => onSort("electric-bass")}>
                       Basses First
                     </button>
                   </li>
                   <li>
-                    <button onClick={() => setSortedBy("amps-first")}>
+                    <button onClick={() => onSort("amps-effects")}>
                       Amps & Effects First
                     </button>
                   </li>
@@ -221,7 +188,7 @@ export default function CardWrapper(props: { children: React.ReactNode }) {
             </div>
           </div>
           {props.children}
-          <div className="flex flex-row items-center justify-center py-10">
+          <div className="flex flex-row items-center justify-center py-10 w-full">
             <button className="main-secondary-btn border-primary-text dark:border-primary-text rounded-full">
               Load More
             </button>
@@ -265,11 +232,11 @@ function SearchCheckbox(props: {
       <label className="label cursor-pointer justify-start gap-4">
         <input
           type="checkbox"
-          className="checkbox checkbox-sm [--chkbg:theme(colors.primary-text)] [--chkfg:white] border-primary-border-dark"
+          className="checkbox checkbox-xs md:checkbox-sm [--chkbg:theme(colors.primary-text)] [--chkfg:white] border-primary-border-dark"
           checked={checked}
           onChange={onChange}
         />
-        <span className="label-text dark:text-white text-black text-base">
+        <span className="label-text dark:text-white text-black text-xs lg:text-base">
           {name}
         </span>
       </label>
