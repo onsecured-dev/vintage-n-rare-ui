@@ -20,7 +20,6 @@ import classNames from "classnames";
 // import nodemailer from 'nodemailer';
 import { OrderNowModal } from "@/components/create/OrderNowModal";
 
-
 type BassFormValues = {
   image: FileList | null;
   instrument: string;
@@ -78,28 +77,32 @@ export default function BassForm() {
         mods: "Minor paint touchups on headstock",
       },
     });
-  const { mutate: createBass, data: cidData, status: metadataStatus } = trpc.createBass.useMutation()
-  console.log({ trpc })
+  const {
+    mutate: createBass,
+    data: cidData,
+    status: metadataStatus,
+  } = trpc.createBass.useMutation();
+
   const onSubmit: SubmitHandler<BassFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
     if (!baseImg) return;
-    console.log('has file')
+    console.log("has file");
     const reader = new FileReader();
     reader.readAsDataURL(baseImg);
     reader.onload = () => {
       const base64 = reader.result?.toString();
       if (!base64) return;
-      console.log('file loaded as string')
+      console.log("file loaded as string");
       createBass({
         image: base64,
         object: {
           ...data,
           fileName: baseImg.name,
-          fileType: baseImg.type
-        }
-      })
-    }
+          fileType: baseImg.type,
+        },
+      });
+    };
   };
 
   const { address } = useAccount();
@@ -169,8 +172,7 @@ export default function BassForm() {
         close={() => modalOrdRef.current?.close()}
         ref={modalOrdRef}
         instrumentData={getValues()}
-      // loading={isMinting || metadataStatus === "pending"}
-
+        // loading={isMinting || metadataStatus === "pending"}
       />
       <form
         className="flex flex-row flex-wrap gap-4 justify-between"
@@ -400,20 +402,19 @@ export default function BassForm() {
           </button>
           <button
             className={classNames(
+              "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
               "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
               "hover:text-white text-primary-text dark:text-white",
               "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
             )}
             type="submit"
+            disabled={!address}
             onClick={(e) => {
               modalRef.current?.showModal();
             }}
           >
             Create Metadata
           </button>
-          {/* <button type="reset" onClick={() => reset()}>
-            Cancel
-          </button> */}
         </div>
       </form>
     </>

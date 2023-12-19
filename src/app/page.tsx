@@ -3,6 +3,7 @@ import Categories from "@/components/Categories";
 import thumbnail from "@/../public/Graphics/thumbnail.jpeg";
 import classNames from "classnames";
 import { type Metadata } from "next";
+import Link from "next/link";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24 md:pb-10 pb-6 ">
@@ -16,7 +17,8 @@ export default function Home() {
             vintage boutique musical instruments on the Binance Smart Chain.
           </p>
           <div className="flex-row items-start justify-between my-8">
-            <button
+            <Link
+              href="/explore"
               className={classNames(
                 "bg-primary-text hover:border-white hover:bg-transparent border-primary-text",
                 "text-white hover:text-primary-text dark:hover:text-white",
@@ -24,8 +26,9 @@ export default function Home() {
               )}
             >
               Explore now
-            </button>
-            <button
+            </Link>
+            <Link
+              href="/create"
               className={classNames(
                 "hover:bg-primary-text bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text",
                 "hover:text-white text-primary-text dark:text-white",
@@ -33,7 +36,7 @@ export default function Home() {
               )}
             >
               Create
-            </button>
+            </Link>
           </div>
         </div>
         <div className="hidden md:block p-4 z-10 dark:bg-transparent border-[1px] dark:border-white bg-gray-400/50 w-5/12 max-h-fit items-end rounded-3xl box-sway">
