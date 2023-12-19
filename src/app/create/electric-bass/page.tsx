@@ -1,4 +1,4 @@
-import BassForm from "@/components/create/BassForm";
+import BassForm from "@/app/_createForms/BassForm";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
 
 export default function CreatePage() {

@@ -38,10 +38,11 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
+      console.log('create bass start')
       if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
-          message: "NFT_STORAGE_KEY is not set",
+          message: "NFT_STORAGE_API_KEY is not set",
         });
 
       console.log("GotBASS : ", input);
@@ -55,7 +56,7 @@ export const appRouter = router({
         });
       const cid = await client.store({
         description: `Vintage and Rare Bass Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: "VNR Bass",
+        name: `${input.input.object.year} - ${input.input.object.brand} - ${input.input.object.model}`,
         image: new File(
           [input.input.image],
           `${input.input.object.model
@@ -170,10 +171,10 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_KEY)
+      if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
-          message: "NFT_STORAGE_KEY is not set",
+          message: "NFT_STORAGE_API_KEY is not set",
         });
 
       console.log("Got E Guit : ", input);
@@ -187,7 +188,7 @@ export const appRouter = router({
         });
       const cid = await client.store({
         description: `Vintage and Rare Electric Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: "VNR Guitar",
+        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
         image: new File(
           [input.input.image],
           `${input.input.object.model
@@ -265,10 +266,10 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_KEY)
+      if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
-          message: "NFT_STORAGE_KEY is not set",
+          message: "NFT_STORAGE_API_KEY is not set",
         });
 
       console.log("GotAcoustic : ", input);
@@ -282,7 +283,7 @@ export const appRouter = router({
         });
       const cid = await client.store({
         description: `Vintage and Rare Acoustic Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: "VNR Acoustic Guitar",
+        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
         image: new File(
           [input.input.image],
           `${input.input.object.model
@@ -363,10 +364,10 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_KEY)
+      if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
-          message: "NFT_STORAGE_KEY is not set",
+          message: "NFT_STORAGE_API_KEY is not set",
         });
 
       console.log("GotAmpFx : ", input);
@@ -380,7 +381,7 @@ export const appRouter = router({
         });
       const cid = await client.store({
         description: `Vintage and Rare Amp Fx - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: "VNR AmpFx",
+        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
         image: new File(
           [input.input.image],
           `${input.input.object.model

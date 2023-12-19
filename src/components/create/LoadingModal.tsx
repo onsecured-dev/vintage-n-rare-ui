@@ -48,13 +48,15 @@ const LoadingModal = forwardRef(function ForwardModal(
               <div className="pt-4 whitespace-pre-wrap text-center">
                 <span>
                   The metadata created and uploaded to IPFS record:{"\n"}
-                  <code className="text-xs">{cid}</code>.
+                  <code className="text-xs break-all">{cid.replace("/metadata.json", "")}</code>.
                 </span>
                 <br />
                 <div className="w-full text-center">
                   <a
-                    href={`https://${cid}.ipfs.nftstorage.link/`}
+                    href={`https://${cid.replace("/metadata.json", "")}.ipfs.nftstorage.link/`}
                     className="btn btn-link text-primary-text text-center"
+                    target="_blank"
+                    rel="nonreferrer noopener"
                   >
                     IPFS Preview Link
                   </a>
