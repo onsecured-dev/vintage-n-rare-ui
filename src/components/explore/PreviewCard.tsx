@@ -10,6 +10,7 @@ import Image from "next/image";
 import { zeroAddress } from "viem";
 import shortAddress from "@/utils/w3String";
 import Link from "next/link";
+import LikeButton from "./LikeButton";
 
 export type InstrumentType =
   | "electric-guitar"
@@ -19,26 +20,31 @@ export type InstrumentType =
 export default function PreviewCard(props: {
   id: number;
   type: InstrumentType;
+  brand: string;
+  model: string;
+  year: number;
+  img: string;
 }) {
+  const { type, id, brand, model, year, img } = props;
   const { data: instrument } = useContractReads({
     contracts: [
       {
         address: electricBass,
         abi: NFTAbi,
         functionName: "tokenURI",
-        args: [BigInt(props.id)],
+        args: [BigInt(id)],
       },
       {
         address: electricBass,
         abi: NFTAbi,
         functionName: "ownerOf",
-        args: [BigInt(props.id)],
+        args: [BigInt(id)],
       },
     ],
   });
 
   const { data: metadata } = useQuery({
-    queryKey: ["metadata", instrument?.[0]?.result || props.id],
+    queryKey: ["metadata", instrument?.[0]?.result || id],
     queryFn: () => {
       const actualCID = instrument?.[0]?.result?.replace("ipfs://", "");
       return fetch(`https://${actualCID}.ipfs.nftstorage.link/`).then((res) =>
@@ -48,45 +54,43 @@ export default function PreviewCard(props: {
     enabled: !!instrument?.[0]?.result,
   });
 
-  console.log({ metadata, instrument });
-
   const parsedMetadata = {
-    name: "Fender Jazzmaster 1965", //metadata?.name || "...",
+    name: "Fender Jazzmaster", //metadata?.name || "...",
   };
 
   return (
     <div
       className={classNames(
         "dark:card-bg bg-white card-shadow border-primary-border dark:border-primary-border-dark rounded-2xl px-4 pt-5 pb-4 border-[1.5px]",
-        "max-w-[80vw] sm:max-w-[calc(50%-32px)] lg:max-w-[calc(33.33%-32px)] w-full",
+        "max-w-[80vw] sm:max-w-[calc(50%-32px)] xl:max-w-[calc(33.33%-32px)] w-full",
         "hover:translate-y-[-10px] transition-transform duration-300"
       )}
     >
       <div className="flex flex-row justify-between items-center">
         <div
-          className="tooltip max-w-[60%] text-left text-ellipsis"
-          data-tip={parsedMetadata.name}
+          className="tooltip max-w-[80%] text-left text-ellipsis"
+          data-tip={`${brand} ${model} ${year}`}
         >
-          <div className="text-xl font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
-            {parsedMetadata.name}
+          <div className="text-base font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
+            {`${brand} ${model}`}
+          </div>
+          <div
+            className={classNames(
+              "text-xs font-semibold whitespace-nowrap w-full overflow-hidden text-ellipsis",
+              "text-disabled-text dark:text-white/60"
+            )}
+          >
+            {year}
           </div>
         </div>
-        <button
-          className={classNames(
-            "btn btn-circle border-[1px] border-primary-border text-primary-border text-xl",
-            "hover:border-red-600 hover:text-white hover:bg-red-600",
-            "bg-transparent transition-colors duration-300"
-          )}
-        >
-          <FaHeart />
-        </button>
+        <LikeButton instrument={type} id={id} />
       </div>
       <div className="w-full px-2 py-3">
-        <div className="relative w-full aspect-square rounded-2xl overflow-hidden">
+        <div className="relative w-full aspect-[1/1.34] ">
           <Image
-            src="/Graphics/thumbnail.jpeg"
+            src={`/placeholders/${img}.jpeg`}
             fill
-            alt={`NFT-${props.id}-${props.type}`}
+            alt={`NFT-${id}-${props.type}`}
           />
         </div>
       </div>
@@ -96,7 +100,7 @@ export default function PreviewCard(props: {
         </div>
         <Link
           className="main-secondary-btn w-auto rounded-full px-8 text-sm text-disabled-text border-primary-border"
-          href={`${props.type}/${props.id}`}
+          href={`${props.type}/${id}`}
         >
           <span>View</span>
         </Link>
