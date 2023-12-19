@@ -450,18 +450,19 @@ export const appRouter = router({
       // const data = JSON.parse( db.get('pending',cid) )
       // actually save the data to the database
       // "{alskdfja;d}"
+      const nftObject: any = {}
       switch (input.nftType) {
         case "guitar":
-          await createGuitar(input.nftObject)
+          await createGuitar(nftObject)
           break;
         case "bass":
-          await createBass(input.nftObject)
+          await createBass(nftObject)
           break;
         case "acoustic":
-          await createAcoustic(input.nftObject)
+          await createAcoustic(nftObject)
           break;
         case "ampfx":
-          await createAmpFx(input.nftObject)
+          await createAmpFx(nftObject)
           break;
       
         default:

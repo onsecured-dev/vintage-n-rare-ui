@@ -14,6 +14,8 @@ import NFTAbi from "@/data/abi/NFTAbi";
 import { zeroAddress } from "viem";
 import { useRef } from "react";
 import LoadingModal from "./LoadingModal";
+import { OrderNowModal } from "./OrderNowModal";
+import classNames from "classnames";
 
 type AmpEffectFormValues = {
   instrument: string;
@@ -37,8 +39,9 @@ type AmpEffectFormValues = {
 };
 
 export default function AmpsEffectForm() {
+  const modalOrdRef = useRef<HTMLDialogElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
-  const { register, handleSubmit, setValue, reset, watch } =
+  const { register, handleSubmit, setValue, reset, watch, getValues } =
     useForm<AmpEffectFormValues>({
       defaultValues: {
         instrument: "",
@@ -133,6 +136,13 @@ export default function AmpsEffectForm() {
         loading={isMinting}
         mintData={mintReceipt}
         close={() => modalRef.current?.close()}
+      />
+      <OrderNowModal
+        name="order-now-modal"
+        close={() => modalOrdRef.current?.close()}
+        ref={modalOrdRef}
+        instrumentData={getValues()}
+        // loading={isMinting || metadataStatus === "pending"}
       />
       <form
         className="flex flex-row flex-wrap gap-4 justify-between"
@@ -294,12 +304,31 @@ export default function AmpsEffectForm() {
         <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">
           <button
             className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
-            type="submit"
+            type="button"
+            onClick={(e) => {
+              // const values = getValues()
+              // console.log('values: ', values)
+              modalOrdRef.current?.showModal();
+
+              // reset();
+            }}
           >
-            Mint
+            Order Now
           </button>
-          <button type="reset" onClick={() => reset()}>
-            Cancel
+          <button
+            className={classNames(
+              "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
+              "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
+              "hover:text-white text-primary-text dark:text-white",
+              "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
+            )}
+            type="submit"
+            disabled={!address}
+            onClick={(e) => {
+              modalRef.current?.showModal();
+            }}
+          >
+            Create Metadata
           </button>
         </div>
       </form>

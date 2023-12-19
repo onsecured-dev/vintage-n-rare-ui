@@ -145,7 +145,9 @@ export default function CardWrapper(props: {
                   className=" border-primary-border border-[1px] rounded-full  px-4 py-2 flex flex-row items-center justify-between w-60 dark:bg-action-bg capitalize"
                 >
                   <div>
-                    {sortedBy == "" ? "Sort by " : sortedBy.replace(/-/g, " ")}
+                    {!sortedBy || sortedBy == ""
+                      ? "Sort by "
+                      : sortedBy.replace(/-/g, " ")}
                   </div>
                   <BsChevronDown />
                 </div>
