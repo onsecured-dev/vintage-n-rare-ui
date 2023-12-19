@@ -40,7 +40,7 @@ export default function Categories(props: { isList?: boolean }) {
       </p>
       <div
         className={classNames(
-          "flex flex-row items-center pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar",
+          "flex flex-row items-center pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar ccontainer ",
           isList
             ? "w-full flex-wrap gap-4 justify-center md:justify-evenly"
             : "flex-nowrap justify-between gap-0 container"
@@ -132,7 +132,7 @@ function Category(props: {
       <Link
         href={href}
         className={classNames(
-          "relative flex-grow group rounded-3xl flex-1 items-center border-2 border-gray-600 h-40 overflow-clip"
+          "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip"
         )}
       >
         <Image
