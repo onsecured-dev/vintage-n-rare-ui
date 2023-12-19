@@ -1,5 +1,4 @@
-import CardWrapper from "@/components/explore/CardWrapper";
-import PreviewCard from "@/components/explore/PreviewCard";
+import Explore from "@/components/explore/Explore";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
 
 export default function ExplorePage() {
@@ -14,14 +13,7 @@ export default function ExplorePage() {
         </h1>
       </section>
       <section className="max-w-7xl">
-        <CardWrapper>
-          <PreviewCard id={1} type="electric-guitar" />
-          <PreviewCard id={1} type="electric-guitar" />
-          <PreviewCard id={1} type="electric-guitar" />
-          <PreviewCard id={1} type="electric-guitar" />
-          <PreviewCard id={1} type="electric-guitar" />
-          <PreviewCard id={1} type="electric-guitar" />
-        </CardWrapper>
+        <Explore />
       </section>
     </main>
   );
