@@ -217,3 +217,104 @@ export interface AmpFxObject {
     transformersPT: string;
     wattage: string;
 }
+
+export enum InstrumentCategory {
+  Guitar = 'electric-guitar',
+  Bass = 'electric-bass',
+  Acoustic = 'acoustic-guitar',
+  AmpsEffects = 'amps-effects'
+}
+
+
+export const categoryDetails = {
+  Guitar: [
+    "Body Material",
+    "Brand",
+    "Case",
+    "Contains Brazilian Rosewood",
+    "Electronics",
+    "Finish",
+    "Finish Material",
+    "Handedness",
+    "Instrument Type",
+    "Year",
+    "Model",
+    "Modifications Repairs",
+    "Neck Fingerboard",
+    "Neck Profile",
+    "Neck Thickness",
+    "Nut Width",
+    "Pickup Impedance",
+    "Pot Codes",
+    "Radius",
+    "Scale Length",
+    "Tuners",
+    "Weight"
+  ],
+  Bass: [
+    "Body Material",
+    "Brand",
+    "Case",
+    "Electronics",
+    "Fingerboard Radius",
+    "Finish",
+    "Finish Material",
+    "Model",
+    "Modifications Repairs",
+    "Neck Depth",
+    "Neck Fingerboard",
+    "Neck Profile",
+    "Nut Width",
+    "Radius",
+    "Scale Length",
+    "Serial Number",
+    "Tuners",
+    "Weight",
+    "Year"
+  ],
+  Acoustic: [
+    "Back And Sides",
+    "Brace Pattern",
+    "Brand",
+    "Bridge",
+    "Case",
+    "Contains Brazilian Rosewood",
+    "Electronics",
+    "Fingerboard Radius",
+    "Finish",
+    "Finish Material",
+    "Handedness",
+    "Year",
+    "Model",
+    "Modifications Repairs",
+    "Neck Depth",
+    "Neck Fingerboard",
+    "Neck Profile",
+    "Nut Width",
+    "Scale Length",
+    "Serial Number",
+    "String Spacing At Saddle",
+    "Top",
+    "Tuners"
+  ],
+  AmpsEffects: [
+    "Brand",
+    "Choke",
+    "Circuit",
+    "Finish",
+    "Instrument",
+    "Year",
+    "Model",
+    "Power",
+    "Preamp",
+    "Rectifier",
+    "Reverb Other",
+    "Serial Number",
+    "Speaker",
+    "Speaker Codes",
+    "Transformers OT",
+    "Transformers PT",
+    "Wattage"
+  ]
+}
+
