@@ -7,6 +7,17 @@ import { previewData } from "@/data/placeholder";
 
 export default function Explore() {
   const searchParams = useSearchParams();
+  /**
+   * `instruments` is a comma-separated list of instrument types
+   * `sort` is a string representing the instrument type to sort by
+   * `query` is a string representing the search query - `name`, `brand`, `model`, `year`, `id`
+   *     - if multiple words, query as array of words
+   *      WHERE
+   *        name LIKE '%word1%' AND name LIKE '%word2%' AND name LIKE '%word3%'
+   *        OR brand LIKE '%word1%' AND brand LIKE '%word2%' AND brand LIKE '%word3%'
+   *       OR model LIKE '%word1%' AND model LIKE '%word2%' AND model LIKE '%word3%'
+   *      OR year LIKE '%word1%' AND year LIKE '%word2%' AND year LIKE '%word3%'
+   */
   const router = useRouter();
   /**
    * 1. get the search params to get the search conditions
