@@ -25,9 +25,19 @@ export default function CardWrapper(props: {
   loadedItems: number;
   onSearch: (vals: SearchParams) => void;
   onSort: (vals: string) => void;
+  onLoadMore?: () => void;
+  canLoadMore?: boolean;
   sortedBy?: string;
 }) {
-  const { totalItems, loadedItems, onSearch, onSort, sortedBy } = props;
+  const {
+    totalItems,
+    loadedItems,
+    onSearch,
+    onSort,
+    sortedBy,
+    onLoadMore,
+    canLoadMore,
+  } = props;
   const [tagSelected, setTagSelected] = useImmer<Array<string>>([]);
   const [searchString, setSearchString] = useState<string>("");
 
@@ -190,11 +200,16 @@ export default function CardWrapper(props: {
             </div>
           </div>
           {props.children}
-          <div className="flex flex-row items-center justify-center py-10 w-full">
-            <button className="main-secondary-btn border-primary-text dark:border-primary-text rounded-full">
-              Load More
-            </button>
-          </div>
+          {canLoadMore ? (
+            <div className="flex flex-row items-center justify-center py-10 w-full">
+              <button
+                className="main-secondary-btn border-primary-text dark:border-primary-text rounded-full"
+                onClick={() => onLoadMore?.()}
+              >
+                Load More
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
