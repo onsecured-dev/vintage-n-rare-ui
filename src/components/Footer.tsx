@@ -53,6 +53,12 @@ const Footer = () => {
           >
             Explore
           </Link>
+          <Link
+            href="/about"
+            className="my-4 block text-center font-light hover:underline md:text-left"
+          >
+            About
+          </Link>
         </div>
         <div className=" md:h-56">
           <p className="text-white-900 my-1 text-center text-lg font-semibold md:text-left">
