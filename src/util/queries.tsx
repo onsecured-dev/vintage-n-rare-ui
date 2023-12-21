@@ -154,3 +154,85 @@ export const getAmpFxById = async (id: string) => {
   }
 }
 
+export const searchQuery = async (query: string) => {
+
+  // perform a findMany on each model and specify the common fields to return
+  // use textSearch in column FullName
+  let guitars = await prisma.electricGuitar.findMany({
+    select: {
+      brand:true,
+      model: true,
+      year: true,
+      NFTId: true,
+    },
+    where: {
+      fullName: {
+        search: query,
+      }
+    }
+  })
+
+  console.log('Guitars: ', guitars)
+
+  let bass = await prisma.bass.findMany({
+    select: {
+      brand:true,
+      model: true,
+      year: true,
+      NFTId: true,
+    },
+    where: {
+      fullName: {
+        search: query,
+      }
+    }
+  })
+
+  console.log('bass: ', bass)
+
+  let acoustic = await prisma.acousticguitar.findMany({
+    select: {
+      brand:true,
+      model: true,
+      year: true,
+      NFTId: true,
+    },
+    where: {
+      fullName: {
+        search: query,
+      }
+    }
+  })
+
+  console.log('acoustic: ', acoustic)
+  
+
+  let ampFx = await prisma.ampfx.findMany({
+    select: {
+      brand:true,
+      model: true,
+      year: true,
+      NFTId: true,
+    },
+    where: {
+      fullName: {
+        search: query,
+      }
+    }
+  })
+  console.log('ampFx: ', ampFx)
+  console.log('Combined: \n', {
+    ...guitars,
+    ...bass,
+    ...acoustic,
+    ...ampFx,
+  })
+
+  // return combined
+  return {
+    ...guitars,
+    ...bass,
+    ...acoustic,
+    ...ampFx,
+  }
+}
