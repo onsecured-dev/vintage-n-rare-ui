@@ -35,7 +35,7 @@ model Bass {
   serialNumber         String
   tuners               String
   weight               String
-  yearMade             String
+  year                 String
   updatedAt            DateTime @updatedAt
 }
 
@@ -53,7 +53,7 @@ model ElectricGuitar {
   finishMaterial            String
   handedness                String
   instrumentType            String
-  madeInYear                String
+  year                      String
   model                     String
   modificationsRepairs      String
   neckFingerboard           String
@@ -79,7 +79,7 @@ model AmpFx {
   circuit        String
   finish         String
   instrument     String
-  madeInYear     String
+  year           String
   model          String
   power          String
   preamp         String
@@ -111,7 +111,7 @@ model AcousticGuitar {
   finish                    String
   finishMaterial            String
   handedness                String
-  madeInYear                String
+  year                      String
   model                     String
   modificationsRepairs      String
   neckDepth                 String
