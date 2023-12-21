@@ -129,7 +129,7 @@ export interface GuitarObject {
   finishMaterial: string;
   handedness: string;
   instrumentType: string;
-  madeInYear: string;
+  year: string;
   model: string;
   modificationsRepairs: string;
   neckFingerboard: string;
@@ -165,7 +165,7 @@ export interface BassObject {
     serialNumber: string;
     tuners: string;
     weight: string;
-    yearMade: string;
+    year: string;
 }
 export interface AcousticObject {
     id: string;
@@ -182,7 +182,7 @@ export interface AcousticObject {
     finish: string;
     finishMaterial: string;
     handedness: string;
-    madeInYear: string;
+    year: string;
     model: string;
     modificationsRepairs: string;
     neckDepth: string;
@@ -204,7 +204,7 @@ export interface AmpFxObject {
     circuit: string;
     finish: string;
     instrument: string;
-    madeInYear: string;
+    year: string;
     model: string;
     power: string;
     preamp: string;

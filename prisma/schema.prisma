@@ -3,6 +3,8 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  // necessary for text search 
 }
 
 datasource db {
@@ -16,6 +18,7 @@ model Bass {
   // id                   String @id @default(uuid())
   NFTCID               String
   NFTId                Int      @id
+  fullName             String
   bodyMaterial         String
   brand                String
   case                 String
@@ -34,7 +37,7 @@ model Bass {
   serialNumber         String
   tuners               String
   weight               String
-  yearMade             String
+  year                 String
   updatedAt            DateTime @updatedAt
 }
 
@@ -42,6 +45,7 @@ model ElectricGuitar {
   // id                        String @id @default(uuid())
   NFTCID                    String
   NFTId                     Int      @id
+  fullName                  String
   bodyMaterial              String
   brand                     String
   case                      String
@@ -51,7 +55,7 @@ model ElectricGuitar {
   finishMaterial            String
   handedness                String
   instrumentType            String
-  madeInYear                String
+  year                      String
   model                     String
   modificationsRepairs      String
   neckFingerboard           String
@@ -71,12 +75,13 @@ model AmpFx {
   // id             String @id @default(uuid())
   NFTCID         String
   NFTId          Int      @id
+  fullName       String
   brand          String
   choke          String
   circuit        String
   finish         String
   instrument     String
-  madeInYear     String
+  year           String
   model          String
   power          String
   preamp         String
@@ -96,6 +101,7 @@ model AcousticGuitar {
   updatedAt                 DateTime @updatedAt
   NFTCID                    String
   NFTId                     Int      @id
+  fullName                  String
   backAndSides              String
   bracePattern              String
   brand                     String
@@ -107,7 +113,7 @@ model AcousticGuitar {
   finish                    String
   finishMaterial            String
   handedness                String
-  madeInYear                String
+  year                      String
   model                     String
   modificationsRepairs      String
   neckDepth                 String
