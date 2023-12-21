@@ -16,6 +16,7 @@ model Bass {
   // id                   String @id @default(uuid())
   NFTCID               String
   NFTId                Int      @id
+  fullName             String
   bodyMaterial         String
   brand                String
   case                 String
@@ -42,6 +43,7 @@ model ElectricGuitar {
   // id                        String @id @default(uuid())
   NFTCID                    String
   NFTId                     Int      @id
+  fullName                  String
   bodyMaterial              String
   brand                     String
   case                      String
@@ -71,6 +73,7 @@ model AmpFx {
   // id             String @id @default(uuid())
   NFTCID         String
   NFTId          Int      @id
+  fullName       String
   brand          String
   choke          String
   circuit        String
@@ -96,6 +99,7 @@ model AcousticGuitar {
   updatedAt                 DateTime @updatedAt
   NFTCID                    String
   NFTId                     Int      @id
+  fullName                  String
   backAndSides              String
   bracePattern              String
   brand                     String
