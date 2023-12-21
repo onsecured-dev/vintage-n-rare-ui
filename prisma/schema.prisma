@@ -1,10 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
-  // necessary for text search 
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -12,103 +8,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// models
-
-model Bass {
-  // id                   String @id @default(uuid())
-  NFTCID               String
-  NFTId                Int      @id
-  fullName             String
-  active               Boolean  @default(true)
-  bodyMaterial         String
-  brand                String
-  case                 String
-  electronics          String
-  fingerboardRadius    String
-  finish               String
-  finishMaterial       String
-  model                String
-  modificationsRepairs String
-  neckDepth            String
-  neckFingerboard      String
-  neckProfile          String
-  nutWidth             String
-  pickupImpedance      String
-  radius               String
-  scaleLength          String
-  serialNumber         String
-  tuners               String
-  weight               String
-  year                 String
-  updatedAt            DateTime @updatedAt
-}
-
-model ElectricGuitar {
-  // id                        String @id @default(uuid())
+model acousticguitar {
+  updatedAt                 DateTime
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
   active                    Boolean  @default(true)
-  bodyMaterial              String
-  brand                     String
-  case                      String
-  containsBrazilianRosewood String
-  electronics               String
-  finish                    String
-  finishMaterial            String
-  handedness                String
-  instrumentType            String
-  year                      String
-  model                     String
-  modificationsRepairs      String
-  neckFingerboard           String  
-  neckProfile               String
-  neckThickness             String
-  nutWidth                  String
-  pickupImpedance           String
-  potCodes                  String
-  radius                    String
-  scaleLength               String
-  tuners                    String
-  weight                    String
-  updatedAt                 DateTime @updatedAt
-  
-}
-
-model AmpFx {
-  // id             String @id @default(uuid())
-  NFTCID         String
-  NFTId          Int      @id
-  fullName       String
-  active         Boolean  @default(true)
-  brand          String
-  choke          String
-  circuit        String
-  finish         String
-  instrument     String
-  year           String
-  model          String
-  power          String
-  preamp         String
-  rectifier      String
-  reverbOther    String
-  serialNumber   String
-  speaker        String
-  speakerCodes   String
-  transformersOT String
-  transformersPT String
-  wattage        String
-  updatedAt      DateTime @updatedAt
-}
-
-model AcousticGuitar {
-  // id                        String @id @default(uuid())
-  updatedAt DateTime @updatedAt
-  NFTCID    String
-  NFTId     Int      @id
-  fullName  String
-  active    Boolean  @default(true)
-
   backAndSides              String
   bracePattern              String
   brand                     String
@@ -134,24 +39,101 @@ model AcousticGuitar {
   tuners                    String
 }
 
-model Pending {
+model ampfx {
+  NFTCID         String
+  NFTId          Int      @id
+  fullName       String
+  active         Boolean  @default(true)
+  brand          String
+  choke          String
+  circuit        String
+  finish         String
+  instrument     String
+  year           String
+  model          String
+  power          String
+  preamp         String
+  rectifier      String
+  reverbOther    String
+  serialNumber   String
+  speaker        String
+  speakerCodes   String
+  transformersOT String
+  transformersPT String
+  wattage        String
+  updatedAt      DateTime
+}
+
+model bass {
+  NFTCID               String
+  NFTId                Int      @id
+  fullName             String
+  active               Boolean  @default(true)
+  bodyMaterial         String
+  brand                String
+  case                 String
+  electronics          String
+  fingerboardRadius    String
+  finish               String
+  finishMaterial       String
+  model                String
+  modificationsRepairs String
+  neckDepth            String
+  neckFingerboard      String
+  neckProfile          String
+  nutWidth             String
+  pickupImpedance      String
+  radius               String
+  scaleLength          String
+  serialNumber         String
+  tuners               String
+  weight               String
+  year                 String
+  updatedAt            DateTime
+}
+
+model electricguitar {
+  NFTCID                    String
+  NFTId                     Int      @id
+  fullName                  String
+  active                    Boolean  @default(true)
+  bodyMaterial              String
+  brand                     String
+  case                      String
+  containsBrazilianRosewood String
+  electronics               String
+  finish                    String
+  finishMaterial            String
+  handedness                String
+  instrumentType            String
+  year                      String
+  model                     String
+  modificationsRepairs      String
+  neckFingerboard           String
+  neckProfile               String
+  neckThickness             String
+  nutWidth                  String
+  pickupImpedance           String
+  potCodes                  String
+  radius                    String
+  scaleLength               String
+  tuners                    String
+  weight                    String
+  updatedAt                 DateTime
+}
+
+model pending {
   cid  String @id
   data Json
 }
 
-// FKs
-// brand, year, model
-// 
-model Years {
-  year Int @id
-  updatedAt DateTime @updatedAt
-
+model wordbank {
+  id    Int     @id
+  word  String
+  alias String?
 }
 
-model Wordbank {
-  id  Int @id
-  word String
-  alias String? //could csv
-  // like fndr, fnder are both aliases for Fender
-  // 
+model years {
+  year      Int      @id
+  updatedAt DateTime
 }

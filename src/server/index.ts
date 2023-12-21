@@ -8,7 +8,8 @@ import {
   NFTBassObject,
   NFTGuitarObject,
 } from "../util/util";
-import { createAcoustic, createAmpFx, createBass, createGuitar } from "../util/queries";
+import { createAcoustic, createAmpFx, createBass, createGuitar, searchQuery } from "../util/queries";
+import { previewData } from "@/data/placeholder";
 
 export const appRouter = router({
   getIds: publicProcedure.query(async () => {
@@ -469,6 +470,30 @@ export const appRouter = router({
           break;
       }
     }),
+
+    search: publicProcedure.input(z.object({query:z.string()}).optional()).mutation(async ({input}) => {
+      if (!input) {
+        return previewData
+      }
+      console.log('Searching For:\n' , input.query)
+      // trim input spaces and separate into multiple words
+      const words = input.query.split(/\s+/)
+      console.log(words)
+      // check wordbank table
+      // IntrumentPayloadDTO
+      return previewData
+      // return await searchQuery(input)
+    }),
+
+    // search: publicProcedure.mutation(async (opts) => {
+    //   await opts.ctx.signGuestBook();
+   
+    //   return {
+    //     message: 'goodbye!',
+    //   };
+    // }),
 });
+
+
 
 export type AppRouter = typeof appRouter;

@@ -225,6 +225,17 @@ export enum InstrumentCategory {
   AmpsEffects = 'amps-effects'
 }
 
+export interface IntrumentPayload {
+  id: number;
+  type: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: number,
+  serial: string;
+  img: string;
+}
+
 
 export const categoryDetails = {
   Guitar: [
