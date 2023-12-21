@@ -45,6 +45,12 @@ const Header = () => {
         >
           Explore
         </Link>
+        <Link
+          href="/about"
+          className="hidden md:block w-20 text-center text-lg font-semibold hover:text-blue-600 lg:w-auto "
+        >
+          About
+        </Link>
       </nav>
 
       <div className="flex lg:flex-1 flex-row items-end justify-end gap-x-4 pl-2 sm:pl-6">
