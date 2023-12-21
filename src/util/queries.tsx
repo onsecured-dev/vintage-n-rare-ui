@@ -154,6 +154,29 @@ export const getAmpFxById = async (id: string) => {
   }
 }
 
+export const getWords =async (words:string[]) => {
+
+  try {
+    const result = await prisma.Wordbank.findUnique({
+      where: {
+        words: words[0]
+        // word: {
+        //   OR: [
+        //     { condition1: value1 },
+            
+        //   ],
+        // }
+      }
+    });
+    return result;
+  } catch (error) {
+    console.log('Error :', error)
+  } finally {
+    await prisma.$disconnect();
+  }
+  
+}
+
 export const searchQuery = async (query: string) => {
 
   // perform a findMany on each model and specify the common fields to return
