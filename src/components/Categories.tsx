@@ -54,27 +54,23 @@ export default function Categories(props: { isList?: boolean }) {
       >
         <Category
           name="Acoustic Guitar"
-          icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/acoustic-guitar"
-          bg="/background/v01_wave-05.jpg"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-28.jpg"
         />
         <Category
           name="Electric Bass"
-          icon="/Graphics/Home Page - 4 Categories/Icons/Guitar.png"
           href="/create/electric-bass"
-          bg="/background/v01_wave-04.jpg"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-29.jpg"
         />
         <Category
           name="Electric Guitar"
-          icon="/Graphics/Home Page - 4 Categories/Icons/Bass.png"
           href="/create/electric-guitar"
-          bg="/background/v01_wave-03.jpg"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-30.jpg"
         />
         <Category
           name="Amps & Effects"
-          icon="/Graphics/Home Page - 4 Categories/Icons/Amps.png"
           href="/create/amps-effects"
-          bg="/background/v01_wave-06.jpg"
+          bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-28.jpg"
         />
       </div>
       <div
@@ -122,7 +118,7 @@ export default function Categories(props: { isList?: boolean }) {
 
 function Category(props: {
   name: string;
-  icon: string;
+  icon?: string;
   href: string;
   bg: string;
 }) {

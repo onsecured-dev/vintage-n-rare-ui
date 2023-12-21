@@ -9,7 +9,7 @@ export default function ExplorePage() {
       </section>
       <section className="container max-w-7xl px-8">
         <h1 className="text-4xl font-semibold py-10 whitespace-pre-wrap">
-          Explore NFTs
+          Explore Items
         </h1>
       </section>
       <section className="max-w-7xl">
