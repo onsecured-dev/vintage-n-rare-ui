@@ -53,7 +53,7 @@ export default function CardWrapper(props: {
               <IoIosSearch className="absolute right-2 top-[12px] text-2xl pointer-events-none" />
               <input
                 type="text"
-                placeholder="Search NFT"
+                placeholder="Search items"
                 onChange={(e) => setSearchString(e.target.value)}
                 value={searchString}
                 className="input input-bordered w-full pr-10 bg-transparent dark:bg-inherit border-primary-border placeholder:text-black/60 dark:placeholder:text-white/60"
@@ -111,7 +111,7 @@ export default function CardWrapper(props: {
                 checked={tagSelected.includes("electric-bass")}
               />
               <SearchCheckbox
-                name="Amps & Effects"
+                name="Amps"
                 onChange={() =>
                   setTagSelected((t) => {
                     const index = t.indexOf("amps-effects");
@@ -192,7 +192,7 @@ export default function CardWrapper(props: {
                   </li>
                   <li>
                     <button onClick={() => onSort("amps-effects")}>
-                      Amps & Effects First
+                      Amps First
                     </button>
                   </li>
                 </ul>

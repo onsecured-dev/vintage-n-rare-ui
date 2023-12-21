@@ -17,7 +17,6 @@ export default function InstrumentPage({
 }: {
   params: { instrument: string; id: string };
 }) {
-  
   const nftItem = previewData.find(
     (item) => item.type === params.instrument && item.id === parseInt(params.id)
   );
@@ -105,7 +104,9 @@ export default function InstrumentPage({
               <MainProperty label="Model" value={nftItem.model} />
               <MainProperty label="Year" value={nftItem.year.toString()} />
               <MainProperty label="Serial" value={nftItem.serial} />
-              {params.instrument != InstrumentCategory.AmpsEffects ? <MainProperty label="Handedness" value={"Right"} /> : null }
+              {params.instrument != InstrumentCategory.AmpsEffects ? (
+                <MainProperty label="Handedness" value={"Right"} />
+              ) : null}
               <MainProperty label="Finish" value={"-"} />
             </div>
             <div className="flex flex-row items-center border-b-2 border-disabled-text/50 pb-4 gap-4">
@@ -116,12 +117,12 @@ export default function InstrumentPage({
                 </span>
               </h3>
             </div>
-            
+
             <ul className="grid xl:grid-cols-2 grid-cols-1">
-            <PropertyManager instrument={params.instrument}
-            // data={data}
-            />
-              
+              <PropertyManager
+                instrument={params.instrument}
+                // data={data}
+              />
             </ul>
           </div>
         </div>
@@ -130,7 +131,7 @@ export default function InstrumentPage({
   );
 }
 
-function PropertyManager(props: {instrument:string}) {
+function PropertyManager(props: { instrument: string }) {
   // @todo receive data
 
   // switch statement with key instrument categories guitar, bass, acoustic, amps-effects
@@ -144,16 +145,32 @@ function PropertyManager(props: {instrument:string}) {
 
   switch (props.instrument) {
     case InstrumentCategory.Guitar:
-      return categoryDetails.Guitar.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
     case InstrumentCategory.Bass:
-      return categoryDetails.Bass.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+      return categoryDetails.Bass.map((item: any, index: number) => (
+        <SecondaryProperty
+          label={item}
+          value="N/A"
+          key={`inst-${item.name}-${item.name}`}
+        />
+      ));
     case InstrumentCategory.Acoustic:
-      return categoryDetails.Acoustic.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+      return categoryDetails.Acoustic.map((item: any, index: number) => (
+        <SecondaryProperty
+          label={item}
+          value="N/A"
+          key={`inst-${item.name}-${item.name}`}
+        />
+      ));
     case InstrumentCategory.AmpsEffects:
-      return categoryDetails.AmpsEffects.map((item:any) => <SecondaryProperty label={item}  value="N/A"/>)
+      return categoryDetails.AmpsEffects.map((item: any, index: number) => (
+        <SecondaryProperty
+          label={item}
+          value="N/A"
+          key={`inst-${item.name}-${item.name}`}
+        />
+      ));
     default:
-      return <></>
-  
+      return <></>;
   }
 }
 
