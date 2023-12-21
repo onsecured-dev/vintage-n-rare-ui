@@ -29,7 +29,7 @@ export default function Categories(props: { isList?: boolean }) {
   }, [setInViewAmount, containerRef]);
 
   return (
-    <div className="flex flex-col flex-nowrap items-start justify-between pt-4 pb-8">
+    <div className="flex flex-col flex-nowrap items-start justify-between pt-4 pb-8 w-full">
       <p
         className={classNames(
           "text-3xl font-bold  text-center md:text-left w-full",
@@ -40,10 +40,10 @@ export default function Categories(props: { isList?: boolean }) {
       </p>
       <div
         className={classNames(
-          "flex flex-row items-center pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar ccontainer ",
+          "flex flex-row items-center pt-4 pb-8 overflow-x-scroll snap-x snap-mandatory no-scrollbar container",
           isList
             ? "w-full flex-wrap gap-4 justify-center md:justify-evenly"
-            : "flex-nowrap justify-between gap-0 container"
+            : "flex-nowrap justify-between gap-0"
         )}
         onScroll={(e) => {
           const currentFullWidth = e.currentTarget.scrollWidth;

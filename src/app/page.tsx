@@ -9,28 +9,29 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-10 md:p-24 md:pb-10 pb-6 ">
       <div className="z-10 max-w-7xl w-full items-start justify-between text-sm flex md:flex-row flex-col">
         <div className=" md:w-6/12 max-h-max items-start">
-          <p className="text-4xl md:text-6xl font-bold">
-            Create your Instrument&apos;s Certificate of Authenticity
+          <p className="text-4xl md:text-5xl lg:text-6xl font-bold">
+            Create your Instrument&apos;s Certificate of Ownership
           </p>
           <p className="text-lg my-8">
-            Facilitating the creation of Certificates of Authenticity for
-            vintage boutique musical instruments on the Binance Smart Chain.
+            Facilitating the creation of Certificates of Ownership for vintage,
+            boutique & high-end musical instruments & gear on the Binance Smart
+            Chain
           </p>
-          <div className="flex-row items-start justify-between my-8">
+          <div className="flex xs:flex-row items-center xs:items-start justify-center xs:justify-start my-8 flex-col w-full">
             <Link
               href="/explore"
               className={classNames(
-                "bg-primary-text hover:border-white hover:bg-transparent border-primary-text",
+                "bg-primary-text hover:border-white hover:bg-transparent border-primary-text block",
                 "text-white hover:text-primary-text dark:hover:text-white",
                 "w-[150px] text-center rounded-xl border-2 font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
               )}
             >
-              Explore now
+              Explore
             </Link>
             <Link
               href="/create"
               className={classNames(
-                "hover:bg-primary-text bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text",
+                "hover:bg-primary-text bg-transparent dark:border-white border-primary-text hover:border-primary-text dark:hover:border-primary-text block",
                 "hover:text-white text-primary-text dark:text-white",
                 "w-[150px] text-center rounded-xl border-2  font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
               )}
@@ -44,7 +45,9 @@ export default function Home() {
         </div>
         {/* <div className="hidden md:block p-2 z-0 dark:bg-white bg-gray-400/50 max-h-fit py-6 mt-6 px-6 items-end rounded-xl bg-mnote bg-cover minibox-sway"></div> */}
       </div>
-      <Categories />
+      <section className="w-full md:max-w-7xl overflow-hidden">
+        <Categories />
+      </section>
     </main>
   );
 }
