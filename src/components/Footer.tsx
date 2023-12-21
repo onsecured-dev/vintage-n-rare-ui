@@ -12,21 +12,18 @@ import {
 } from "react-icons/ti";
 import { SlSocialInstagram } from "react-icons/sl";
 
-const logoPath = "/Graphics/Menu Bar LOGO/v_logo.png";
+import logo from "@/../public/Graphics/mainLogo.png";
 
 const Footer = () => {
   return (
     <footer className="bg-dark pt-8 items-center  ">
       <nav className="flex flex-col max-w-screen-2xl items-center md:items-start justify-between px-8 pt-4 pb-8 md:mx-auto md:flex-row">
         <div className="pb-4 flex flex-col items-center md:items-start">
-          <Link href="/">
-            <Image
-              src={logoPath}
-              alt="Logo"
-              width={300 / 2.5}
-              height={300 / 2.5}
-              className=" invert dark:invert-0"
-            />
+          <Link
+            href="/"
+            className="max-w-[220px] md:max-w-[150px] lg:max-w-[250px] pb-2"
+          >
+            <Image src={logo} alt="Logo" className=" invert dark:invert-0" />
           </Link>
           <div className="text-xs dark:text-white/60 text-center md:text-left whitespace-pre-wrap">
             Integrating Web3 technology into{"\n"}Web2 businesses
