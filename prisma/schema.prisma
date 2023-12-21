@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
   // necessary for text search 
 }
@@ -19,6 +19,7 @@ model Bass {
   NFTCID               String
   NFTId                Int      @id
   fullName             String
+  active               Boolean  @default(true)
   bodyMaterial         String
   brand                String
   case                 String
@@ -32,6 +33,7 @@ model Bass {
   neckFingerboard      String
   neckProfile          String
   nutWidth             String
+  pickupImpedance      String
   radius               String
   scaleLength          String
   serialNumber         String
@@ -46,6 +48,7 @@ model ElectricGuitar {
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
+  active                    Boolean  @default(true)
   bodyMaterial              String
   brand                     String
   case                      String
@@ -58,7 +61,7 @@ model ElectricGuitar {
   year                      String
   model                     String
   modificationsRepairs      String
-  neckFingerboard           String
+  neckFingerboard           String  
   neckProfile               String
   neckThickness             String
   nutWidth                  String
@@ -69,6 +72,7 @@ model ElectricGuitar {
   tuners                    String
   weight                    String
   updatedAt                 DateTime @updatedAt
+  
 }
 
 model AmpFx {
@@ -76,6 +80,7 @@ model AmpFx {
   NFTCID         String
   NFTId          Int      @id
   fullName       String
+  active         Boolean  @default(true)
   brand          String
   choke          String
   circuit        String
@@ -98,10 +103,12 @@ model AmpFx {
 
 model AcousticGuitar {
   // id                        String @id @default(uuid())
-  updatedAt                 DateTime @updatedAt
-  NFTCID                    String
-  NFTId                     Int      @id
-  fullName                  String
+  updatedAt DateTime @updatedAt
+  NFTCID    String
+  NFTId     Int      @id
+  fullName  String
+  active    Boolean  @default(true)
+
   backAndSides              String
   bracePattern              String
   brand                     String
@@ -130,4 +137,21 @@ model AcousticGuitar {
 model Pending {
   cid  String @id
   data Json
+}
+
+// FKs
+// brand, year, model
+// 
+model Years {
+  year Int @id
+  updatedAt DateTime @updatedAt
+
+}
+
+model Wordbank {
+  id  Int @id
+  word String
+  alias String? //could csv
+  // like fndr, fnder are both aliases for Fender
+  // 
 }
