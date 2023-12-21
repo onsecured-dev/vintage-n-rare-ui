@@ -76,7 +76,7 @@ const Footer = () => {
             href="/create/amps-effects"
             className="my-4 block text-center font-light hover:underline md:text-left"
           >
-            Amps & Effects
+            Amps
           </Link>
           <Link
             href="/create/electric-bass"
@@ -119,6 +119,13 @@ const Footer = () => {
         </p> */}
       </nav>
       <div className="pb-5 mt-2 mb-2 text-center text-sm text-slate-700 dark:text-white/50">
+        <a
+          href="https://securedonblockchain.com"
+          target="_blank"
+          className="hover:text-primary-text font-mono"
+        >
+          Powered by: Secured On Blockchain.
+        </a>
         <p>2023 by Vintage and Rare. All rights Reserved.</p>
       </div>
     </footer>

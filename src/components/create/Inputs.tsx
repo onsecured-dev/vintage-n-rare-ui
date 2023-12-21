@@ -11,7 +11,7 @@ const Input = forwardRef(function MidInput(
   props: {
     title: string;
     type: HTMLInputTypeAttribute;
-    placeholder: string;
+    placeholder?: string;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     onBlur: React.FocusEventHandler<HTMLInputElement>;
     name: string;

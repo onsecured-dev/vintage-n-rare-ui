@@ -200,36 +200,11 @@ export default function BassForm() {
               Enter the basic information about your instrument
             </span>
           </label>
-          <Input
-            title="Instrument"
-            type="text"
-            {...register("instrument")}
-            placeholder="e.g. Fender Jazzmaster 1965 / Lake Placid Blue"
-          />
-          <Input
-            title="Model"
-            type="text"
-            {...register("model")}
-            placeholder="Stratocaster, LesPaul, etc.."
-          />
-          <Input
-            title="Year Made"
-            type="number"
-            {...register("year")}
-            placeholder="1999, 1980, ..."
-          />
-          <Input
-            title="Brand"
-            type="text"
-            {...register("brand")}
-            placeholder="Fender, Gibson, Orange..."
-          />
-          <Input
-            title="Serial Number"
-            type="text"
-            {...register("serial")}
-            placeholder="#AZ123"
-          />
+          <Input title="Instrument" type="text" {...register("instrument")} />
+          <Input title="Model" type="text" {...register("model")} />
+          <Input title="Year Made" type="number" {...register("year")} />
+          <Input title="Brand" type="text" {...register("brand")} />
+          <Input title="Serial Number" type="text" {...register("serial")} />
           <div className="pt-4">
             <div className="text-base">Handedness</div>
             <div className="flex flex-row items-center gap-x-4">
@@ -274,49 +249,25 @@ export default function BassForm() {
             title="Body Material"
             type="text"
             {...register("bodyMaterial")}
-            placeholder="Rosewood,"
           />
-          <Input
-            title="Finish"
-            type="text"
-            {...register("finish")}
-            placeholder="Maple, Rosewood, Ebony..."
-          />
+          <Input title="Finish" type="text" {...register("finish")} />
           <Input
             title="Finish Material"
             type="text"
             {...register("finishMaterial")}
-            placeholder="Sunburnt"
           />
-          <Input
-            title="Tuners"
-            type="text"
-            {...register("tuners")}
-            placeholder=""
-          />
-          <Input
-            title="Weight"
-            type="text"
-            {...register("weight")}
-            placeholder=""
-          />
-          <Input
-            title="Electronics"
-            type="text"
-            {...register("electronics")}
-            placeholder=""
-          />
+          <Input title="Tuners" type="text" {...register("tuners")} />
+          <Input title="Weight" type="text" {...register("weight")} />
+          <Input title="Electronics" type="text" {...register("electronics")} />
           <Input
             title="Potentiometer Codes"
             type="text"
             {...register("potCodes")}
-            placeholder=""
           />
           <Input
             title="Pickup Impedance"
             type="text"
             {...register("pickupImpedance")}
-            placeholder=""
           />
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
@@ -331,38 +282,24 @@ export default function BassForm() {
             title="Neck/Fingerboard"
             type="text"
             {...register("neckFingerboard")}
-            placeholder="Decals or details"
           />
           <Input
             title="Neck Profile"
             type="text"
             {...register("neckProfile")}
-            placeholder=""
           />
           <Input
             title="Neck Thickness"
             type="text"
             {...register("neckThickness")}
-            placeholder=""
           />
           <Input
             title="Scale Length"
             type="text"
             {...register("scaleLength")}
-            placeholder=""
           />
-          <Input
-            title="Nut Width"
-            type="text"
-            {...register("nutWidth")}
-            placeholder=""
-          />
-          <Input
-            title="Radius"
-            type="text"
-            {...register("radius")}
-            placeholder=""
-          />
+          <Input title="Nut Width" type="text" {...register("nutWidth")} />
+          <Input title="Radius" type="text" {...register("radius")} />
         </div>
 
         <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
@@ -373,17 +310,11 @@ export default function BassForm() {
               Other important details
             </span>
           </label>
-          <Input
-            title="Case"
-            type="text"
-            {...register("case")}
-            placeholder=""
-          />
+          <Input title="Case" type="text" {...register("case")} />
           <Input
             title="Modifications/Repairs"
             type="text"
             {...register("mods")}
-            placeholder="Modifications made or repairs done"
           />
         </div>
         <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">

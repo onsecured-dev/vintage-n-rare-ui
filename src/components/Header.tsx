@@ -34,7 +34,7 @@ const Header = () => {
               { href: "/create/acoustic-guitar", name: "Acoustic Guitars" },
               { href: "/create/electric-bass", name: "Electric Bass" },
               { href: "/create/electric-guitar", name: "Electric Guitar" },
-              { href: "/create/amps-effects", name: "Amps & Effects" },
+              { href: "/create/amps-effects", name: "Amps" },
             ]}
           />
         </div>

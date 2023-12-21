@@ -70,7 +70,7 @@ export default function DrawerButton() {
             href="/create/amps-effects"
             className="w-full block text-center"
           >
-            Amps & Effects
+            Amps
           </Link>
         </li>
         <li className="py-2 text-center w-full text-lg">Explore</li>
