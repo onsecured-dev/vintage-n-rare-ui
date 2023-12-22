@@ -17,6 +17,13 @@ export type InstrumentType =
   | "electric-bass"
   | "amps-effets"
   | "acoustic-guitar";
+
+const typeId = {
+  "electric-guitar": "EG",
+  "electric-bass": "EB",
+  "amps-effects": "AM",
+  "acoustic-guitar": "AG",
+};
 export default function PreviewCard(props: {
   id: number;
   type: InstrumentType;
@@ -54,10 +61,6 @@ export default function PreviewCard(props: {
     enabled: !!instrument?.[0]?.result,
   });
 
-  const parsedMetadata = {
-    name: "Fender Jazzmaster", //metadata?.name || "...",
-  };
-
   return (
     <div
       className={classNames(
@@ -66,24 +69,8 @@ export default function PreviewCard(props: {
         "hover:translate-y-[-10px] transition-transform duration-300"
       )}
     >
-      <div className="flex flex-row justify-between items-center">
-        <div
-          className="tooltip max-w-[80%] text-left text-ellipsis"
-          data-tip={`${brand} ${model} ${year}`}
-        >
-          <div className="text-base font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
-            {`${brand} ${model}`}
-          </div>
-          <div
-            className={classNames(
-              "text-xs font-semibold whitespace-nowrap w-full overflow-hidden text-ellipsis",
-              "text-disabled-text dark:text-white/60"
-            )}
-          >
-            {year}
-          </div>
-        </div>
-        <LikeButton instrument={type} id={id} />
+      <div className="text-base font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
+        {`${year} ${brand} ${model}`}
       </div>
       <div className="w-full px-2 py-3">
         <div className="relative w-full aspect-[1/1.34] ">
@@ -94,9 +81,20 @@ export default function PreviewCard(props: {
           />
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-1">
-        <div className="text-sm">
-          Creator:&nbsp;{shortAddress(instrument?.[1]?.result || zeroAddress)}
+      <div className="flex flex-col items-center justify-center gap-1 px-2">
+        <div className="flex flex-row justify-between items-center py-2 w-full">
+          <div
+            className={classNames(
+              "text-xs font-semibold whitespace-nowrap w-full overflow-hidden text-ellipsis",
+              "text-disabled-text dark:text-white/60"
+            )}
+          >
+            <span className="text-white">
+              #{typeId[type]} {id}
+            </span>
+            &nbsp;{metadata?.serial || "A1B2C3D4"}
+          </div>
+          <LikeButton instrument={type} id={id} />
         </div>
         <Link
           className="main-secondary-btn w-auto rounded-full px-8 text-sm text-disabled-text border-primary-border"
