@@ -9,7 +9,7 @@ datasource db {
 }
 
 model acousticguitar {
-  updatedAt                 DateTime
+  updatedAt                 DateTime @db.DateTime()
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
@@ -61,7 +61,7 @@ model ampfx {
   transformersOT String
   transformersPT String
   wattage        String
-  updatedAt      DateTime
+  updatedAt      DateTime @db.DateTime()
 }
 
 model bass {
@@ -89,7 +89,7 @@ model bass {
   tuners               String
   weight               String
   year                 String
-  updatedAt            DateTime
+  updatedAt            DateTime @db.DateTime()
 }
 
 model electricguitar {
@@ -119,7 +119,7 @@ model electricguitar {
   scaleLength               String
   tuners                    String
   weight                    String
-  updatedAt                 DateTime
+  updatedAt                 DateTime @db.DateTime()
 }
 
 model pending {
@@ -127,13 +127,41 @@ model pending {
   data Json
 }
 
-model wordbank {
-  id    Int     @id
-  word  String
-  alias String?
+model Wordbank {
+  id       Int     @id @default(autoincrement())
+  word     String
+  brand    Brands  @relation(fields: [brandsId], references: [id])
+  brandsId Int
+  alias    String?
 }
 
-model years {
-  year      Int      @id
+model Years {
+  year        Int           @id @default(autoincrement())
+  updatedAt   DateTime
+  SearchTable SearchTable[]
+}
+
+model Brands {
+  id          Int           @id @default(autoincrement())
+  brand       String        @unique
+  updatedAt   DateTime
+  SearchTable SearchTable[]
+  Wordbank    Wordbank[]
+}
+
+model InstrumentType {
+  // guitar, ampfx, bass, acoustic
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
   updatedAt DateTime
+}
+
+model SearchTable {
+  id        Int      @id
+  name      String // combination year - brand - model
+  year      Years    @relation(fields: [yearsYear], references: [year])
+  brand     Brands   @relation(fields: [brandsId], references: [id])
+  updatedAt DateTime
+  yearsYear Int
+  brandsId  Int
 }
