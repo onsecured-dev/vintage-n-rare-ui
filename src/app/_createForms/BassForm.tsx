@@ -44,6 +44,10 @@ type BassFormValues = {
   neckFingerboard: string;
   case: string;
   mods: string;
+  //USER
+  name: string;
+  email: string;
+  phone: string;
 };
 
 export default function BassForm() {
@@ -53,28 +57,32 @@ export default function BassForm() {
     useForm<BassFormValues>({
       defaultValues: {
         image: null,
-        instrument: "Fender Jazzmaster 1965 / Lake Placid Blue",
-        model: "Jazzmaster",
-        year: 1965,
-        brand: "Fender",
-        serial: "1234abcd",
+        instrument: "",
+        model: "",
+        year: new Date().getFullYear(),
+        brand: "",
+        serial: "",
         handedness: "right",
-        bodyMaterial: "Alder Ash Basswood",
-        finish: "Lake Placid Blue",
-        finishMaterial: "nitrocellulose lacquer",
-        radius: "9.5 in",
-        weight: "8.6 lbs",
-        tuners: "N/A",
-        scaleLength: "64.77 cm",
-        nutWidth: "42 mm",
-        neckProfile: "Mid '60s 'C'",
-        neckThickness: "21.8 mm",
-        potCodes: "CTS 1 MOhm",
-        electronics: "Pickups VintageStyle '60s Single-Coil Jazzmaster",
-        pickupImpedance: "8K Ohms",
-        neckFingerboard: "Maple 4 bolt Glass Urethane",
-        case: "Not included",
-        mods: "Minor paint touchups on headstock",
+        bodyMaterial: "",
+        finish: "",
+        finishMaterial: "",
+        radius: "",
+        weight: "",
+        tuners: "",
+        scaleLength: "",
+        nutWidth: "",
+        neckProfile: "",
+        neckThickness: "",
+        potCodes: "",
+        electronics: "",
+        pickupImpedance: "",
+        neckFingerboard: "",
+        case: "",
+        mods: "",
+        //USER
+        name: "",
+        email: "",
+        phone: "",
       },
     });
   const {
@@ -191,19 +199,35 @@ export default function BassForm() {
             setValue={setValue}
             value={watch("image")}
           />
+          <Input
+            title={`Name ${address ? "" : " *"}`}
+            type="text"
+            {...register("name", { required: !address })}
+          />
+          <Input
+            title={`Email ${address ? "" : " *"}`}
+            type="email"
+            {...register("email", { required: !address })}
+          />
+          <Input title="Phone" type="tel" {...register("phone")} />
         </div>
         <div className="md:max-w-[45%] w-full">
           <label className="whitespace-pre-wrap pb-4">
             <span className="font-bold text-xl">Basic Information</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Enter the basic information about your instrument
-            </span>
           </label>
-          <Input title="Instrument" type="text" {...register("instrument")} />
-          <Input title="Model" type="text" {...register("model")} />
           <Input title="Year Made" type="number" {...register("year")} />
           <Input title="Brand" type="text" {...register("brand")} />
+          <Input title="Model" type="text" {...register("model")} />
+          <div>
+            <label className="label">
+              <span>Instrument</span>
+            </label>
+            <div className=" h-12 flex flex-col justify-center px-4">
+              <div className="text-disabled-text">
+                {watch("year")} {watch("brand")} {watch("model")}
+              </div>
+            </div>
+          </div>
           <Input title="Serial Number" type="text" {...register("serial")} />
           <div className="pt-4">
             <div className="text-base">Handedness</div>
@@ -237,14 +261,6 @@ export default function BassForm() {
           </div>
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Body Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the finish of your instrument
-            </span>
-          </label>
-
           <Input
             title="Body Material"
             type="text"
@@ -264,20 +280,13 @@ export default function BassForm() {
             type="text"
             {...register("potCodes")}
           />
+        </div>
+        <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
           <Input
             title="Pickup Impedance"
             type="text"
             {...register("pickupImpedance")}
           />
-        </div>
-        <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Neck/Bridge/Tuner Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the neck, bridge and tuners of your instrument
-            </span>
-          </label>
           <Input
             title="Neck/Fingerboard"
             type="text"
@@ -303,13 +312,6 @@ export default function BassForm() {
         </div>
 
         <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Other</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Other important details
-            </span>
-          </label>
           <Input title="Case" type="text" {...register("case")} />
           <Input
             title="Modifications/Repairs"
