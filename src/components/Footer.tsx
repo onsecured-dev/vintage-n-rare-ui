@@ -1,15 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-
-import { GrInstagram } from "react-icons/gr";
-import { RiMessengerFill } from "react-icons/ri";
-import { FaTelegramPlane } from "react-icons/fa";
-import { HiMenuAlt2 } from "react-icons/hi";
-import {
-  TiSocialYoutubeCircular,
-  TiSocialTwitter,
-  TiSocialYoutube,
-} from "react-icons/ti";
+import { FaFacebook, FaYoutube, FaXTwitter } from "react-icons/fa6";
+import { TiSocialYoutube } from "react-icons/ti";
 import { SlSocialInstagram } from "react-icons/sl";
 
 import logo from "@/../public/Graphics/mainLogo.png";
@@ -28,11 +20,31 @@ const Footer = () => {
           <div className="text-xs dark:text-white/60 text-center md:text-left whitespace-pre-wrap">
             Integrating Web3 technology into{"\n"}Web2 businesses
           </div>
-          <div className="mt-2 flex flex-row justify-center md:justify-start my-4 gap-4  w-full">
-            <TiSocialYoutubeCircular size={"1.75em"} />
-            <TiSocialTwitter size={"1.75em"} />
-            <TiSocialYoutube size={"1.75em"} />
-            <SlSocialInstagram size={"1.75em"} />
+          <div className="mt-2 flex flex-row justify-center md:justify-start my-4 gap-1  w-full">
+            <a
+              href="http://twitter.com/vintageandrare"
+              target="_blank"
+              rel="noopener nonreferrer"
+              className="hover:bg-primary-text rounded-full p-2"
+            >
+              <FaXTwitter size={"1.75em"} />
+            </a>
+            <a
+              href="https://www.youtube.com/user/VintageandRare"
+              target="_blank"
+              rel="noopener nonreferrer"
+              className="hover:bg-primary-text rounded-full p-2"
+            >
+              <FaYoutube size={"1.75em"} />
+            </a>
+            <a
+              href="https://www.facebook.com/pages/VintageandRarecom/138943436124974?v=app_163976936970571&ref=ts"
+              target="_blank"
+              rel="noopener nonreferrer"
+              className="hover:bg-primary-text rounded-full p-2"
+            >
+              <FaFacebook size={"1.75em"} />
+            </a>
           </div>
         </div>
         <div className=" md:h-56">

@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 import LoadingModal from "./LoadingModal";
@@ -16,6 +16,7 @@ import NFTAbi from "@/data/abi/NFTAbi";
 import { zeroAddress } from "viem";
 import { OrderNowModal } from "./OrderNowModal";
 import classNames from "classnames";
+import { trpc } from "@/app/_trpc/client";
 
 type AcousticGuitarFormValues = {
   instrument: string;
@@ -28,6 +29,8 @@ type AcousticGuitarFormValues = {
   bodyMaterial: string;
   finish: string;
   finishMaterial: string;
+  top: string;
+  backSides: string;
   tuners: string;
   bridge: string;
   electronics: string;
@@ -42,6 +45,10 @@ type AcousticGuitarFormValues = {
   case: string;
   mods: string;
   bzRosewood: boolean;
+  //USER
+  name: string;
+  email: string;
+  phone: string;
 };
 
 export default function AcousticGuitarForm() {
@@ -60,6 +67,8 @@ export default function AcousticGuitarForm() {
         bodyMaterial: "",
         finish: "",
         finishMaterial: "",
+        top: "",
+        backSides: "",
         tuners: "",
         bridge: "",
         electronics: "",
@@ -74,17 +83,39 @@ export default function AcousticGuitarForm() {
         case: "",
         mods: "",
         bzRosewood: false,
+        //USER
+        name: "",
+        email: "",
+        phone: "",
       },
     });
-  const onSubmit = (data: any) => {
-    console.log({ submitData: data });
-  };
 
-  const { data: bassMetadata } = {
-    data:
-      // "loading"
-      "bafkreih2byiyq2tibwxsxdiiw5edau4w2gfpy2jhcpj6f2ora5dk4mhygy",
-  }; // get actual CID here
+  const {
+    mutate: createAcoustic,
+    data: cidData,
+    status: metadataStatus,
+  } = trpc.createAcoustic.useMutation();
+  const onSubmit: SubmitHandler<AcousticGuitarFormValues> = (data) => {
+    if (!data.image || data.image.length !== 1) return;
+    const baseImg = data.image[0];
+    if (!baseImg) return;
+    console.log("has file");
+    const reader = new FileReader();
+    reader.readAsDataURL(baseImg);
+    reader.onload = () => {
+      const base64 = reader.result?.toString();
+      if (!base64) return;
+      console.log("file loaded as string");
+      createAcoustic({
+        image: base64,
+        object: {
+          ...data,
+          fileName: baseImg.name,
+          fileType: baseImg.type,
+        },
+      });
+    };
+  };
 
   const { address } = useAccount();
   const { data: nftData } = useContractReads({
@@ -107,7 +138,7 @@ export default function AcousticGuitarForm() {
     address: acousticGuitars,
     abi: NFTAbi,
     functionName: "mint",
-    args: [bassMetadata],
+    args: [cidData],
     value:
       nftData?.[0]?.result || false ? 0n : BigInt(nftData?.[1]?.result || 0n),
   });
@@ -141,10 +172,10 @@ export default function AcousticGuitarForm() {
     <>
       <LoadingModal
         name="acoustic-guitar-form-modal"
-        cid={bassMetadata}
+        cid={cidData || "loading"}
         close={() => modalRef.current?.close()}
         ref={modalRef}
-        loading={isMinting}
+        loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
       />
@@ -172,45 +203,37 @@ export default function AcousticGuitarForm() {
             setValue={setValue}
             value={watch("image")}
           />
+          <Input
+            title={`Name ${address ? "" : " *"}`}
+            type="text"
+            {...register("name", { required: !address })}
+          />
+          <Input
+            title={`Email ${address ? "" : " *"}`}
+            type="email"
+            {...register("email", { required: !address })}
+          />
+          <Input title="Phone" type="tel" {...register("phone")} />
         </div>
         <div className="md:max-w-[45%] w-full">
           <label className="whitespace-pre-wrap pb-4">
             <span className="font-bold text-xl">Basic Information</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Enter the basic information about your instrument
-            </span>
           </label>
-          <Input
-            title="Instrument"
-            type="text"
-            {...register("instrument")}
-            placeholder="e.g. Fender Jazzmaster 1965 / Lake Placid Blue"
-          />
-          <Input
-            title="Model"
-            type="text"
-            {...register("model")}
-            placeholder="Stratocaster, LesPaul, etc.."
-          />
-          <Input
-            title="Year Made"
-            type="number"
-            {...register("year")}
-            placeholder="1999, 1980, ..."
-          />
-          <Input
-            title="Brand"
-            type="text"
-            {...register("brand")}
-            placeholder="Fender, Gibson, Orange..."
-          />
-          <Input
-            title="Serial Number"
-            type="text"
-            {...register("serial")}
-            placeholder="#AZ123"
-          />
+          <Input title="Brand" type="text" {...register("brand")} />
+          <Input title="Model" type="text" {...register("model")} />
+          <Input title="Year Made" type="number" {...register("year")} />
+          <div>
+            <label className="label">
+              <span>Instrument</span>
+            </label>
+            <div className=" h-12 flex flex-col justify-center px-4">
+              <div className="text-disabled-text">
+                {watch("year")} {watch("brand")} {watch("model")}
+              </div>
+            </div>
+          </div>
+          <Input title="Instrument" type="text" {...register("instrument")} />
+          <Input title="Serial Number" type="text" {...register("serial")} />
           <div className="pt-4">
             <div className="text-base">Handedness</div>
             <div className="flex flex-row items-center gap-x-4">
@@ -243,118 +266,64 @@ export default function AcousticGuitarForm() {
           </div>
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Body Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the finish of your instrument
-            </span>
-          </label>
-
           <Input
             title="Body Material"
             type="text"
             {...register("bodyMaterial")}
-            placeholder="Rosewood,"
           />
-          <Input
-            title="Finish"
-            type="text"
-            {...register("finish")}
-            placeholder="Maple, Rosewood, Ebony..."
-          />
+          <Input title="Finish" type="text" {...register("finish")} />
           <Input
             title="Finish Material"
             type="text"
             {...register("finishMaterial")}
-            placeholder="Sunburnt"
           />
-          <Input
-            title="Tuners"
-            type="text"
-            {...register("tuners")}
-            placeholder=""
-          />
-          <Input
-            title="Bridge"
-            type="text"
-            {...register("bridge")}
-            placeholder=""
-          />
-          <Input
-            title="Electronics"
-            type="text"
-            {...register("electronics")}
-            placeholder=""
-          />
+          <Input title="Tuners" type="text" {...register("tuners")} />
+          <Input title="Bridge" type="text" {...register("bridge")} />
+          <Input title="Electronics" type="text" {...register("electronics")} />
           <Input
             title="Brace Pattern"
             type="text"
             {...register("bracePattern")}
-            placeholder=""
           />
           <Input
             title="String Spacing at Saddle"
             type="text"
             {...register("ssSaddle")}
-            placeholder=""
           />
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Neck/Bridge/Tuner Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the neck, bridge and tuners of your instrument
-            </span>
-          </label>
+          <Input title="Top" type="text" {...register("top")} />
+          <Input
+            title="Back and Sides"
+            type="text"
+            {...register("backSides")}
+          />
           <Input
             title="Neck/Fingerboard"
             type="text"
             {...register("neckFingerboard")}
-            placeholder="Decals or details"
           />
           <Input
             title="Neck Profile"
             type="text"
             {...register("neckProfile")}
-            placeholder=""
           />
-          <Input
-            title="Neck Depth"
-            type="text"
-            {...register("neckDepth")}
-            placeholder=""
-          />
+          <Input title="Neck Depth" type="text" {...register("neckDepth")} />
           <Input
             title="Fingerboard Radius"
             type="text"
             {...register("fingerboardRadius")}
-            placeholder=""
           />
 
           <Input
             title="Scale Length"
             type="text"
             {...register("scaleLength")}
-            placeholder=""
           />
-          <Input
-            title="Nut Width"
-            type="text"
-            {...register("nutWidth")}
-            placeholder=""
-          />
+          <Input title="Nut Width" type="text" {...register("nutWidth")} />
         </div>
 
         <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Other</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Other important details
-            </span>
-          </label>
           <div className="form-control max-w-fit">
             <label className="label">
               <span className="label-text text-base text-black dark:text-white">
@@ -367,18 +336,18 @@ export default function AcousticGuitarForm() {
               />
             </label>
           </div>
-          <Input
-            title="Case"
-            type="text"
-            {...register("case")}
-            placeholder=""
-          />
-          <Input
-            title="Modifications/Repairs"
-            type="text"
-            {...register("mods")}
-            placeholder="Modifications made or repairs done"
-          />
+          <div className="grid grid-cols-7 w-full">
+            <div className="md:col-span-3 col-span-7">
+              <Input title="Case" type="text" {...register("case")} />
+            </div>
+            <div className="md:col-span-3 md:col-start-5 col-start-1 col-span-7">
+              <Input
+                title="Modifications/Repairs"
+                type="text"
+                {...register("mods")}
+              />
+            </div>
+          </div>
         </div>
         <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">
           <button
