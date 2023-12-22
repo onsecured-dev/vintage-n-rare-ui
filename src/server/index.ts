@@ -3,17 +3,69 @@ import { publicProcedure, router } from "./trpc";
 import { NFTStorage, File } from "nft.storage";
 import { TRPCError } from "@trpc/server";
 import {
+  AcousticObject,
+  AmpFxObject,
+  BassObject,
+  GuitarObject,
   NFTAcousticObject,
   NFTAmpFxObject,
   NFTBassObject,
   NFTGuitarObject,
 } from "../util/util";
-import { createAcoustic, createAmpFx, createBass, createGuitar, searchDb, searchQuery } from "../util/queries";
+import {
+  createAcoustic,
+  createAmpFx,
+  createBass,
+  createGuitar,
+  searchDb,
+  searchQuery,
+} from "../util/queries";
 import { previewData } from "@/data/placeholder";
+import { initdb } from "@/util/initdb";
+import nodemailer from "nodemailer";
+import { env } from "process";
+
+const transporter = nodemailer.createTransport({
+  service: "one",
+  host: "send.one.com",
+  // host: "mailout.one.com",
+  port: 587,
+  auth: {
+    user: process.env.EM_USR,
+    pass: process.env.EM_PW,
+  },
+});
+
+
 
 export const appRouter = router({
   getIds: publicProcedure.query(async () => {
     return [1, 2, 3];
+  }),
+
+  sendMail: publicProcedure.query(async () => {
+    const mailOptions = {
+      from: process.env.EM_USR,
+      to: "target@email",
+      subject: "Vintage and Rare Instruments",
+      text: "That was easy!",
+      html: "<h1>Vintage and Rare Instruments</h1><h2>Thanks</h2>",
+      // attachments: []
+    };
+
+    try {
+      // Send email
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Message sent: %s", info.messageId);
+      return { success: true };
+    } catch (error) {
+      console.error(error);
+    }
+  }),
+
+  initDb: publicProcedure.query(async () => {
+    await initdb();
+    return 200;
   }),
 
   getGuitars: publicProcedure
@@ -39,7 +91,7 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      console.log('create bass start')
+      console.log("create bass start");
       if (!process.env.NFT_STORAGE_API_KEY)
         return new TRPCError({
           code: "BAD_REQUEST",
@@ -47,6 +99,24 @@ export const appRouter = router({
         });
 
       console.log("GotBASS : ", input);
+
+      // PINATA BULLSHIT
+      // STEP 1, pin Image
+      const res = await fetch(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.PINATA_JWT}`,
+          },
+          // body: data,
+        }
+      );
+      const { IpfsHash } = await res.json();
+      // STEP2 PIN JSON
+
+      //=--------------
+
       const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
       const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
 
@@ -443,7 +513,8 @@ export const appRouter = router({
       z.object({
         nftid: z.string(), // typeof == `0x{hex stuff}
         nftmetadataCID: z.string(), // typeof == `Qm{base58 stuff}`
-        nftType: z.string()
+        nftType: z.string(),
+        nftData: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -451,51 +522,155 @@ export const appRouter = router({
       // const data = JSON.parse( db.get('pending',cid) )
       // actually save the data to the database
       // "{alskdfja;d}"
-      const nftObject: any = {}
+      console.log("pushNFTtoDb input:\n", input);
+      const nftObject: any = {};
+      // turn input.nft to nftObject
+      // GuitarObject, BassObject, AmpFxObject, AcousticObject
+      let data = JSON.parse(input.nftData);
       switch (input.nftType) {
         case "guitar":
-          await createGuitar(nftObject)
+          let guitarObj: GuitarObject = {
+            NFTCID: input.nftmetadataCID,
+            NFTId: input.nftid,
+            bodyMaterial: data.bodyMaterial,
+            brand: data.brand,
+            case: data.case,
+            containsBrazilianRosewood: data.containsBrazilianRosewood,
+            electronics: data.electronics,
+            finish: data.finish,
+            finishMaterial: data.finishMaterial,
+            handedness: data.handedness,
+            instrumentType: data.instrumentType,
+            year: data.year,
+            model: data.model,
+            modificationsRepairs: data.modificationsRepairs,
+            neckFingerboard: data.neckFingerboard,
+            neckProfile: data.neckProfile,
+            neckThickness: data.neckThickness,
+            nutWidth: data.nutWidth,
+            pickupImpedance: data.pickupImpedance,
+            potCodes: data.potCodes,
+            radius: data.radius,
+            scaleLength: data.scaleLength,
+            tuners: data.tuners,
+            weight: data.weight,
+          };
+          await createGuitar(guitarObj);
           break;
         case "bass":
-          await createBass(nftObject)
+          let bassObj: BassObject = {
+            id: data.id,
+            NFTCID: input.nftmetadataCID,
+            NFTId: input.nftid,
+            bodyMaterial: data.bodyMaterial,
+            brand: data.brand,
+            case: data.case,
+            electronics: data.electronics,
+            fingerboardRadius: data.fingerboardRadius,
+            finish: data.finish,
+            finishMaterial: data.finishMaterial,
+            model: data.model,
+            modificationsRepairs: data.modificationsRepairs,
+            neckDepth: data.neckDepth,
+            neckFingerboard: data.neckFingerboard,
+            neckProfile: data.neckProfile,
+            nutWidth: data.nutWidth,
+            radius: data.radius,
+            scaleLength: data.scaleLength,
+            serialNumber: data.serialNumber,
+            tuners: data.tuners,
+            weight: data.weight,
+            year: data.year,
+          };
+          await createBass(bassObj);
           break;
         case "acoustic":
-          await createAcoustic(nftObject)
+          let acousticObj: AcousticObject = {
+            id: data.id,
+            NFTCID: input.nftmetadataCID,
+            NFTId: input.nftid,
+            backAndSides: data.backAndSides,
+            bracePattern: data.bracePattern,
+            brand: data.brand,
+            bridge: data.bridge,
+            case: data.case,
+            containsBrazilianRosewood: data.containsBrazilianRosewood,
+            electronics: data.electronics,
+            fingerboardRadius: data.fingerboardRadius,
+            finish: data.finish,
+            finishMaterial: data.finishMaterial,
+            handedness: data.handedness,
+            year: data.year,
+            model: data.model,
+            modificationsRepairs: data.modificationsRepairs,
+            neckDepth: data.neckDepth,
+            neckFingerboard: data.neckFingerboard,
+            neckProfile: data.neckProfile,
+            nutWidth: data.nutWidth,
+            scaleLength: data.scaleLength,
+            serialNumber: data.serialNumber,
+            stringSpacingAtSaddle: data.stringSpacingAtSaddle,
+            top: data.top,
+            tuners: data.tuners,
+          };
+          await createAcoustic(nftObject);
           break;
         case "ampfx":
-          await createAmpFx(nftObject)
+          let ampfxObj: AmpFxObject = {
+            id: data.id,
+            NFTCID: input.nftmetadataCID,
+            NFTId: input.nftid,
+            brand: data.brand,
+            choke: data.choke,
+            circuit: data.circuit,
+            finish: data.finish,
+            instrument: data.instrument,
+            year: data.year,
+            model: data.model,
+            power: data.power,
+            preamp: data.preamp,
+            rectifier: data.rectifier,
+            reverbOther: data.reverbOther,
+            serialNumber: data.serialNumber,
+            speaker: data.speaker,
+            speakerCodes: data.speakerCodes,
+            transformersOT: data.transformersOT,
+            transformersPT: data.transformersPT,
+            wattage: data.wattage,
+          };
+          await createAmpFx(nftObject);
           break;
-      
+
         default:
           break;
       }
     }),
 
-    search: publicProcedure.input(z.object({query:z.string()}).optional()).mutation(async ({input}) => {
+  search: publicProcedure
+    .input(z.object({ query: z.string() }).optional())
+    .mutation(async ({ input }) => {
       if (!input) {
-        return previewData
+        return previewData;
       }
-      console.log('Searching For:\n' , input.query)
+      console.log("Searching For:\n", input.query);
       // trim input spaces and separate into multiple words
-      const words = input.query.split(/\s+/)
-      console.log(words)
-      const res = await searchDb(words)
-      console.log('db response: \n', res)
+      const words = input.query.split(/\s+/);
+      console.log(words);
+      const res = await searchDb(words);
+      console.log("db response: \n", res);
       // check wordbank table
       // IntrumentPayloadDTO
-      return previewData
+      return res;
       // return await searchQuery(input)
     }),
 
-    // search: publicProcedure.mutation(async (opts) => {
-    //   await opts.ctx.signGuestBook();
-   
-    //   return {
-    //     message: 'goodbye!',
-    //   };
-    // }),
+  // search: publicProcedure.mutation(async (opts) => {
+  //   await opts.ctx.signGuestBook();
+
+  //   return {
+  //     message: 'goodbye!',
+  //   };
+  // }),
 });
-
-
 
 export type AppRouter = typeof appRouter;

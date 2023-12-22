@@ -96,6 +96,7 @@ model electricguitar {
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
+  // instrument
   active                    Boolean  @default(true)
   bodyMaterial              String
   brand                     String
@@ -146,10 +147,14 @@ model instrumenttype {
 model searchtable {
   id        Int            @id
   name      String
+  // instrument
+  // 2004 fendre bass p
+  // 
   updatedAt DateTime
   yearsYear Int
   brandsId  Int
   typeId    Int
+  nftid     String         @unique
   brands    brands         @relation(fields: [brandsId], references: [id], map: "SearchTable_brandsId_fkey")
   years     years          @relation(fields: [yearsYear], references: [year], map: "SearchTable_yearsYear_fkey")
   type      instrumenttype @relation(fields: [typeId], references: [id])

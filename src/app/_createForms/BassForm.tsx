@@ -53,7 +53,7 @@ type BassFormValues = {
 export default function BassForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
-  const { register, handleSubmit, setValue, reset, watch, getValues } =
+  const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors } } =
     useForm<BassFormValues>({
       defaultValues: {
         image: null,
@@ -85,6 +85,8 @@ export default function BassForm() {
         phone: "",
       },
     });
+
+  console.log({errors})
   const {
     mutate: createBass,
     data: cidData,
