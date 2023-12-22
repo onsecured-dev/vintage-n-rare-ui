@@ -9,7 +9,7 @@ export default function CreatePage() {
       </section>
       <section className="container max-w-7xl px-12">
         <h1 className="text-4xl font-semibold py-10 whitespace-pre-wrap">
-          Add Amp or Effect
+          Add Amp
         </h1>
         <AEForm />
       </section>
