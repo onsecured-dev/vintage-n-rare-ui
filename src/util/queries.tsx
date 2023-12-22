@@ -9,20 +9,32 @@ import {
 
 export const createGuitar = async (guitar: GuitarObject) => {
   try {
+    // findOrCreate brand
+    let brand = await prisma.brands.findUnique({
+      where: {
+        brand: guitar.brand
+      }
+    })
+
+    if (!brand) {
+      brand = await prisma.brands.create({
+        data: {
+          brand: guitar.brand
+        }
+      })
+    }
+
     const result = await prisma.electricGuitar.create({
       data: {
         fullName: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         ...guitar,
+        brand: brand.id,
       },
     });
 
-    // findOrCreate year
-    let yearId = await prisma.years.findUnique({
 
-    })
+    // validate year
 
-    // findOrCreate brand
-    
     // guitar type
 
     // save in searchtable
@@ -30,7 +42,7 @@ export const createGuitar = async (guitar: GuitarObject) => {
       data: {
         name: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         yearsYear: guitar.year,
-        brandsId: yearId,
+        brandsId: brand.id,
         typeId: 1,
       }
     })
@@ -195,6 +207,23 @@ export const getWords =async (words:string[]) => {
     await prisma.$disconnect();
   }
   
+}
+
+export const searchDb = async (query: string | string[]) => {
+
+  // check if query is string or array
+  // if (typeof query === 'string') {
+  //   return await searchQuery(query)
+  // }
+
+  const res = await prisma.searchtable.findMany({
+    where: {
+      name: {
+        search: query,
+      }
+    }
+  })
+  return res
 }
 
 export const searchQuery = async (query: string) => {

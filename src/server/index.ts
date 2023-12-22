@@ -8,7 +8,7 @@ import {
   NFTBassObject,
   NFTGuitarObject,
 } from "../util/util";
-import { createAcoustic, createAmpFx, createBass, createGuitar, searchQuery } from "../util/queries";
+import { createAcoustic, createAmpFx, createBass, createGuitar, searchDb, searchQuery } from "../util/queries";
 import { previewData } from "@/data/placeholder";
 
 export const appRouter = router({
@@ -479,6 +479,8 @@ export const appRouter = router({
       // trim input spaces and separate into multiple words
       const words = input.query.split(/\s+/)
       console.log(words)
+      const res = await searchDb(words)
+      console.log('db response: \n', res)
       // check wordbank table
       // IntrumentPayloadDTO
       return previewData
