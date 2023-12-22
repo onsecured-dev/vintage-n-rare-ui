@@ -15,7 +15,7 @@ import LikeButton from "./LikeButton";
 export type InstrumentType =
   | "electric-guitar"
   | "electric-bass"
-  | "amps-effets"
+  | "amps-effects"
   | "acoustic-guitar";
 
 const typeId = {
