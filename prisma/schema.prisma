@@ -9,7 +9,7 @@ datasource db {
 }
 
 model acousticguitar {
-  updatedAt                 DateTime
+  updatedAt                 DateTime @db.DateTime(0)
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
@@ -61,7 +61,7 @@ model ampfx {
   transformersOT String
   transformersPT String
   wattage        String
-  updatedAt      DateTime
+  updatedAt      DateTime @db.DateTime(0)
 }
 
 model bass {
@@ -89,7 +89,7 @@ model bass {
   tuners               String
   weight               String
   year                 String
-  updatedAt            DateTime
+  updatedAt            DateTime @db.DateTime(0)
 }
 
 model electricguitar {
@@ -119,7 +119,7 @@ model electricguitar {
   scaleLength               String
   tuners                    String
   weight                    String
-  updatedAt                 DateTime
+  updatedAt                 DateTime @db.DateTime(0)
 }
 
 model pending {
@@ -127,13 +127,53 @@ model pending {
   data Json
 }
 
+model brands {
+  id          Int           @id @default(autoincrement())
+  brand       String        @unique(map: "Brands_brand_key")
+  // updatedAt   DateTime      @db.DateTime()
+  searchtable searchtable[]
+  wordbank    wordbank[]
+}
+
+model instrumenttype {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique(map: "InstrumentType_name_key")
+  // updatedAt   DateTime      @db.DateTime()
+  searchtable searchtable[]
+  wordbank    wordbank[]
+}
+
+model searchtable {
+  id        Int            @id
+  name      String
+  updatedAt DateTime
+  yearsYear Int
+  brandsId  Int
+  typeId    Int
+  brands    brands         @relation(fields: [brandsId], references: [id], map: "SearchTable_brandsId_fkey")
+  years     years          @relation(fields: [yearsYear], references: [year], map: "SearchTable_yearsYear_fkey")
+  type      instrumenttype @relation(fields: [typeId], references: [id])
+
+  @@index([brandsId], map: "SearchTable_brandsId_fkey")
+  @@index([yearsYear], map: "SearchTable_yearsYear_fkey")
+  @@index([typeId], map: "searchtable_typeId_fkey")
+}
+
 model wordbank {
-  id    Int     @id
-  word  String
-  alias String?
+  id       Int            @id @default(autoincrement())
+  word     String
+  alias    String?
+  brandsId Int
+  typeId   Int
+  brands   brands         @relation(fields: [brandsId], references: [id], map: "Wordbank_brandsId_fkey")
+  type     instrumenttype @relation(fields: [typeId], references: [id])
+
+  @@index([brandsId], map: "Wordbank_brandsId_fkey")
+  @@index([typeId], map: "wordbank_typeId_fkey")
 }
 
 model years {
-  year      Int      @id
-  updatedAt DateTime
+  year        Int           @id @default(autoincrement())
+  // updatedAt   DateTime
+  searchtable searchtable[]
 }

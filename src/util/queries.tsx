@@ -15,6 +15,26 @@ export const createGuitar = async (guitar: GuitarObject) => {
         ...guitar,
       },
     });
+
+    // findOrCreate year
+    let yearId = await prisma.years.findUnique({
+
+    })
+
+    // findOrCreate brand
+    
+    // guitar type
+
+    // save in searchtable
+    const res = await prisma.searchTable.create({
+      data: {
+        name: `${guitar.year} ${guitar.brand} ${guitar.model} `,
+        yearsYear: guitar.year,
+        brandsId: yearId,
+        typeId: 1,
+      }
+    })
+
     return result;
   } finally {
     await prisma.$disconnect();
