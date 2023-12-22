@@ -312,14 +312,20 @@ export default function BassForm() {
         </div>
 
         <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <Input title="Case" type="text" {...register("case")} />
-          <Input
-            title="Modifications/Repairs"
-            type="text"
-            {...register("mods")}
-          />
+          <div className="grid grid-cols-7 w-full">
+            <div className="md:col-span-3 col-span-7">
+              <Input title="Case" type="text" {...register("case")} />
+            </div>
+            <div className="md:col-span-3 md:col-start-5 col-start-1 col-span-7">
+              <Input
+                title="Modifications/Repairs"
+                type="text"
+                {...register("mods")}
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">
+        <div className="flex flex-row items-center justify-center gap-4 px-4 pt-6 w-full">
           <button
             className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
             type="button"
