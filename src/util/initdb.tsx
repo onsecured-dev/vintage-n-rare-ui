@@ -5,14 +5,14 @@ const prisma = new PrismaClient();
 
 // insert instrument types
 // all 4
-const createInstrumentTypes = async () => {
+export const createInstrumentTypes = async () => {
   try {
     const allTypes = await prisma.instrumenttype.createMany({
       data: [
-        { name: InstrumentCategory.Guitar },
-        { name: InstrumentCategory.Acoustic },
-        { name: InstrumentCategory.Bass },
-        { name: InstrumentCategory.AmpsEffects },
+        { name: InstrumentCategory.Guitar, id: 1 },
+        { name: InstrumentCategory.Acoustic, id: 2 },
+        { name: InstrumentCategory.Bass, id: 3 },
+        { name: InstrumentCategory.AmpsEffects, id: 4 },
       ],
     });
   } finally {
@@ -21,7 +21,7 @@ const createInstrumentTypes = async () => {
 };
 
 // insert years
-const addYears = async () => {
+export const addYears = async () => {
   try {
     const allTypes = await prisma.years.createMany({
       data: [
