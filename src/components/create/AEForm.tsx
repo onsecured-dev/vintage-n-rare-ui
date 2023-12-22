@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 import {
@@ -16,6 +16,7 @@ import { useRef } from "react";
 import LoadingModal from "./LoadingModal";
 import { OrderNowModal } from "./OrderNowModal";
 import classNames from "classnames";
+import { trpc } from "@/app/_trpc/client";
 
 type AmpEffectFormValues = {
   instrument: string;
@@ -36,6 +37,12 @@ type AmpEffectFormValues = {
   ot: string;
   choke: string;
   reverbOther: string;
+  finish: string;
+  wattage: number;
+  //USER
+  name: string;
+  email: string;
+  phone: string;
 };
 
 export default function AmpsEffectForm() {
@@ -62,17 +69,41 @@ export default function AmpsEffectForm() {
         ot: "",
         choke: "",
         reverbOther: "",
+        finish: "",
+        wattage: 0,
+        //USER
+        name: "",
+        email: "",
+        phone: "",
       },
     });
-  const onSubmit = (data: any) => {
-    console.log({ submitData: data });
-  };
+  const {
+    mutate: createAmpFx,
+    data: cidData,
+    status: metadataStatus,
+  } = trpc.createAmpFx.useMutation();
 
-  const { data: bassMetadata } = {
-    data:
-      // "loading"
-      "bafkreih2byiyq2tibwxsxdiiw5edau4w2gfpy2jhcpj6f2ora5dk4mhygy",
-  }; // get actual CID here
+  const onSubmit: SubmitHandler<AmpEffectFormValues> = (data) => {
+    if (!data.image || data.image.length !== 1) return;
+    const baseImg = data.image[0];
+    if (!baseImg) return;
+    console.log("has file");
+    const reader = new FileReader();
+    reader.readAsDataURL(baseImg);
+    reader.onload = () => {
+      const base64 = reader.result?.toString();
+      if (!base64) return;
+      console.log("file loaded as string");
+      createAmpFx({
+        image: base64,
+        object: {
+          ...data,
+          fileName: baseImg.name,
+          fileType: baseImg.type,
+        },
+      });
+    };
+  };
 
   const { address } = useAccount();
   const { data: nftData } = useContractReads({
@@ -95,7 +126,7 @@ export default function AmpsEffectForm() {
     address: ampsEffects,
     abi: NFTAbi,
     functionName: "mint",
-    args: [bassMetadata],
+    args: [cidData],
     value:
       nftData?.[0]?.result || false ? 0n : BigInt(nftData?.[1]?.result || 0n),
   });
@@ -130,10 +161,10 @@ export default function AmpsEffectForm() {
     <>
       <LoadingModal
         name="amp-effect-loading-modal"
-        cid={bassMetadata}
+        cid={cidData || "loading"}
         ref={modalRef}
         mint={mint}
-        loading={isMinting}
+        loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         close={() => modalRef.current?.close()}
       />
@@ -161,147 +192,70 @@ export default function AmpsEffectForm() {
             setValue={setValue}
             value={watch("image")}
           />
+          <Input
+            title={`Name ${address ? "" : " *"}`}
+            type="text"
+            {...register("name", { required: !address })}
+          />
+          <Input
+            title={`Email ${address ? "" : " *"}`}
+            type="email"
+            {...register("email", { required: !address })}
+          />
+          <Input title="Phone" type="tel" {...register("phone")} />
         </div>
         <div className="md:max-w-[45%] w-full">
           <label className="whitespace-pre-wrap pb-4">
             <span className="font-bold text-xl">Basic Information</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Enter the basic information about your amp/effect
-            </span>
           </label>
-          <Input
-            title="Instrument"
-            type="text"
-            {...register("instrument")}
-            placeholder="Guitar, bass, etc.."
-          />
-          <Input
-            title="Brand"
-            type="text"
-            {...register("brand")}
-            placeholder="Fender, Gibson, Orange..."
-          />
-          <Input
-            title="Model"
-            type="text"
-            {...register("model")}
-            placeholder="Jazz Bass, Les Paul, ..."
-          />
-          <Input
-            title="Year Made"
-            type="number"
-            {...register("year")}
-            placeholder="1999, 1980, ..."
-          />
-          <Input
-            title="Serial Number"
-            type="text"
-            {...register("serial")}
-            placeholder="#AZ123"
-          />
+          <Input title="Instrument" type="text" {...register("instrument")} />
+          <Input title="Year Made" type="number" {...register("year")} />
+          <Input title="Brand" type="text" {...register("brand")} />
+          <Input title="Model" type="text" {...register("model")} />
+          <div>
+            <label className="label">
+              <span>Name</span>
+            </label>
+            <div className=" h-12 flex flex-col justify-center px-4">
+              <div className="text-disabled-text">
+                {watch("year")} {watch("brand")} {watch("model")}
+              </div>
+            </div>
+          </div>
+          <Input title="Serial Number" type="text" {...register("serial")} />
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Power Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the power of your amp/effect
-            </span>
-          </label>
-
-          <Input
-            title="Preamp"
-            type="text"
-            {...register("preamp")}
-            placeholder="...,"
-          />
-          <Input
-            title="Power"
-            type="text"
-            {...register("power")}
-            placeholder="35W, 70W, ..."
-          />
-          <Input
-            title="Rectifier"
-            type="text"
-            {...register("rectifier")}
-            placeholder="..."
-          />
-          <Input
-            title="Circuit"
-            type="text"
-            {...register("circuit")}
-            placeholder=""
-          />
+          <Input title="Preamp" type="text" {...register("preamp")} />
+          <Input title="Power" type="text" {...register("power")} />
+          <Input title="Rectifier" type="text" {...register("rectifier")} />
+          <Input title="Circuit" type="text" {...register("circuit")} />
           <Input
             title="Transformers"
             type="text"
             {...register("transformer")}
-            placeholder=""
           />
         </div>
         <div className="md:max-w-[45%] w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Speaker Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Details of the speakers of your amp
-            </span>
-          </label>
-          <Input
-            title="Speaker"
-            type="text"
-            {...register("speaker")}
-            placeholder=""
-          />
+          <Input title="Speaker" type="text" {...register("speaker")} />
           <Input
             title="Speaker Codes"
             type="text"
             {...register("speakerCodes")}
-            placeholder=""
           />
-        </div>
-
-        <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Effects Details</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Effects of your amp or effects
-            </span>
-          </label>
-          <Input title="PT" type="text" {...register("pt")} placeholder="" />
-          <Input title="OT" type="text" {...register("ot")} placeholder="" />
-          <Input
-            title="Choke"
-            type="text"
-            {...register("choke")}
-            placeholder=""
-          />
+          <Input title="Choke" type="text" {...register("choke")} />
           <Input
             title="Reverb/Other"
             type="text"
             {...register("reverbOther")}
-            placeholder=""
           />
-        </div>
-        <div className="w-full border-t-[1px] pt-4 dark:border-white/70 border-slate-500">
-          <label className="whitespace-pre-wrap pb-4">
-            <span className="font-bold text-xl">Other</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Other informationa about your amp or effects
-            </span>
-          </label>
           <Input
             title="Modifications/Repairs"
             type="text"
             {...register("mods")}
-            placeholder="Modifications made or repairs done"
           />
         </div>
-        <div className="flex flex-row items-center justify-center gap-4 px-4 w-full">
+
+        <div className="flex flex-row items-center justify-center gap-4 px-4 pt-6 w-full">
           <button
             className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
             type="button"
