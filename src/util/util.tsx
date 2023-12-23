@@ -332,14 +332,33 @@ export const categoryDetails = {
   ]
 }
 
+const capitalizeFirstLetter = (str:string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export const buildHtmlFromObject = (obj: any) => {
-  console.log('building HTML')
-  let html = '<h1>Vintage and Rare Instruments</h1><ul>';
+  // For certificate emails
+
+  let html = '<h1>Vintage and Rare Instruments</h1><h3>Request for Certificate</h3><ul>';
   
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
-      html += `<li><strong>${key}:</strong> ${value}</li>`;
+      switch (key) {
+        case "name":
+          html += `</ul><hr><h4>Personal details</h4><ul><li><strong>${capitalizeFirstLetter(key)}:</strong> ${value}</li>`;
+
+          
+          break;
+
+        // case "instrument":
+        //   // manually build instrument field
+        //   html += `<li><strong>${capitalizeFirstLetter(key)}:</strong> ${obj['year'] + ' - ' + obj['brand'] + ' - ' + obj['model']}</li>`;
+      
+        default:
+          html += `<li><strong>${capitalizeFirstLetter(key)}:</strong> ${value}</li>`;
+          break;
+      }
     }
   }
   
@@ -350,7 +369,7 @@ export const buildHtmlFromObject = (obj: any) => {
 
 export const buildTextFromObject = (obj: any) => {
   console.log('building text')
-  let text = `Hello,\n\nThis is the order details:\n\n`;
+  let text = `Hello,\n\nThese are the order details:\n\n`;
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {

@@ -1,8 +1,7 @@
 "use client";
 
-import classNames from "classnames";
+
 import { ForwardedRef, forwardRef, useState } from "react";
-import Input from "@/components/create/Inputs";
 // import nodemailer from 'nodemailer';
 import { useForm } from "react-hook-form";
 import { trpc } from "../../app/_trpc/client";
@@ -25,13 +24,7 @@ export const OrderNowModal = forwardRef(function ForwardModal(
     status: metadataStatus,
   } = trpc.sendMail.useMutation();
 
-  // transporter.sendMail(mailOptions, function (error, info) {
-  //   if (error) {
-  //     console.log(error);
-  //   } else {
-  //     console.log('Email sent: ' + info.response);
-  //   }
-  // });
+
 
   const { name, status } = props;
   const {
@@ -42,9 +35,10 @@ export const OrderNowModal = forwardRef(function ForwardModal(
   } = useForm();
 
   const onSubmit =  async(data: any) => {
-    console.log("Email to: ", getValues());
-    console.log("instdata: \n", props.instrumentData);
-    console.log("keys imash: \n", props.instrumentData.image[0]);
+    // console.log("Email to: ", getValues());
+    // console.log("instdata: \n", props.instrumentData);
+    // console.log("keys imash: \n", props.instrumentData.image[0]);
+   
     await sendMail({
       sendTo: props.instrumentData.email,
       instObject: props.instrumentData
