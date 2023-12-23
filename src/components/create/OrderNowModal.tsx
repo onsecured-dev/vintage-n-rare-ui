@@ -1,13 +1,9 @@
 "use client";
 
-
 import { ForwardedRef, forwardRef, useState } from "react";
-// import nodemailer from 'nodemailer';
-import { useForm } from "react-hook-form";
-import { trpc } from "../../app/_trpc/client";
+
 import Link from "next/link";
 
-// export const OrderNowModal = forwardRef() => {
 export const OrderNowModal = forwardRef(function ForwardModal(
   props: {
     name: string;
@@ -17,34 +13,7 @@ export const OrderNowModal = forwardRef(function ForwardModal(
   },
   ref: ForwardedRef<HTMLDialogElement>
 ) {
-  
-  const {
-    mutate: sendMail,
-    data: cidData,
-    status: metadataStatus,
-  } = trpc.sendMail.useMutation();
-
-
-
   const { name, status } = props;
-  const {
-    register,
-    getValues,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-
-  const onSubmit =  async(data: any) => {
-    // console.log("Email to: ", getValues());
-    // console.log("instdata: \n", props.instrumentData);
-    // console.log("keys imash: \n", props.instrumentData.image[0]);
-   
-    await sendMail({
-      sendTo: props.instrumentData.email,
-      instObject: props.instrumentData
-    })
-    props.close();
-  };
 
   return (
     <dialog id={name} ref={ref} className="modal">
