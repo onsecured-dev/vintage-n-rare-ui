@@ -92,142 +92,141 @@ export const appRouter = router({
     )
     .mutation(async (input) => {
       console.log("create bass start");
-      if (!process.env.NFT_STORAGE_API_KEY)
+      if (!process.env.PINATA_JWT)
         return new TRPCError({
           code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
+          message: "PINATA Auth is not set",
         });
 
       console.log("GotBASS : ", input);
 
+      const fullName = `${input.input.object.year} - ${input.input.object.brand} - ${input.input.object.model}`;
       // PINATA BULLSHIT
+
+      const data = new FormData();
+      data.append("file", new Blob([input.input.image]));
+      data.append("pinataMetadata", JSON.stringify({ name: fullName }));
       // STEP 1, pin Image
-      const res = await fetch(
+      const resImage = await fetch(
         "https://api.pinata.cloud/pinning/pinFileToIPFS",
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${process.env.PINATA_JWT}`,
           },
-          // body: data,
+          body: data,
         }
       );
-      const { IpfsHash } = await res.json();
+      const { IpfsHash: imageHash } = await resImage.json();
       // STEP2 PIN JSON
+      
+      const parsedData = {
+        description: `Vintage and Rare Bass Guitar - ${fullName} - ${input.input.object.serial}`,
+        name: fullName,
+        image: `ipfs://${imageHash}`,
+          attributes: [
+            {
+              trait_type: "Model",
+              value: input.input.object.model,
+            },
+            {
+              trait_type: "Year",
+              value: input.input.object.year,
+            },
+            {
+              trait_type: "Brand",
+              value: input.input.object.brand,
+            },
+            {
+              trait_type: "Serial",
+              value: input.input.object.serial,
+            },
+            {
+              trait_type: "Handedness",
+              value: input.input.object.handedness,
+            },
+            {
+              trait_type: "BodyMaterial",
+              value: input.input.object.bodyMaterial,
+            },
+            {
+              trait_type: "Finish",
+              value: input.input.object.finish,
+            },
+            {
+              trait_type: "FinishMaterial",
+              value: input.input.object.finishMaterial,
+            },
+            {
+              trait_type: "Radius",
+              value: input.input.object.radius,
+            },
+            {
+              trait_type: "Weight",
+              value: input.input.object.weight,
+            },
+            {
+              trait_type: "Tuners",
+              value: input.input.object.tuners,
+            },
+            {
+              trait_type: "ScaleLength",
+              value: input.input.object.scaleLength,
+            },
+            {
+              trait_type: "NutWidth",
+              value: input.input.object.nutWidth,
+            },
+            {
+              trait_type: "NeckProfile",
+              value: input.input.object.neckProfile,
+            },
+            {
+              trait_type: "NeckThickness",
+              value: input.input.object.neckThickness,
+            },
+            {
+              trait_type: "PotCodes",
+              value: input.input.object.potCodes,
+            },
+            {
+              trait_type: "Electronics",
+              value: input.input.object.electronics,
+            },
+            {
+              trait_type: "PickupImpedance",
+              value: input.input.object.pickupImpedance,
+            },
+            {
+              trait_type: "NeckFingerboard",
+              value: input.input.object.neckFingerboard,
+            },
+            {
+              trait_type: "Case",
+              value: input.input.object.case,
+            },
+            {
+              trait_type: "mods",
+              value: input.input.object.mods,
+            },
+          ],
 
-      //=--------------
+      }
 
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
+      const resMetadata = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS',{
+        method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.PINATA_JWT}`,
+            accept: 'application/json', 
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(parsedData),
+      })
 
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Bass Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.year} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          {
-            trait_type: "Model",
-            value: input.input.object.model,
-          },
-          {
-            trait_type: "Year",
-            value: input.input.object.year,
-          },
-          {
-            trait_type: "Brand",
-            value: input.input.object.brand,
-          },
-          {
-            trait_type: "Serial",
-            value: input.input.object.serial,
-          },
-          {
-            trait_type: "Handedness",
-            value: input.input.object.handedness,
-          },
-          {
-            trait_type: "BodyMaterial",
-            value: input.input.object.bodyMaterial,
-          },
-          {
-            trait_type: "Finish",
-            value: input.input.object.finish,
-          },
-          {
-            trait_type: "FinishMaterial",
-            value: input.input.object.finishMaterial,
-          },
-          {
-            trait_type: "Radius",
-            value: input.input.object.radius,
-          },
-          {
-            trait_type: "Weight",
-            value: input.input.object.weight,
-          },
-          {
-            trait_type: "Tuners",
-            value: input.input.object.tuners,
-          },
-          {
-            trait_type: "ScaleLength",
-            value: input.input.object.scaleLength,
-          },
-          {
-            trait_type: "NutWidth",
-            value: input.input.object.nutWidth,
-          },
-          {
-            trait_type: "NeckProfile",
-            value: input.input.object.neckProfile,
-          },
-          {
-            trait_type: "NeckThickness",
-            value: input.input.object.neckThickness,
-          },
-          {
-            trait_type: "PotCodes",
-            value: input.input.object.potCodes,
-          },
-          {
-            trait_type: "Electronics",
-            value: input.input.object.electronics,
-          },
-          {
-            trait_type: "PickupImpedance",
-            value: input.input.object.pickupImpedance,
-          },
-          {
-            trait_type: "NeckFingerboard",
-            value: input.input.object.neckFingerboard,
-          },
-          {
-            trait_type: "Case",
-            value: input.input.object.case,
-          },
-          {
-            trait_type: "mods",
-            value: input.input.object.mods,
-          },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
+      const { IpfsHash: dataHash } = await resMetadata.json();
 
-      // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
+      return dataHash;
+
     }),
 
   createGuitar: publicProcedure

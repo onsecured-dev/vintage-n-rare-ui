@@ -85,7 +85,7 @@ const Footer = () => {
             Acoustic Guitar
           </Link>
           <Link
-            href="/create/amps-effects"
+            href="/create/amps"
             className="my-4 block text-center font-light hover:underline md:text-left"
           >
             Amps

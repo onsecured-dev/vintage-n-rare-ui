@@ -219,9 +219,9 @@ export default function AcousticGuitarForm() {
           <label className="whitespace-pre-wrap pb-4">
             <span className="font-bold text-xl">Basic Information</span>
           </label>
+          <Input title="Year Made" type="number" {...register("year")} />
           <Input title="Brand" type="text" {...register("brand")} />
           <Input title="Model" type="text" {...register("model")} />
-          <Input title="Year Made" type="number" {...register("year")} />
           <div>
             <label className="label">
               <span>Instrument</span>
@@ -232,7 +232,6 @@ export default function AcousticGuitarForm() {
               </div>
             </div>
           </div>
-          <Input title="Instrument" type="text" {...register("instrument")} />
           <Input title="Serial Number" type="text" {...register("serial")} />
           <div className="pt-4">
             <div className="text-base">Handedness</div>

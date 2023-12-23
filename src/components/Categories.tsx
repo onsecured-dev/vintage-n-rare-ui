@@ -69,7 +69,7 @@ export default function Categories(props: { isList?: boolean }) {
         />
         <Category
           name="Amps"
-          href="/create/amps-effects"
+          href="/create/amps"
           bg="/Graphics/Home Page - 4 Categories/Background/v01_wave-28.jpg"
         />
       </div>

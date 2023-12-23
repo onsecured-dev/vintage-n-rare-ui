@@ -53,40 +53,46 @@ type BassFormValues = {
 export default function BassForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
-  const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors } } =
-    useForm<BassFormValues>({
-      defaultValues: {
-        image: null,
-        instrument: "",
-        model: "",
-        year: new Date().getFullYear(),
-        brand: "",
-        serial: "",
-        handedness: "right",
-        bodyMaterial: "",
-        finish: "",
-        finishMaterial: "",
-        radius: "",
-        weight: "",
-        tuners: "",
-        scaleLength: "",
-        nutWidth: "",
-        neckProfile: "",
-        neckThickness: "",
-        potCodes: "",
-        electronics: "",
-        pickupImpedance: "",
-        neckFingerboard: "",
-        case: "",
-        mods: "",
-        //USER
-        name: "",
-        email: "",
-        phone: "",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useForm<BassFormValues>({
+    defaultValues: {
+      image: null,
+      instrument: "",
+      model: "",
+      year: new Date().getFullYear(),
+      brand: "",
+      serial: "",
+      handedness: "right",
+      bodyMaterial: "",
+      finish: "",
+      finishMaterial: "",
+      radius: "",
+      weight: "",
+      tuners: "",
+      scaleLength: "",
+      nutWidth: "",
+      neckProfile: "",
+      neckThickness: "",
+      potCodes: "",
+      electronics: "",
+      pickupImpedance: "",
+      neckFingerboard: "",
+      case: "",
+      mods: "",
+      //USER
+      name: "",
+      email: "",
+      phone: "",
+    },
+  });
 
-  console.log({errors})
   const {
     mutate: createBass,
     data: cidData,
@@ -132,7 +138,11 @@ export default function BassForm() {
     ],
   });
 
-  const { config } = usePrepareContractWrite({
+  const {
+    config,
+    refetch: tryAgainMint,
+    error: mintError,
+  } = usePrepareContractWrite({
     address: electricBass,
     abi: NFTAbi,
     functionName: "mint",
