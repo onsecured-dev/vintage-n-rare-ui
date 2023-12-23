@@ -16,12 +16,14 @@ export type InstrumentType =
   | "electric-guitar"
   | "electric-bass"
   | "amps-effects"
+  | "amps"
   | "acoustic-guitar";
 
 const typeId = {
   "electric-guitar": "EG",
   "electric-bass": "EB",
   "amps-effects": "AM",
+  amps: "AM",
   "acoustic-guitar": "AG",
 };
 export default function PreviewCard(props: {

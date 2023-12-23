@@ -1,5 +1,7 @@
 import { string, z } from "zod";
 
+const HandednessSchema = z.enum(["left", "right"]);
+
 export const NFTBassObject = z
   .object({
     bodyMaterial: z.string().optional(),
@@ -8,7 +10,7 @@ export const NFTBassObject = z
     electronics: z.string().optional(),
     finish: z.string().optional(),
     finishMaterial: z.string().optional(),
-    handedness: z.string().optional(),
+    handedness: HandednessSchema,
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
     // image a base64 string to store as metadata inside nft >>?
     model: z.string(),
@@ -36,16 +38,16 @@ export const NFTGuitarObject = z
     bodyMaterial: z.string(),
     brand: z.string(),
     case: z.string(),
-    containsBrazilianRosewood: z.string(),
+    bzRosewood: z.boolean(),
     electronics: z.string(),
     finish: z.string(),
     finishMaterial: z.string(),
-    handedness: z.string(),
+    handedness: HandednessSchema,
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
     instrumentType: z.string(),
-    madeInYear: z.string(),
+    year: z.number(),
     model: z.string(),
-    modificationsRepairs: z.string(),
+    mods: z.string(),
     neckFingerboard: z.string(),
     neckProfile: z.string(),
     neckThickness: z.string(),
@@ -53,6 +55,7 @@ export const NFTGuitarObject = z
     pickupImpedance: z.string(),
     potCodes: z.string(),
     radius: z.string(),
+    serial: z.string(),
     scaleLength: z.string(),
     tuners: z.string(),
     weight: z.string(),
@@ -64,7 +67,8 @@ export const NFTGuitarObject = z
 export const NFTAcousticObject = z
   .object({
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
-    backAndSides: z.string(),
+    bodyMaterial: z.string(),
+    backSides: z.string(),
     bracePattern: z.string(),
     brand: z.string(),
     bridge: z.string(),
@@ -74,19 +78,20 @@ export const NFTAcousticObject = z
     fingerboardRadius: z.string(),
     finish: z.string(),
     finishMaterial: z.string(),
-    handedness: z.string(),
-    madeInYear: z.string(),
+    handedness: HandednessSchema,
+    year: z.number(),
     model: z.string(),
-    modificationsRepairs: z.string(),
+    mods: z.string(),
     neckDepth: z.string(),
     neckFingerboard: z.string(),
     neckProfile: z.string(),
     nutWidth: z.string(),
     scaleLength: z.string(),
-    serialNumber: z.string(),
-    stringSpacingAtSaddle: z.string(),
+    serial: z.string(),
+    ssSaddle: z.string(),
     top: z.string(),
     tuners: z.string(),
+    bzRosewood: z.boolean(),
     fileType: z.string().regex(/^image\/(jpeg|png|gif|bmp|svg\+xml)$/),
     fileName: z.string().regex(/^[^\\/:\*\?"<>\|]+(\.[^\\/:\*\?"<>\|]+)*$/),
   })
@@ -100,17 +105,19 @@ export const NFTAmpFxObject = z
     circuit: z.string(),
     finish: z.string(),
     instrument: z.string(),
-    madeInYear: z.string(),
+    year: z.number(),
     model: z.string(),
     power: z.string(),
     preamp: z.string(),
     rectifier: z.string(),
     reverbOther: z.string(),
-    serialNumber: z.string(),
+    serial: z.string(),
+    mods: z.string(),
     speaker: z.string(),
     speakerCodes: z.string(),
-    transformersOT: z.string(),
-    transformersPT: z.string(),
+    ot: z.string(),
+    pt: z.string(),
+    transformer: z.string(),
     wattage: z.string(),
     fileType: z.string().regex(/^image\/(jpeg|png|gif|bmp|svg\+xml)$/),
     fileName: z.string().regex(/^[^\\/:\*\?"<>\|]+(\.[^\\/:\*\?"<>\|]+)*$/),
@@ -144,85 +151,85 @@ export interface GuitarObject {
   weight: string;
 }
 export interface BassObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    bodyMaterial: string;
-    brand: string;
-    case: string;
-    electronics: string;
-    fingerboardRadius: string;
-    finish: string;
-    finishMaterial: string;
-    model: string;
-    modificationsRepairs: string;
-    neckDepth: string;
-    neckFingerboard: string;
-    neckProfile: string;
-    nutWidth: string;
-    radius: string;
-    scaleLength: string;
-    serialNumber: string;
-    tuners: string;
-    weight: string;
-    year: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  bodyMaterial: string;
+  brand: string;
+  case: string;
+  electronics: string;
+  fingerboardRadius: string;
+  finish: string;
+  finishMaterial: string;
+  model: string;
+  modificationsRepairs: string;
+  neckDepth: string;
+  neckFingerboard: string;
+  neckProfile: string;
+  nutWidth: string;
+  radius: string;
+  scaleLength: string;
+  serialNumber: string;
+  tuners: string;
+  weight: string;
+  year: string;
 }
 export interface AcousticObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    backAndSides: string;
-    bracePattern: string;
-    brand: string;
-    bridge: string;
-    case: string;
-    containsBrazilianRosewood: string;
-    electronics: string;
-    fingerboardRadius: string;
-    finish: string;
-    finishMaterial: string;
-    handedness: string;
-    year: string;
-    model: string;
-    modificationsRepairs: string;
-    neckDepth: string;
-    neckFingerboard: string;
-    neckProfile: string;
-    nutWidth: string;
-    scaleLength: string;
-    serialNumber: string;
-    stringSpacingAtSaddle: string;
-    top: string;
-    tuners: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  backAndSides: string;
+  bracePattern: string;
+  brand: string;
+  bridge: string;
+  case: string;
+  containsBrazilianRosewood: string;
+  electronics: string;
+  fingerboardRadius: string;
+  finish: string;
+  finishMaterial: string;
+  handedness: string;
+  year: string;
+  model: string;
+  modificationsRepairs: string;
+  neckDepth: string;
+  neckFingerboard: string;
+  neckProfile: string;
+  nutWidth: string;
+  scaleLength: string;
+  serialNumber: string;
+  stringSpacingAtSaddle: string;
+  top: string;
+  tuners: string;
 }
 export interface AmpFxObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    brand: string;
-    choke: string;
-    circuit: string;
-    finish: string;
-    instrument: string;
-    year: string;
-    model: string;
-    power: string;
-    preamp: string;
-    rectifier: string;
-    reverbOther: string;
-    serialNumber: string;
-    speaker: string;
-    speakerCodes: string;
-    transformersOT: string;
-    transformersPT: string;
-    wattage: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  brand: string;
+  choke: string;
+  circuit: string;
+  finish: string;
+  instrument: string;
+  year: string;
+  model: string;
+  power: string;
+  preamp: string;
+  rectifier: string;
+  reverbOther: string;
+  serialNumber: string;
+  speaker: string;
+  speakerCodes: string;
+  transformersOT: string;
+  transformersPT: string;
+  wattage: string;
 }
 
 export enum InstrumentCategory {
-  Guitar = 'electric-guitar',
-  Bass = 'electric-bass',
-  Acoustic = 'acoustic-guitar',
-  AmpsEffects = 'amps-effects'
+  Guitar = "electric-guitar",
+  Bass = "electric-bass",
+  Acoustic = "acoustic-guitar",
+  AmpsEffects = "amps-effects",
 }
 
 export interface IntrumentPayload {
@@ -231,11 +238,10 @@ export interface IntrumentPayload {
   name: string;
   brand: string;
   model: string;
-  year: number,
+  year: number;
   serial: string;
   img: string;
 }
-
 
 export const categoryDetails = {
   Guitar: [
@@ -260,28 +266,25 @@ export const categoryDetails = {
     "Radius",
     "Scale Length",
     "Tuners",
-    "Weight"
+    "Weight",
   ],
   Bass: [
     "Body Material",
-    "Brand",
     "Case",
     "Electronics",
-    "Fingerboard Radius",
-    "Finish",
+    "Radius",
     "Finish Material",
-    "Model",
-    "Modifications Repairs",
-    "Neck Depth",
     "Neck Fingerboard",
     "Neck Profile",
+    "Neck Thickness",
     "Nut Width",
+    "Pickup Impedance",
+    "Pot. Codes",
     "Radius",
     "Scale Length",
-    "Serial Number",
     "Tuners",
     "Weight",
-    "Year"
+    "Modifications / Repairs",
   ],
   Acoustic: [
     "Back And Sides",
@@ -306,7 +309,7 @@ export const categoryDetails = {
     "Serial Number",
     "String Spacing At Saddle",
     "Top",
-    "Tuners"
+    "Tuners",
   ],
   AmpsEffects: [
     "Brand",

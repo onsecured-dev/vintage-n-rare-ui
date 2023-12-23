@@ -67,7 +67,7 @@ export default function DrawerButton() {
         <li className="py-2 text-center w-full text-sm bg-primary-text/30">
           <Link
             onClick={() => setIsOpen(false)}
-            href="/create/amps-effects"
+            href="/create/amps"
             className="w-full block text-center"
           >
             Amps

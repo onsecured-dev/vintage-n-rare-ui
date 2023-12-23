@@ -25,11 +25,13 @@ import {
 import { previewData } from "@/data/placeholder";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
-// import { env } from "process";
+import { env } from "process";
+import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
+import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
 
 const transporter = nodemailer.createTransport({
   service: "one",
-  host: "send.one.com",
+  host: process.env.EM_SMTP,
   // host: "mailout.one.com",
   port: 587,
   auth: {
@@ -46,35 +48,26 @@ export const appRouter = router({
   }),
 
   sendMail: publicProcedure.input(z.object({
-    sendTo: z.string(),
-    instObject: z.any(),
+    email: z.string().email(),
+    name: z.string(),
+    phone: z.string().optional(),
+    data: z.any(),
+    attachment: z.string()
   })).mutation(async (input) => {
-    
-    console.log('Sendmail input: ', input)
 
-    const reader = new FileReader()
-    let base64
-    reader.readAsDataURL(input.input.instObject.image[0])
-    reader.onload = () => {
-      base64 = reader.result?.toString()
-
-      if (!base64) return
-    }
-    const mailOptions = {
-      from: process.env.EM_USR,
-      to: '1panorama@proton.me',
-      // to: process.env.EM_USR,,
-      subject: "Vintage and Rare Instruments",
-
-      // text: buildTextFromObject(input.input.instObject),
-      html: buildHtmlFromObject(input.input.instObject),
-      attachments: [{path: base64}]
-    };
+    const sentData = input.input.data
+    delete sentData.image
 
     try {
       // Send email
-      console.log('senidng ?><SDADSSD???')
-      const info = await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail({
+        from: process.env.EM_USR,
+        to:"info@vintageandrare.io",
+        subject: "Request for Certificate",
+        text: JSON.stringify(input.input.data),
+        html: "<b>Request for Certificate</b><br></br><p>" + JSON.stringify(sentData, null, 4) + "</p>",
+        attachments: [{ path: input.input.attachment}]
+      });
       console.log("Message sent: %s", info.messageId);
       return { success: true };
     } catch (error) {
@@ -110,143 +103,16 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      console.log("create bass start");
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
+      checkPinataSetup();
 
       console.log("GotBASS : ", input);
-
-      // PINATA BULLSHIT
-      // STEP 1, pin Image
-      const res = await fetch(
-        "https://api.pinata.cloud/pinning/pinFileToIPFS",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.PINATA_JWT}`,
-          },
-          // body: data,
-        }
-      );
-      const { IpfsHash } = await res.json();
-      // STEP2 PIN JSON
-
-      //=--------------
-
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
-
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Bass Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.year} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          {
-            trait_type: "Model",
-            value: input.input.object.model,
-          },
-          {
-            trait_type: "Year",
-            value: input.input.object.year,
-          },
-          {
-            trait_type: "Brand",
-            value: input.input.object.brand,
-          },
-          {
-            trait_type: "Serial",
-            value: input.input.object.serial,
-          },
-          {
-            trait_type: "Handedness",
-            value: input.input.object.handedness,
-          },
-          {
-            trait_type: "BodyMaterial",
-            value: input.input.object.bodyMaterial,
-          },
-          {
-            trait_type: "Finish",
-            value: input.input.object.finish,
-          },
-          {
-            trait_type: "FinishMaterial",
-            value: input.input.object.finishMaterial,
-          },
-          {
-            trait_type: "Radius",
-            value: input.input.object.radius,
-          },
-          {
-            trait_type: "Weight",
-            value: input.input.object.weight,
-          },
-          {
-            trait_type: "Tuners",
-            value: input.input.object.tuners,
-          },
-          {
-            trait_type: "ScaleLength",
-            value: input.input.object.scaleLength,
-          },
-          {
-            trait_type: "NutWidth",
-            value: input.input.object.nutWidth,
-          },
-          {
-            trait_type: "NeckProfile",
-            value: input.input.object.neckProfile,
-          },
-          {
-            trait_type: "NeckThickness",
-            value: input.input.object.neckThickness,
-          },
-          {
-            trait_type: "PotCodes",
-            value: input.input.object.potCodes,
-          },
-          {
-            trait_type: "Electronics",
-            value: input.input.object.electronics,
-          },
-          {
-            trait_type: "PickupImpedance",
-            value: input.input.object.pickupImpedance,
-          },
-          {
-            trait_type: "NeckFingerboard",
-            value: input.input.object.neckFingerboard,
-          },
-          {
-            trait_type: "Case",
-            value: input.input.object.case,
-          },
-          {
-            trait_type: "mods",
-            value: input.input.object.mods,
-          },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
+      
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, fullName);
+      
+      const bassParsed = parseBassToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(bassParsed);
+      return dataHash;
     }),
 
   createGuitar: publicProcedure
@@ -261,87 +127,16 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
+      checkPinataSetup();
 
       console.log("Got E Guit : ", input);
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
 
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Electric Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          {
-            trait_type: "BodyMaterial",
-            value: input.input.object.bodyMaterial,
-          },
-          { trait_type: "Brand", value: input.input.object.brand },
-          { trait_type: "Case", value: input.input.object.case },
-          {
-            trait_type: "ContainsBrazilianRosewood",
-            value: input.input.object.containsBrazilianRosewood,
-          },
-          { trait_type: "Electronics", value: input.input.object.electronics },
-          { trait_type: "Finish", value: input.input.object.finish },
-          {
-            trait_type: "FinishMaterial",
-            value: input.input.object.finishMaterial,
-          },
-          { trait_type: "Handedness", value: input.input.object.handedness },
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, fullName);
+      const guitarParsed = parseElectricGuitarToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(guitarParsed);
+      return dataHash;
 
-          {
-            trait_type: "InstrumentType",
-            value: input.input.object.instrumentType,
-          },
-          { trait_type: "MadeInYear", value: input.input.object.madeInYear },
-          { trait_type: "Model", value: input.input.object.model },
-          {
-            trait_type: "ModificationsRepairs",
-            value: input.input.object.modificationsRepairs,
-          },
-          {
-            trait_type: "NeckFingerboard",
-            value: input.input.object.neckFingerboard,
-          },
-          { trait_type: "NeckProfile", value: input.input.object.neckProfile },
-          {
-            trait_type: "NeckThickness",
-            value: input.input.object.neckThickness,
-          },
-          { trait_type: "NutWidth", value: input.input.object.nutWidth },
-          {
-            trait_type: "PickupImpedance",
-            value: input.input.object.pickupImpedance,
-          },
-          { trait_type: "PotCodes", value: input.input.object.potCodes },
-          { trait_type: "Radius", value: input.input.object.radius },
-          { trait_type: "ScaleLength", value: input.input.object.scaleLength },
-          { trait_type: "Tuners", value: input.input.object.tuners },
-          { trait_type: "Weight", value: input.input.object.weight },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
     }),
 
   createAcoustic: publicProcedure
@@ -356,90 +151,12 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
-
+      checkPinataSetup();
       console.log("GotAcoustic : ", input);
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
-
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Acoustic Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          {
-            trait_type: "BackAndSides",
-            value: input.input.object.backAndSides,
-          },
-          {
-            trait_type: "BracePattern",
-            value: input.input.object.bracePattern,
-          },
-          { trait_type: "Brand", value: input.input.object.brand },
-          { trait_type: "Bridge", value: input.input.object.bridge },
-          { trait_type: "Case", value: input.input.object.case },
-          {
-            trait_type: "ContainsBrazilianRosewood",
-            value: input.input.object.containsBrazilianRosewood,
-          },
-          { trait_type: "Electronics", value: input.input.object.electronics },
-          {
-            trait_type: "FingerboardRadius",
-            value: input.input.object.fingerboardRadius,
-          },
-          { trait_type: "Finish", value: input.input.object.finish },
-          {
-            trait_type: "FinishMaterial",
-            value: input.input.object.finishMaterial,
-          },
-          { trait_type: "Handedness", value: input.input.object.handedness },
-          { trait_type: "MadeInYear", value: input.input.object.madeInYear },
-          { trait_type: "Model", value: input.input.object.model },
-          {
-            trait_type: "ModificationsRepairs",
-            value: input.input.object.modificationsRepairs,
-          },
-          { trait_type: "NeckDepth", value: input.input.object.neckDepth },
-          {
-            trait_type: "NeckFingerboard",
-            value: input.input.object.neckFingerboard,
-          },
-          { trait_type: "NeckProfile", value: input.input.object.neckProfile },
-          { trait_type: "NutWidth", value: input.input.object.nutWidth },
-          { trait_type: "ScaleLength", value: input.input.object.scaleLength },
-          {
-            trait_type: "SerialNumber",
-            value: input.input.object.serialNumber,
-          },
-          {
-            trait_type: "StringSpacingAtSaddle",
-            value: input.input.object.stringSpacingAtSaddle,
-          },
-          { trait_type: "Top", value: input.input.object.top },
-          { trait_type: "Tuners", value: input.input.object.tuners },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, fullName);
+      const acousticParsed = parseAcousticToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(acousticParsed);
     }),
 
   createAmpFx: publicProcedure
@@ -454,73 +171,14 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
-
+      checkPinataSetup();
       console.log("GotAmpFx : ", input);
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, input.input.object.model);
+      const ampParsed = parseAmpToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(ampParsed);
 
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Amp Fx - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          { trait_type: "brand", value: input.input.object.brand },
-          { trait_type: "choke", value: input.input.object.choke },
-          { trait_type: "circuit", value: input.input.object.circuit },
-          { trait_type: "finish", value: input.input.object.finish },
-          { trait_type: "instrument", value: input.input.object.instrument },
-          { trait_type: "madeInYear", value: input.input.object.madeInYear },
-          { trait_type: "model", value: input.input.object.model },
-          { trait_type: "power", value: input.input.object.power },
-          { trait_type: "preamp", value: input.input.object.preamp },
-          { trait_type: "rectifier", value: input.input.object.rectifier },
-          { trait_type: "reverbOther", value: input.input.object.reverbOther },
-          {
-            trait_type: "serialNumber",
-            value: input.input.object.serialNumber,
-          },
-          { trait_type: "speaker", value: input.input.object.speaker },
-          {
-            trait_type: "speakerCodes",
-            value: input.input.object.speakerCodes,
-          },
-          {
-            trait_type: "transformersOT",
-            value: input.input.object.transformersOT,
-          },
-          {
-            trait_type: "transformersPT",
-            value: input.input.object.transformersPT,
-          },
-          { trait_type: "wattage", value: input.input.object.wattage },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      // get CID
-      const CID = cid.url.replace("ipfs://", "");
-      /// add to DB - pending Table
-      // db.create('pending', id: CID, data: JSON.stringify(input.object))
-      return CID;
+      return dataHash;
     }),
 
   getTest: publicProcedure.query(async () => {

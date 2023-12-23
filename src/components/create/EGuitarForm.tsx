@@ -12,85 +12,66 @@ import {
 } from "wagmi";
 import { electricGuitars } from "@/data/contracts";
 import NFTAbi from "@/data/abi/NFTAbi";
-import { zeroAddress } from "viem";
+import { BaseError, zeroAddress } from "viem";
 import LoadingModal from "./LoadingModal";
 import classNames from "classnames";
 import { OrderNowModal } from "./OrderNowModal";
 import { trpc } from "@/app/_trpc/client";
-
-type ElectricGuitarFormProps = {
-  instrument: string;
-  image: FileList | null;
-  brand: string;
-  model: string;
-  finish: string;
-  handedness: string;
-  year: number;
-  bodyMaterial: string;
-  finishMaterial: string;
-  radius: string;
-  weight: string;
-  tuners: string;
-  scaleLength: string;
-  nutWidth: string;
-  neckProfile: string;
-  serial: string;
-  neckThickness: string;
-  electronics: string;
-  potCodes: string;
-  pickupImpedance: string;
-  bzRosewood: boolean;
-  case: string;
-  mods: string;
-  //USER
-  name: string;
-  email: string;
-  phone: string;
-};
+import { ElectricGuitarClientFormValues } from "@/utils/formTypes";
 
 export default function ElectricGuitarForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
 
-  const { register, handleSubmit, setValue, reset, watch, getValues } =
-    useForm<ElectricGuitarFormProps>({
-      defaultValues: {
-        instrument: "",
-        image: null,
-        brand: "",
-        model: "",
-        finish: "",
-        handedness: "right",
-        year: new Date().getFullYear(),
-        bodyMaterial: "",
-        finishMaterial: "",
-        radius: "",
-        weight: "",
-        tuners: "",
-        scaleLength: "",
-        nutWidth: "",
-        neckProfile: "",
-        serial: "",
-        neckThickness: "",
-        electronics: "",
-        potCodes: "",
-        pickupImpedance: "",
-        bzRosewood: false,
-        case: "",
-        mods: "",
-        //USER
-        name: "",
-        email: "",
-        phone: "",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm<ElectricGuitarClientFormValues>({
+    defaultValues: {
+      instrument: "",
+      image: null,
+      brand: "",
+      model: "",
+      finish: "",
+      handedness: "right",
+      year: new Date().getFullYear(),
+      bodyMaterial: "",
+      finishMaterial: "",
+      radius: "",
+      weight: "",
+      tuners: "",
+      scaleLength: "",
+      nutWidth: "",
+      neckProfile: "",
+      serial: "",
+      neckThickness: "",
+      electronics: "",
+      potCodes: "",
+      pickupImpedance: "",
+      bzRosewood: false,
+      case: "",
+      mods: "",
+      //USER
+      name: "",
+      email: "",
+      phone: "",
+    },
+  });
   const {
     mutate: createGuitar,
     data: cidData,
     status: metadataStatus,
   } = trpc.createGuitar.useMutation();
 
-  const onSubmit: SubmitHandler<ElectricGuitarFormProps> = (data) => {
+  const { mutate: sendMailInfo, status: mailInfoStatus } =
+    trpc.sendMail.useMutation();
+
+  const onSubmit: SubmitHandler<ElectricGuitarClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
     if (!baseImg) return;
@@ -129,7 +110,11 @@ export default function ElectricGuitarForm() {
     ],
   });
 
-  const { config } = usePrepareContractWrite({
+  const {
+    config,
+    refetch: tryAgainMint,
+    error: mintError,
+  } = usePrepareContractWrite({
     address: electricGuitars,
     abi: NFTAbi,
     functionName: "mint",
@@ -173,12 +158,15 @@ export default function ElectricGuitarForm() {
         loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
+        errorData={mintError as BaseError | undefined}
+        refetchMint={tryAgainMint}
       />
       <OrderNowModal
         name="order-now-modal"
         close={() => modalOrdRef.current?.close()}
         ref={modalOrdRef}
         instrumentData={getValues()}
+        status={mailInfoStatus}
         // loading={isMinting || metadataStatus === "pending"}
       />
       <form
@@ -334,33 +322,50 @@ export default function ElectricGuitarForm() {
         </div>
         <div className="flex flex-row items-center justify-center gap-4 px-4 pt-6 w-full">
           <button
-            className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
+            className={classNames(
+              "bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold",
+              "disabled:hover:bg-gray-700/20 disabled:bg-gray-700/20 disabled:hover:dark:bg-gray-700/20"
+            )}
             type="button"
-            onClick={(e) => {
-              // const values = getValues()
-              // console.log('values: ', values)
+            disabled={!isValid}
+            onClick={() => {
               modalOrdRef.current?.showModal();
-
-              // reset();
+              const image = getValues().image?.[0];
+              if (!image) return;
+              const reader = new FileReader();
+              reader.readAsDataURL(image);
+              reader.onload = () => {
+                const base64 = reader.result?.toString();
+                if (!base64) return;
+                sendMailInfo({
+                  email: getValues().email,
+                  name: getValues().name,
+                  phone: getValues().phone,
+                  data: getValues(),
+                  attachment: base64,
+                });
+              };
             }}
           >
             Order Now
           </button>
-          <button
-            className={classNames(
-              "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
-              "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
-              "hover:text-white text-primary-text dark:text-white",
-              "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
-            )}
-            type="submit"
-            disabled={!address}
-            onClick={(e) => {
-              modalRef.current?.showModal();
-            }}
-          >
-            Create Metadata
-          </button>
+          {!!address && (
+            <button
+              className={classNames(
+                "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
+                "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
+                "hover:text-white text-primary-text dark:text-white",
+                "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
+              )}
+              type="submit"
+              disabled={!address || !isValid}
+              onClick={(e) => {
+                modalRef.current?.showModal();
+              }}
+            >
+              Create Metadata
+            </button>
+          )}
         </div>
       </form>
     </>

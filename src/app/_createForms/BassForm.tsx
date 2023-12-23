@@ -12,88 +12,68 @@ import {
 } from "wagmi";
 import { electricBass } from "@/data/contracts";
 import NFTAbi from "@/data/abi/NFTAbi";
-import { zeroAddress } from "viem";
+import { BaseError, zeroAddress } from "viem";
 import LoadingModal from "@/components/create/LoadingModal";
 import { useRef } from "react";
 import { trpc } from "../_trpc/client";
 import classNames from "classnames";
 // import nodemailer from 'nodemailer';
 import { OrderNowModal } from "@/components/create/OrderNowModal";
-
-type BassFormValues = {
-  image: FileList | null;
-  instrument: string;
-  model: string;
-  year: number;
-  brand: string;
-  serial: string;
-  handedness: "left" | "right";
-  bodyMaterial: string;
-  finish: string;
-  finishMaterial: string;
-  radius: string;
-  weight: string;
-  tuners: string;
-  scaleLength: string;
-  nutWidth: string;
-  neckProfile: string;
-  neckThickness: string;
-  potCodes: string;
-  electronics: string;
-  pickupImpedance: string;
-  neckFingerboard: string;
-  case: string;
-  mods: string;
-  //USER
-  name: string;
-  email: string;
-  phone: string;
-};
+import { BassClientFormValues, BassFormValues } from "@/utils/formTypes";
 
 export default function BassForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
-  const { register, handleSubmit, setValue, reset, watch, getValues, formState: { errors } } =
-    useForm<BassFormValues>({
-      defaultValues: {
-        image: null,
-        instrument: "",
-        model: "",
-        year: new Date().getFullYear(),
-        brand: "",
-        serial: "",
-        handedness: "right",
-        bodyMaterial: "",
-        finish: "",
-        finishMaterial: "",
-        radius: "",
-        weight: "",
-        tuners: "",
-        scaleLength: "",
-        nutWidth: "",
-        neckProfile: "",
-        neckThickness: "",
-        potCodes: "",
-        electronics: "",
-        pickupImpedance: "",
-        neckFingerboard: "",
-        case: "",
-        mods: "",
-        //USER
-        name: "",
-        email: "",
-        phone: "",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm<BassClientFormValues>({
+    defaultValues: {
+      image: null,
+      instrument: "",
+      model: "",
+      year: new Date().getFullYear(),
+      brand: "",
+      serial: "",
+      handedness: "right",
+      bodyMaterial: "",
+      finish: "",
+      finishMaterial: "",
+      radius: "",
+      weight: "",
+      tuners: "",
+      scaleLength: "",
+      nutWidth: "",
+      neckProfile: "",
+      neckThickness: "",
+      potCodes: "",
+      electronics: "",
+      pickupImpedance: "",
+      neckFingerboard: "",
+      case: "",
+      mods: "",
+      //USER
+      name: "",
+      email: "",
+      phone: "",
+    },
+  });
 
-  console.log({errors})
   const {
     mutate: createBass,
     data: cidData,
     status: metadataStatus,
   } = trpc.createBass.useMutation();
 
-  const onSubmit: SubmitHandler<BassFormValues> = (data) => {
+  const { mutate: sendMailInfo, status: mailInfoStatus } =
+    trpc.sendMail.useMutation();
+
+  const onSubmit: SubmitHandler<BassClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
     if (!baseImg) return;
@@ -108,6 +88,7 @@ export default function BassForm() {
         image: base64,
         object: {
           ...data,
+          year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,
         },
@@ -132,7 +113,11 @@ export default function BassForm() {
     ],
   });
 
-  const { config } = usePrepareContractWrite({
+  const {
+    config,
+    refetch: tryAgainMint,
+    error: mintError,
+  } = usePrepareContractWrite({
     address: electricBass,
     abi: NFTAbi,
     functionName: "mint",
@@ -176,13 +161,15 @@ export default function BassForm() {
         loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
+        errorData={mintError as BaseError | undefined}
+        refetchMint={tryAgainMint}
       />
       <OrderNowModal
         name="order-now-modal"
         close={() => modalOrdRef.current?.close()}
         ref={modalOrdRef}
         instrumentData={getValues()}
-        // loading={isMinting || metadataStatus === "pending"}
+        status={mailInfoStatus}
       />
       <form
         className="flex flex-row flex-wrap gap-4 justify-between"
@@ -329,33 +316,50 @@ export default function BassForm() {
         </div>
         <div className="flex flex-row items-center justify-center gap-4 px-4 pt-6 w-full">
           <button
-            className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
+            className={classNames(
+              "bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold",
+              "disabled:hover:bg-gray-700/20 disabled:bg-gray-700/20 disabled:hover:dark:bg-gray-700/20"
+            )}
             type="button"
-            onClick={(e) => {
-              // const values = getValues()
-              // console.log('values: ', values)
+            disabled={!isValid}
+            onClick={() => {
               modalOrdRef.current?.showModal();
-
-              // reset();
+              const image = getValues().image?.[0];
+              if (!image) return;
+              const reader = new FileReader();
+              reader.readAsDataURL(image);
+              reader.onload = () => {
+                const base64 = reader.result?.toString();
+                if (!base64) return;
+                sendMailInfo({
+                  email: getValues().email,
+                  name: getValues().name,
+                  phone: getValues().phone,
+                  data: getValues(),
+                  attachment: base64,
+                });
+              };
             }}
           >
             Order Now
           </button>
-          <button
-            className={classNames(
-              "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
-              "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
-              "hover:text-white text-primary-text dark:text-white",
-              "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
-            )}
-            type="submit"
-            disabled={!address}
-            onClick={(e) => {
-              modalRef.current?.showModal();
-            }}
-          >
-            Create Metadata
-          </button>
+          {!!address && (
+            <button
+              className={classNames(
+                "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
+                "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
+                "hover:text-white text-primary-text dark:text-white",
+                "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
+              )}
+              type="submit"
+              disabled={!address || !isValid}
+              onClick={(e) => {
+                modalRef.current?.showModal();
+              }}
+            >
+              Create Metadata
+            </button>
+          )}
         </div>
       </form>
     </>

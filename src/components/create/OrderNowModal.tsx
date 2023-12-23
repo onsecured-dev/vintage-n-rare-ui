@@ -1,18 +1,19 @@
 "use client";
 
 import classNames from "classnames";
-import { ForwardedRef, forwardRef } from "react";
+import { ForwardedRef, forwardRef, useState } from "react";
 import Input from "@/components/create/Inputs";
 // import nodemailer from 'nodemailer';
 import { useForm } from "react-hook-form";
 import { trpc } from "../../app/_trpc/client";
+import Link from "next/link";
 
 // export const OrderNowModal = forwardRef() => {
 export const OrderNowModal = forwardRef(function ForwardModal(
   props: {
     name: string;
     close: () => void;
-    // loading: boolean;
+    status: string;
     instrumentData: object;
   },
   ref: ForwardedRef<HTMLDialogElement>
@@ -49,54 +50,40 @@ export const OrderNowModal = forwardRef(function ForwardModal(
     })
     props.close();
   };
+  const { name, status } = props;
 
   return (
     <dialog id={name} ref={ref} className="modal">
       <div className="modal-box dark:bg-action-bg bg-white ">
         {/* <p className="text-xs text-right justify-end">ESC to close</p> */}
-        <p className="text-xl text-center">Order</p>
-        <div className="flex flex-col items-center py-12">
-          {/* input for email address */}
-          {/* div including a span to show json data that will be sent */}
-          <div className="items-center justify-center ">
-            <p className="text-ms break-all my-4 ">
-              Order details will be sent to the following address
-            </p>
-            {/* <p>{JSON.stringify(props.instrumentData)}</p> */}
-          </div>
-          <form
-            className="flex flex-col items-center flex-wrap gap-4 justify-between"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="max-w-2xl my-4">
-              {/* <p>Email</p>
-              <p>{props.instrumentData.email}</p> */}
-              <Input
-                title="Email"
-                type="email"
-                {...register("email", { required: true, minLength: 5 })}
-                placeholder="e.g. email@domain.com"
-              />
-              {errors.yourInput && errors.yourInput.type === "required" && (
-                <p>This field is required.</p>
-              )}
-              {errors.yourInput && errors.yourInput.type === "minLength" && (
-                <p>Input must be at least 5 characters long.</p>
-              )}
-            </div>
-            <button
-              className={classNames(
-                "hover:bg-primary-text bg-transparent dark:border-white hover:dark:border-primary-text",
-                "hover:text-white text-primary-text dark:text-white",
-                "w-full max-w-[225px] text-center rounded-full border-2  font-semibold px-6 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
-              )}
-              type="submit"
-              // onClick={onSubmit}
-              disabled={Object.keys(errors).length > 0}
-            >
-              Send
-            </button>
-          </form>
+        <div className="flex flex-col items-center justify-center py-12">
+          <p className="my-4 text-center">
+            {status == "pending" ? (
+              <>
+                <div className="loading loading-spinner w-[70px] text-primary-text" />
+                <br />
+                Submitting Info to Vintage & Rare
+              </>
+            ) : status === "success" ? (
+              "Email sent!"
+            ) : (
+              ""
+            )}
+          </p>
+          {status === "success" ? (
+            <>
+              <p className="text-center text-sm">
+                Team will contact you soon with details to create your
+                Certificate
+              </p>
+              <p className="text-center text-sm">
+                In the meantime, check out the other items on the&nbsp;
+                <Link href="/explore" className="btn-link text-primary-text">
+                  explore page
+                </Link>
+              </p>
+            </>
+          ) : null}
         </div>
       </div>
     </dialog>
