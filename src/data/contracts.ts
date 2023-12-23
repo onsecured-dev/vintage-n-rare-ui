@@ -8,3 +8,10 @@ export const electricGuitars = "0x732f876EF9D2416EB509b5fe3C79c3925e227f68"
 export const acousticGuitars = "0x77E32647E14A12f840a9614554D5DB44020Cf34E"
 export const electricBass = "0x7333DA35Baca8e02dF4dbf8F7b18Bc789A2F1724"
 export const ampsEffects = "0x971F2EC349D5ABB24db088fd1B19E22337258e26"
+
+export const contractAddressMapping = {
+   "electric-guitar" : electricGuitars,
+   "acoustic-guitar" : acousticGuitars,
+   "electric-bass" : electricBass,
+   "amps-effects" : ampsEffects
+} as const

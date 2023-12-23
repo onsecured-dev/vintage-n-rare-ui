@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-
   reactStrictMode: true,
   webpack: (config, context) => {
     config.resolve.fallback = { fs:false, net:false, tls:false }
@@ -13,6 +12,16 @@ const nextConfig = {
     }
     return config
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'salmon-persistent-parrotfish-346.mypinata.cloud',
+        port: '',
+        pathname: '/ipfs/**',
+      },
+    ],
+  }
 }
 
 module.exports = nextConfig
