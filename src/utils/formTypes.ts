@@ -83,7 +83,10 @@ export type ElectricGuitarFormValues = BaseMetadataFields & {
   case: string;
 };
 
+export type ElectricGuitarClientFormValues = ElectricGuitarFormValues & DefaultClientFields & UserFields;
+
 export type AmpEffectFormValues = BaseMetadataFields & {
+  instrument: string;
   preamp: string;
   power: string;
   rectifier: string;
@@ -96,5 +99,7 @@ export type AmpEffectFormValues = BaseMetadataFields & {
   choke: string;
   reverbOther: string;
   finish: string;
-  wattage: number;
+  wattage: string;
 };
+
+export type AmpEffectClientFormValues = AmpEffectFormValues & DefaultClientFields & UserFields;
