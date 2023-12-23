@@ -5,6 +5,8 @@ import { ForwardedRef, forwardRef } from "react";
 import { BaseError, TransactionReceipt } from "viem";
 import { TbWorldCheck } from "react-icons/tb";
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const LoadingModal = forwardRef(function ForwardModal(
   props: {
@@ -22,10 +24,12 @@ const LoadingModal = forwardRef(function ForwardModal(
   const { name, cid, close, mint, loading, mintData, errorData, refetchMint } =
     props;
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
+  const path = usePathname();
+  const itemCreated = path.replace("/create/", "");
   return (
     <dialog id={name} ref={ref} className="modal">
       <div className="modal-box dark:bg-action-bg bg-white">
-        <div className="flex flex-col items-center py-20">
+        <div className="flex flex-col items-center py-10">
           {cid === "loading" || loading ? (
             <>
               <div className="loading loading-spinner w-[70px] text-primary-text" />
@@ -59,10 +63,7 @@ const LoadingModal = forwardRef(function ForwardModal(
                 <br />
                 <div className="w-full text-center">
                   <a
-                    href={`https://${cid.replace(
-                      "/metadata.json",
-                      ""
-                    )}.ipfs.nftstorage.link/`}
+                    href={`https://salmon-persistent-parrotfish-346.mypinata.cloud/ipfs/${cid}/`}
                     className="btn btn-link text-primary-text text-center"
                     target="_blank"
                     rel="nonreferrer noopener"
@@ -75,9 +76,14 @@ const LoadingModal = forwardRef(function ForwardModal(
                 <>
                   {errorData ? (
                     <div className="flex flex-col items-center justify-center">
-                      <div>{errorData.message}</div>
-                      <button className="btn bg-indigo-500 hover:bg-indigo-700 text-white">
-                        Retry
+                      <div className="text-center w-full text-red-500 text-sm pb-2">
+                        {errorData.shortMessage}
+                      </div>
+                      <button
+                        className="btn bg-indigo-500 hover:bg-indigo-700 text-white"
+                        onClick={refetchMint}
+                      >
+                        Recheck
                       </button>
                     </div>
                   ) : (
@@ -88,7 +94,6 @@ const LoadingModal = forwardRef(function ForwardModal(
                         "w-[150px] text-center rounded-xl border-2 font-semibold px-8 py-2 my-2 mx-1 shadow-sm transition-colors duration-300",
                         loading ? "hidden" : ""
                       )}
-                      disabled
                       onClick={() => mint?.()}
                     >
                       Mint
@@ -104,6 +109,16 @@ const LoadingModal = forwardRef(function ForwardModal(
                     </code>
                     .
                   </span>
+                  <br />
+                  <div className="w-full text-center">
+                    <Link
+                      href={`/${itemCreated}/${nftId}`}
+                      className="btn btn-link text-center"
+                      target="_blank"
+                    >
+                      View Item
+                    </Link>
+                  </div>
                   <br />
                   <div className="w-full text-center">
                     <a

@@ -12,7 +12,7 @@ import {
 } from "wagmi";
 import { electricBass } from "@/data/contracts";
 import NFTAbi from "@/data/abi/NFTAbi";
-import { zeroAddress } from "viem";
+import { BaseError, zeroAddress } from "viem";
 import LoadingModal from "@/components/create/LoadingModal";
 import { useRef } from "react";
 import { trpc } from "../_trpc/client";
@@ -88,6 +88,7 @@ export default function BassForm() {
         image: base64,
         object: {
           ...data,
+          year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,
         },
@@ -160,6 +161,8 @@ export default function BassForm() {
         loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
+        errorData={mintError as BaseError | undefined}
+        refetchMint={tryAgainMint}
       />
       <OrderNowModal
         name="order-now-modal"
