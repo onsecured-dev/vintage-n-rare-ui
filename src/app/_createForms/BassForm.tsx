@@ -352,7 +352,7 @@ export default function BassForm() {
                 "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
               )}
               type="submit"
-              disabled={!address}
+              disabled={!address || !isValid}
               onClick={(e) => {
                 modalRef.current?.showModal();
               }}
