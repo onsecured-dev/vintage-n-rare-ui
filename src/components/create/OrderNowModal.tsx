@@ -32,7 +32,8 @@ export const OrderNowModal = forwardRef(function ForwardModal(
   //     console.log('Email sent: ' + info.response);
   //   }
   // });
-  const { name } = props;
+
+  const { name, status } = props;
   const {
     register,
     getValues,
@@ -50,7 +51,6 @@ export const OrderNowModal = forwardRef(function ForwardModal(
     })
     props.close();
   };
-  const { name, status } = props;
 
   return (
     <dialog id={name} ref={ref} className="modal">
