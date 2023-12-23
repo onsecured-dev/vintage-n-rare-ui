@@ -11,6 +11,8 @@ import {
   NFTAmpFxObject,
   NFTBassObject,
   NFTGuitarObject,
+  buildHtmlFromObject,
+  buildTextFromObject,
 } from "../util/util";
 import {
   createAcoustic,
@@ -23,7 +25,7 @@ import {
 import { previewData } from "@/data/placeholder";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
-import { env } from "process";
+// import { env } from "process";
 
 const transporter = nodemailer.createTransport({
   service: "one",
@@ -43,18 +45,35 @@ export const appRouter = router({
     return [1, 2, 3];
   }),
 
-  sendMail: publicProcedure.query(async () => {
+  sendMail: publicProcedure.input(z.object({
+    sendTo: z.string(),
+    instObject: z.any(),
+  })).mutation(async (input) => {
+    
+    console.log('Sendmail input: ', input)
+
+    const reader = new FileReader()
+    let base64
+    reader.readAsDataURL(input.input.instObject.image[0])
+    reader.onload = () => {
+      base64 = reader.result?.toString()
+
+      if (!base64) return
+    }
     const mailOptions = {
       from: process.env.EM_USR,
-      to: "target@email",
+      to: '1panorama@proton.me',
+      // to: process.env.EM_USR,,
       subject: "Vintage and Rare Instruments",
-      text: "That was easy!",
-      html: "<h1>Vintage and Rare Instruments</h1><h2>Thanks</h2>",
-      // attachments: []
+
+      // text: buildTextFromObject(input.input.instObject),
+      html: buildHtmlFromObject(input.input.instObject),
+      attachments: [{path: base64}]
     };
 
     try {
       // Send email
+      console.log('senidng ?><SDADSSD???')
       const info = await transporter.sendMail(mailOptions);
       console.log("Message sent: %s", info.messageId);
       return { success: true };

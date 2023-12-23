@@ -5,6 +5,7 @@ import { ForwardedRef, forwardRef } from "react";
 import Input from "@/components/create/Inputs";
 // import nodemailer from 'nodemailer';
 import { useForm } from "react-hook-form";
+import { trpc } from "../../app/_trpc/client";
 
 // export const OrderNowModal = forwardRef() => {
 export const OrderNowModal = forwardRef(function ForwardModal(
@@ -16,24 +17,12 @@ export const OrderNowModal = forwardRef(function ForwardModal(
   },
   ref: ForwardedRef<HTMLDialogElement>
 ) {
-  // const transporter = nodemailer.createTransport({
-  //   service: 'gmail',
-  //   host: 'smtp.gmail.com',
-  //   port: 587,
-  //   auth: {
-  //     user: 'XXXXXXXXXXXXXXXXXXXXXXXXXX',
-  //     pass: 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
-  //   }
-  // });
-
-  const mailOptions = {
-    from: "XXXXXXXXXXXXXXXXXXXXXXXXXX",
-    to: "XXXXXXXXXXXXXXXXXXXXXXXXXX",
-    subject: "Vintage and Rare Instruments",
-    text: "That was easy!",
-    html: "<h1>Vintage and Rare Instruments</h1>",
-    // attachments: []
-  };
+  
+  const {
+    mutate: sendMail,
+    data: cidData,
+    status: metadataStatus,
+  } = trpc.sendMail.useMutation();
 
   // transporter.sendMail(mailOptions, function (error, info) {
   //   if (error) {
@@ -50,9 +39,14 @@ export const OrderNowModal = forwardRef(function ForwardModal(
     handleSubmit,
   } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log("Email to: ", getValues().email);
-    console.log("Data: \n", props.instrumentData);
+  const onSubmit =  async(data: any) => {
+    console.log("Email to: ", getValues());
+    console.log("instdata: \n", props.instrumentData);
+    console.log("keys imash: \n", props.instrumentData.image[0]);
+    await sendMail({
+      sendTo: props.instrumentData.email,
+      instObject: props.instrumentData
+    })
     props.close();
   };
 
@@ -66,7 +60,7 @@ export const OrderNowModal = forwardRef(function ForwardModal(
           {/* div including a span to show json data that will be sent */}
           <div className="items-center justify-center ">
             <p className="text-ms break-all my-4 ">
-              Please enter a valid address to send the order details
+              Order details will be sent to the following address
             </p>
             {/* <p>{JSON.stringify(props.instrumentData)}</p> */}
           </div>
@@ -75,6 +69,8 @@ export const OrderNowModal = forwardRef(function ForwardModal(
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="max-w-2xl my-4">
+              {/* <p>Email</p>
+              <p>{props.instrumentData.email}</p> */}
               <Input
                 title="Email"
                 type="email"
@@ -95,11 +91,7 @@ export const OrderNowModal = forwardRef(function ForwardModal(
                 "w-full max-w-[225px] text-center rounded-full border-2  font-semibold px-6 py-2 my-2 mx-1 shadow-sm transition-colors duration-300"
               )}
               type="submit"
-              // onClick={(e) => {
-              //   console.log('Email to: ', getValues().email)
-              //   console.log("Data: \n", props.instrumentData);
-              //   props.close();
-              // }}
+              // onClick={onSubmit}
               disabled={Object.keys(errors).length > 0}
             >
               Send
