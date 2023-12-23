@@ -25,7 +25,7 @@ import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
-import { getFullName, parseBassToJSON } from "@/utils/dataParse";
+import { getFullName, parseAmpToJSON, parseBassToJSON } from "@/utils/dataParse";
 
 const transporter = nodemailer.createTransport({
   service: "one",
@@ -318,73 +318,14 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
-
+      checkPinataSetup();
       console.log("GotAmpFx : ", input);
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, input.input.object.model);
+      const ampParsed = parseAmpToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(ampParsed);
 
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Amp Fx - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          { trait_type: "brand", value: input.input.object.brand },
-          { trait_type: "choke", value: input.input.object.choke },
-          { trait_type: "circuit", value: input.input.object.circuit },
-          { trait_type: "finish", value: input.input.object.finish },
-          { trait_type: "instrument", value: input.input.object.instrument },
-          { trait_type: "madeInYear", value: input.input.object.madeInYear },
-          { trait_type: "model", value: input.input.object.model },
-          { trait_type: "power", value: input.input.object.power },
-          { trait_type: "preamp", value: input.input.object.preamp },
-          { trait_type: "rectifier", value: input.input.object.rectifier },
-          { trait_type: "reverbOther", value: input.input.object.reverbOther },
-          {
-            trait_type: "serialNumber",
-            value: input.input.object.serialNumber,
-          },
-          { trait_type: "speaker", value: input.input.object.speaker },
-          {
-            trait_type: "speakerCodes",
-            value: input.input.object.speakerCodes,
-          },
-          {
-            trait_type: "transformersOT",
-            value: input.input.object.transformersOT,
-          },
-          {
-            trait_type: "transformersPT",
-            value: input.input.object.transformersPT,
-          },
-          { trait_type: "wattage", value: input.input.object.wattage },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      // get CID
-      const CID = cid.url.replace("ipfs://", "");
-      /// add to DB - pending Table
-      // db.create('pending', id: CID, data: JSON.stringify(input.object))
-      return CID;
+      return dataHash;
     }),
 
   getTest: publicProcedure.query(async () => {
