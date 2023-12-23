@@ -1,4 +1,4 @@
-import { BassFormValues, GenericFields } from './formTypes';
+import { AmpEffectFormValues, BassFormValues, GenericFields } from './formTypes';
 
 export function getFullName( data: GenericFields ){
   return `${data.year} ${data.brand} ${data.model}`;
@@ -98,4 +98,43 @@ export function parseBassToJSON(bass: BassFormValues, imageHash: string, fullNam
 
   }
   return parsedData;
+}
+
+export function parseAmpToJSON(amp: AmpEffectFormValues, imageHash: string, fullName: string){
+  return({
+    description: `Vintage and Rare Amp Fx - ${fullName} - ${amp.serial}`,
+    name: fullName,
+    image: `ipfs://${imageHash}`,
+    attributes: [
+      { trait_type: "Brand", value: amp.brand },
+      { trait_type: "Choke", value: amp.choke },
+      { trait_type: "Circuit", value: amp.circuit },
+      { trait_type: "Finish", value: amp.finish },
+      { trait_type: "Instrument", value: amp.instrument },
+      { trait_type: "Year", value: amp.year },
+      { trait_type: "Model", value: amp.model },
+      { trait_type: "Power", value: amp.power },
+      { trait_type: "Preamp", value: amp.preamp },
+      { trait_type: "Rectifier", value: amp.rectifier },
+      { trait_type: "Reverb Other", value: amp.reverbOther },
+      {
+        trait_type: "Serial",
+        value: amp.serial,
+      },
+      { trait_type: "Speaker", value: amp.speaker },
+      {
+        trait_type: "SpeakerCodes",
+        value: amp.speakerCodes,
+      },
+      {
+        trait_type: "OT",
+        value: amp.ot,
+      },
+      {
+        trait_type: "PT",
+        value: amp.pt,
+      },
+      { trait_type: "Wattage", value: amp.wattage },
+    ],
+  })
 }
