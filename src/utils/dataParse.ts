@@ -1,4 +1,4 @@
-import { AcousticGuitarFormValues, AmpEffectFormValues, BassFormValues, GenericFields } from './formTypes';
+import { AcousticGuitarFormValues, AmpEffectFormValues, BassFormValues, ElectricGuitarFormValues, GenericFields } from './formTypes';
 
 export function getFullName( data: GenericFields ){
   return `${data.year} ${data.brand} ${data.model}`;
@@ -196,5 +196,54 @@ export function parseAcousticToJSON(acoustic: AcousticGuitarFormValues, imageHas
           { trait_type: "Top", value: acoustic.top },
           { trait_type: "Tuners", value: acoustic.tuners },
         ],
+  })
+}
+
+export function parseElectricGuitarToJSON(electric: ElectricGuitarFormValues, imageHash: string, fullName: string){
+  return({
+    description: `Vintage and Rare Electric Guitar - ${fullName} - ${electric.serial}`,
+    name: fullName,
+    image: `ipfs://${imageHash}`,
+    attributes: [
+      {
+        trait_type: "BodyMaterial",
+        value: electric.bodyMaterial,
+      },
+      { trait_type: "Brand", value: electric.brand },
+      { trait_type: "Case", value: electric.case },
+      {
+        trait_type: "ContainsBrazilianRosewood",
+        value: electric.bzRosewood,
+      },
+      { trait_type: "Electronics", value: electric.electronics },
+      { trait_type: "Finish", value: electric.finish },
+      {
+        trait_type: "FinishMaterial",
+        value: electric.finishMaterial,
+      },
+      { trait_type: "Handedness", value: electric.handedness },
+
+      { trait_type: "Year", value: electric.year },
+      { trait_type: "Model", value: electric.model },
+      {
+        trait_type: "ModificationsRepairs",
+        value: electric.mods,
+      },
+      { trait_type: "NeckProfile", value: electric.neckProfile },
+      {
+        trait_type: "NeckThickness",
+        value: electric.neckThickness,
+      },
+      { trait_type: "NutWidth", value: electric.nutWidth },
+      {
+        trait_type: "PickupImpedance",
+        value: electric.pickupImpedance,
+      },
+      { trait_type: "PotCodes", value: electric.potCodes },
+      { trait_type: "Radius", value: electric.radius },
+      { trait_type: "ScaleLength", value: electric.scaleLength },
+      { trait_type: "Tuners", value: electric.tuners },
+      { trait_type: "Weight", value: electric.weight },
+    ],
   })
 }

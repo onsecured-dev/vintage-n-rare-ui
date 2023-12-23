@@ -25,7 +25,7 @@ import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
 import { env } from "process";
 import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
-import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON } from "@/utils/dataParse";
+import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
 
 const transporter = nodemailer.createTransport({
   service: "one",
@@ -125,87 +125,16 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      if (!process.env.NFT_STORAGE_API_KEY)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "NFT_STORAGE_API_KEY is not set",
-        });
+      checkPinataSetup();
 
       console.log("Got E Guit : ", input);
-      const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY });
-      const fileExtension = input.input.object.fileName.match(/\.[^/.]+$/)?.[0];
 
-      if (!fileExtension)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "File extension not found",
-        });
-      const cid = await client.store({
-        description: `Vintage and Rare Electric Guitar - ${input.input.object.brand} - ${input.input.object.model}`,
-        name: `${input.input.object.madeInYear} - ${input.input.object.brand} - ${input.input.object.model}`,
-        image: new File(
-          [input.input.image],
-          `${input.input.object.model
-            .toLowerCase()
-            .replace(/[^\w\s]/gi, "")
-            .replace(/\s+/g, "_")}${fileExtension}`,
-          { type: input.input.object.fileType }
-        ),
-        attributes: [
-          {
-            trait_type: "BodyMaterial",
-            value: input.input.object.bodyMaterial,
-          },
-          { trait_type: "Brand", value: input.input.object.brand },
-          { trait_type: "Case", value: input.input.object.case },
-          {
-            trait_type: "ContainsBrazilianRosewood",
-            value: input.input.object.containsBrazilianRosewood,
-          },
-          { trait_type: "Electronics", value: input.input.object.electronics },
-          { trait_type: "Finish", value: input.input.object.finish },
-          {
-            trait_type: "FinishMaterial",
-            value: input.input.object.finishMaterial,
-          },
-          { trait_type: "Handedness", value: input.input.object.handedness },
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, fullName);
+      const guitarParsed = parseElectricGuitarToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(guitarParsed);
+      return dataHash;
 
-          {
-            trait_type: "InstrumentType",
-            value: input.input.object.instrumentType,
-          },
-          { trait_type: "MadeInYear", value: input.input.object.madeInYear },
-          { trait_type: "Model", value: input.input.object.model },
-          {
-            trait_type: "ModificationsRepairs",
-            value: input.input.object.modificationsRepairs,
-          },
-          {
-            trait_type: "NeckFingerboard",
-            value: input.input.object.neckFingerboard,
-          },
-          { trait_type: "NeckProfile", value: input.input.object.neckProfile },
-          {
-            trait_type: "NeckThickness",
-            value: input.input.object.neckThickness,
-          },
-          { trait_type: "NutWidth", value: input.input.object.nutWidth },
-          {
-            trait_type: "PickupImpedance",
-            value: input.input.object.pickupImpedance,
-          },
-          { trait_type: "PotCodes", value: input.input.object.potCodes },
-          { trait_type: "Radius", value: input.input.object.radius },
-          { trait_type: "ScaleLength", value: input.input.object.scaleLength },
-          { trait_type: "Tuners", value: input.input.object.tuners },
-          { trait_type: "Weight", value: input.input.object.weight },
-        ],
-      });
-      //  show cid to check
-      console.log(cid);
-
-      // return cid without ipfs substr
-      return cid.url.replace("ipfs://", "");
     }),
 
   createAcoustic: publicProcedure
