@@ -1,4 +1,4 @@
-import { AmpEffectFormValues, BassFormValues, GenericFields } from './formTypes';
+import { AcousticGuitarFormValues, AmpEffectFormValues, BassFormValues, GenericFields } from './formTypes';
 
 export function getFullName( data: GenericFields ){
   return `${data.year} ${data.brand} ${data.model}`;
@@ -136,5 +136,65 @@ export function parseAmpToJSON(amp: AmpEffectFormValues, imageHash: string, full
       },
       { trait_type: "Wattage", value: amp.wattage },
     ],
+  })
+}
+
+export function parseAcousticToJSON(acoustic: AcousticGuitarFormValues, imageHash: string, fullName: string){
+  return({
+    description: `Vintage and Rare Acoustic Guitar - ${fullName} - ${acoustic.serial}`,
+        name: fullName,
+        image: `ipfs://${imageHash}`,
+        attributes: [
+          {
+            trait_type: "Back&Sides",
+            value: acoustic.backSides,
+          },
+          {
+            trait_type: "BracePattern",
+            value: acoustic.bracePattern,
+          },
+          { trait_type: "Brand", value: acoustic.brand },
+          { trait_type: "Bridge", value: acoustic.bridge },
+          { trait_type: "Case", value: acoustic.case },
+          {
+            trait_type: "ContainsBrazilianRosewood",
+            value: acoustic.bzRosewood,
+          },
+          { trait_type: "Electronics", value: acoustic.electronics },
+          {
+            trait_type: "FingerboardRadius",
+            value: acoustic.fingerboardRadius,
+          },
+          { trait_type: "Finish", value: acoustic.finish },
+          {
+            trait_type: "FinishMaterial",
+            value: acoustic.finishMaterial,
+          },
+          { trait_type: "Handedness", value: acoustic.handedness },
+          { trait_type: "MadeInYear", value: acoustic.year },
+          { trait_type: "Model", value: acoustic.model },
+          {
+            trait_type: "Modifications / Repairs",
+            value: acoustic.mods,
+          },
+          { trait_type: "Neck Depth", value: acoustic.neckDepth },
+          {
+            trait_type: "Neck Fingerboard",
+            value: acoustic.neckFingerboard,
+          },
+          { trait_type: "Neck Profile", value: acoustic.neckProfile },
+          { trait_type: "Nut Width", value: acoustic.nutWidth },
+          { trait_type: "Scale Length", value: acoustic.scaleLength },
+          {
+            trait_type: "SerialNumber",
+            value: acoustic.serial,
+          },
+          {
+            trait_type: "StringSpacingAtSaddle",
+            value: acoustic.ssSaddle,
+          },
+          { trait_type: "Top", value: acoustic.top },
+          { trait_type: "Tuners", value: acoustic.tuners },
+        ],
   })
 }

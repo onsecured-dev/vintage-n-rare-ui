@@ -13,89 +13,66 @@ import {
 } from "wagmi";
 import { acousticGuitars } from "@/data/contracts";
 import NFTAbi from "@/data/abi/NFTAbi";
-import { zeroAddress } from "viem";
+import { BaseError, zeroAddress } from "viem";
 import { OrderNowModal } from "./OrderNowModal";
 import classNames from "classnames";
 import { trpc } from "@/app/_trpc/client";
-
-type AcousticGuitarFormValues = {
-  instrument: string;
-  image: FileList | null;
-  model: string;
-  year: number;
-  brand: string;
-  serial: string;
-  handedness: string;
-  bodyMaterial: string;
-  finish: string;
-  finishMaterial: string;
-  top: string;
-  backSides: string;
-  tuners: string;
-  bridge: string;
-  electronics: string;
-  bracePattern: string;
-  ssSaddle: string;
-  neckFingerboard: string;
-  neckProfile: string;
-  neckDepth: string;
-  fingerboardRadius: string;
-  scaleLength: string;
-  nutWidth: string;
-  case: string;
-  mods: string;
-  bzRosewood: boolean;
-  //USER
-  name: string;
-  email: string;
-  phone: string;
-};
+import { AcousticGuitarClientFormValues } from "@/utils/formTypes";
 
 export default function AcousticGuitarForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
-  const { register, handleSubmit, setValue, reset, watch, getValues } =
-    useForm<AcousticGuitarFormValues>({
-      defaultValues: {
-        instrument: "",
-        model: "",
-        image: null,
-        year: new Date().getFullYear(),
-        brand: "",
-        serial: "",
-        handedness: "right",
-        bodyMaterial: "",
-        finish: "",
-        finishMaterial: "",
-        top: "",
-        backSides: "",
-        tuners: "",
-        bridge: "",
-        electronics: "",
-        bracePattern: "",
-        ssSaddle: "",
-        neckFingerboard: "",
-        neckProfile: "",
-        neckDepth: "",
-        fingerboardRadius: "",
-        scaleLength: "",
-        nutWidth: "",
-        case: "",
-        mods: "",
-        bzRosewood: false,
-        //USER
-        name: "",
-        email: "",
-        phone: "",
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm<AcousticGuitarClientFormValues>({
+    defaultValues: {
+      instrument: "",
+      model: "",
+      image: null,
+      year: new Date().getFullYear(),
+      brand: "",
+      serial: "",
+      handedness: "right",
+      bodyMaterial: "",
+      finish: "",
+      finishMaterial: "",
+      top: "",
+      backSides: "",
+      tuners: "",
+      bridge: "",
+      electronics: "",
+      bracePattern: "",
+      ssSaddle: "",
+      neckFingerboard: "",
+      neckProfile: "",
+      neckDepth: "",
+      fingerboardRadius: "",
+      scaleLength: "",
+      nutWidth: "",
+      case: "",
+      mods: "",
+      bzRosewood: false,
+      //USER
+      name: "",
+      email: "",
+      phone: "",
+    },
+  });
 
   const {
     mutate: createAcoustic,
     data: cidData,
     status: metadataStatus,
   } = trpc.createAcoustic.useMutation();
-  const onSubmit: SubmitHandler<AcousticGuitarFormValues> = (data) => {
+  const { mutate: sendMailInfo, status: mailInfoStatus } =
+    trpc.sendMail.useMutation();
+  const onSubmit: SubmitHandler<AcousticGuitarClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
     if (!baseImg) return;
@@ -134,7 +111,11 @@ export default function AcousticGuitarForm() {
     ],
   });
 
-  const { config } = usePrepareContractWrite({
+  const {
+    config,
+    refetch: tryAgainMint,
+    error: mintError,
+  } = usePrepareContractWrite({
     address: acousticGuitars,
     abi: NFTAbi,
     functionName: "mint",
@@ -178,13 +159,15 @@ export default function AcousticGuitarForm() {
         loading={isMinting || metadataStatus === "pending"}
         mintData={mintReceipt}
         mint={mint}
+        errorData={mintError as BaseError | undefined}
+        refetchMint={tryAgainMint}
       />
       <OrderNowModal
         name="order-now-modal"
         close={() => modalOrdRef.current?.close()}
         ref={modalOrdRef}
         instrumentData={getValues()}
-        // loading={isMinting || metadataStatus === "pending"}
+        status={mailInfoStatus}
       />
       <form
         className="flex flex-row flex-wrap gap-4 justify-between"
@@ -350,33 +333,50 @@ export default function AcousticGuitarForm() {
         </div>
         <div className="flex flex-row items-center justify-center gap-4 px-4 pt-6 w-full">
           <button
-            className="bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold"
+            className={classNames(
+              "bg-primary-text rounded-full flex items-center justify-center w-full max-w-[250px] py-4 transition-all duration-300 hover:bg-gray-700/20 hover:dark:bg-gray-700 hover:text-primary-text hover:dark:text-white text-white font-semibold",
+              "disabled:hover:bg-gray-700/20 disabled:bg-gray-700/20 disabled:hover:dark:bg-gray-700/20"
+            )}
             type="button"
-            onClick={(e) => {
-              // const values = getValues()
-              // console.log('values: ', values)
+            disabled={!isValid}
+            onClick={() => {
               modalOrdRef.current?.showModal();
-
-              // reset();
+              const image = getValues().image?.[0];
+              if (!image) return;
+              const reader = new FileReader();
+              reader.readAsDataURL(image);
+              reader.onload = () => {
+                const base64 = reader.result?.toString();
+                if (!base64) return;
+                sendMailInfo({
+                  email: getValues().email,
+                  name: getValues().name,
+                  phone: getValues().phone,
+                  data: getValues(),
+                  attachment: base64,
+                });
+              };
             }}
           >
             Order Now
           </button>
-          <button
-            className={classNames(
-              "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
-              "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
-              "hover:text-white text-primary-text dark:text-white",
-              "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
-            )}
-            type="submit"
-            disabled={!address}
-            onClick={(e) => {
-              modalRef.current?.showModal();
-            }}
-          >
-            Create Metadata
-          </button>
+          {!!address && (
+            <button
+              className={classNames(
+                "disabled:hover:dark:bg-transparent disabled:bg-gray-100 disabled:dark:bg-transparent disabled:dark:border-disabled-text disabled:text-disabled-text/70 disabled:dark:text-disabled-text",
+                "hover:dark:bg-gray-700 bg-transparent dark:border-white ",
+                "hover:text-white text-primary-text dark:text-white",
+                "w-full max-w-[250px] text-center rounded-full border-2  font-semibold py-4  shadow-sm transition-colors duration-300"
+              )}
+              type="submit"
+              disabled={!address || !isValid}
+              onClick={(e) => {
+                modalRef.current?.showModal();
+              }}
+            >
+              Create Metadata
+            </button>
+          )}
         </div>
       </form>
     </>
