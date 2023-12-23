@@ -329,3 +329,38 @@ export const categoryDetails = {
   ]
 }
 
+export const buildHtmlFromObject = (obj: any) => {
+  console.log('building HTML')
+  let html = '<h1>Vintage and Rare Instruments</h1><ul>';
+  
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      html += `<li><strong>${key}:</strong> ${value}</li>`;
+    }
+  }
+  
+  html += '</ul>';
+  return html;
+
+}
+
+export const buildTextFromObject = (obj: any) => {
+  console.log('building text')
+  let text = `Hello,\n\nThis is the order details:\n\n`;
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      text += `${key}: ${value}\n`;
+    }
+  }
+
+  return text;
+
+}
+
+// export const mailConfig = (to: string, data:any) => {
+
+
+// }
