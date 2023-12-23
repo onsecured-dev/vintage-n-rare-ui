@@ -64,8 +64,8 @@ export const appRouter = router({
         from: process.env.EM_USR,
         to:"info@vintageandrare.io",
         subject: "Request for Certificate",
-        text: JSON.stringify(input.input.data),
-        html: "<b>Request for Certificate</b><br></br><p>" + JSON.stringify(sentData, null, 4) + "</p>",
+        // text: JSON.stringify(input.input.data),
+        html: buildHtmlFromObject(input.input.data),
         attachments: [{ path: input.input.attachment}]
       });
       console.log("Message sent: %s", info.messageId);
@@ -341,13 +341,7 @@ export const appRouter = router({
       // return await searchQuery(input)
     }),
 
-  // search: publicProcedure.mutation(async (opts) => {
-  //   await opts.ctx.signGuestBook();
 
-  //   return {
-  //     message: 'goodbye!',
-  //   };
-  // }),
 });
 
 export type AppRouter = typeof appRouter;
