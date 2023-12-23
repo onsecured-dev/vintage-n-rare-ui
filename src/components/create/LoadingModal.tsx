@@ -26,6 +26,7 @@ const LoadingModal = forwardRef(function ForwardModal(
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
   const path = usePathname();
   const itemCreated = path.replace("/create/", "");
+  const itemType = itemCreated === "amp" ? "amps-effects" : itemCreated;
   return (
     <dialog id={name} ref={ref} className="modal">
       <div className="modal-box dark:bg-action-bg bg-white">
@@ -112,7 +113,7 @@ const LoadingModal = forwardRef(function ForwardModal(
                   <br />
                   <div className="w-full text-center">
                     <Link
-                      href={`/${itemCreated}/${nftId}`}
+                      href={`/${itemType}/${nftId}`}
                       className="btn btn-link text-center"
                       target="_blank"
                     >

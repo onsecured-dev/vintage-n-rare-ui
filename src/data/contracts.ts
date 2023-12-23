@@ -13,5 +13,6 @@ export const contractAddressMapping = {
    "electric-guitar" : electricGuitars,
    "acoustic-guitar" : acousticGuitars,
    "electric-bass" : electricBass,
-   "amps-effects" : ampsEffects
+   "amps-effects" : ampsEffects,
+   "amps" : ampsEffects
 } as const
