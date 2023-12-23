@@ -1,5 +1,7 @@
 import { string, z } from "zod";
 
+const HandednessSchema = z.enum(["left", "right"]);
+
 export const NFTBassObject = z
   .object({
     bodyMaterial: z.string().optional(),
@@ -8,7 +10,7 @@ export const NFTBassObject = z
     electronics: z.string().optional(),
     finish: z.string().optional(),
     finishMaterial: z.string().optional(),
-    handedness: z.string().optional(),
+    handedness: HandednessSchema,
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
     // image a base64 string to store as metadata inside nft >>?
     model: z.string(),
@@ -40,7 +42,7 @@ export const NFTGuitarObject = z
     electronics: z.string(),
     finish: z.string(),
     finishMaterial: z.string(),
-    handedness: z.string(),
+    handedness: HandednessSchema,
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
     instrumentType: z.string(),
     madeInYear: z.string(),
@@ -74,7 +76,7 @@ export const NFTAcousticObject = z
     fingerboardRadius: z.string(),
     finish: z.string(),
     finishMaterial: z.string(),
-    handedness: z.string(),
+    handedness: HandednessSchema,
     madeInYear: z.string(),
     model: z.string(),
     modificationsRepairs: z.string(),
@@ -144,85 +146,85 @@ export interface GuitarObject {
   weight: string;
 }
 export interface BassObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    bodyMaterial: string;
-    brand: string;
-    case: string;
-    electronics: string;
-    fingerboardRadius: string;
-    finish: string;
-    finishMaterial: string;
-    model: string;
-    modificationsRepairs: string;
-    neckDepth: string;
-    neckFingerboard: string;
-    neckProfile: string;
-    nutWidth: string;
-    radius: string;
-    scaleLength: string;
-    serialNumber: string;
-    tuners: string;
-    weight: string;
-    year: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  bodyMaterial: string;
+  brand: string;
+  case: string;
+  electronics: string;
+  fingerboardRadius: string;
+  finish: string;
+  finishMaterial: string;
+  model: string;
+  modificationsRepairs: string;
+  neckDepth: string;
+  neckFingerboard: string;
+  neckProfile: string;
+  nutWidth: string;
+  radius: string;
+  scaleLength: string;
+  serialNumber: string;
+  tuners: string;
+  weight: string;
+  year: string;
 }
 export interface AcousticObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    backAndSides: string;
-    bracePattern: string;
-    brand: string;
-    bridge: string;
-    case: string;
-    containsBrazilianRosewood: string;
-    electronics: string;
-    fingerboardRadius: string;
-    finish: string;
-    finishMaterial: string;
-    handedness: string;
-    year: string;
-    model: string;
-    modificationsRepairs: string;
-    neckDepth: string;
-    neckFingerboard: string;
-    neckProfile: string;
-    nutWidth: string;
-    scaleLength: string;
-    serialNumber: string;
-    stringSpacingAtSaddle: string;
-    top: string;
-    tuners: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  backAndSides: string;
+  bracePattern: string;
+  brand: string;
+  bridge: string;
+  case: string;
+  containsBrazilianRosewood: string;
+  electronics: string;
+  fingerboardRadius: string;
+  finish: string;
+  finishMaterial: string;
+  handedness: string;
+  year: string;
+  model: string;
+  modificationsRepairs: string;
+  neckDepth: string;
+  neckFingerboard: string;
+  neckProfile: string;
+  nutWidth: string;
+  scaleLength: string;
+  serialNumber: string;
+  stringSpacingAtSaddle: string;
+  top: string;
+  tuners: string;
 }
 export interface AmpFxObject {
-    id: string;
-    NFTCID: string;
-    NFTId: string;
-    brand: string;
-    choke: string;
-    circuit: string;
-    finish: string;
-    instrument: string;
-    year: string;
-    model: string;
-    power: string;
-    preamp: string;
-    rectifier: string;
-    reverbOther: string;
-    serialNumber: string;
-    speaker: string;
-    speakerCodes: string;
-    transformersOT: string;
-    transformersPT: string;
-    wattage: string;
+  id: string;
+  NFTCID: string;
+  NFTId: string;
+  brand: string;
+  choke: string;
+  circuit: string;
+  finish: string;
+  instrument: string;
+  year: string;
+  model: string;
+  power: string;
+  preamp: string;
+  rectifier: string;
+  reverbOther: string;
+  serialNumber: string;
+  speaker: string;
+  speakerCodes: string;
+  transformersOT: string;
+  transformersPT: string;
+  wattage: string;
 }
 
 export enum InstrumentCategory {
-  Guitar = 'electric-guitar',
-  Bass = 'electric-bass',
-  Acoustic = 'acoustic-guitar',
-  AmpsEffects = 'amps-effects'
+  Guitar = "electric-guitar",
+  Bass = "electric-bass",
+  Acoustic = "acoustic-guitar",
+  AmpsEffects = "amps-effects",
 }
 
 export interface IntrumentPayload {
@@ -231,11 +233,10 @@ export interface IntrumentPayload {
   name: string;
   brand: string;
   model: string;
-  year: number,
+  year: number;
   serial: string;
   img: string;
 }
-
 
 export const categoryDetails = {
   Guitar: [
@@ -260,7 +261,7 @@ export const categoryDetails = {
     "Radius",
     "Scale Length",
     "Tuners",
-    "Weight"
+    "Weight",
   ],
   Bass: [
     "Body Material",
@@ -281,7 +282,7 @@ export const categoryDetails = {
     "Serial Number",
     "Tuners",
     "Weight",
-    "Year"
+    "Year",
   ],
   Acoustic: [
     "Back And Sides",
@@ -306,7 +307,7 @@ export const categoryDetails = {
     "Serial Number",
     "String Spacing At Saddle",
     "Top",
-    "Tuners"
+    "Tuners",
   ],
   AmpsEffects: [
     "Brand",
@@ -325,7 +326,6 @@ export const categoryDetails = {
     "Speaker Codes",
     "Transformers OT",
     "Transformers PT",
-    "Wattage"
-  ]
-}
-
+    "Wattage",
+  ],
+};

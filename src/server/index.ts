@@ -24,10 +24,12 @@ import { previewData } from "@/data/placeholder";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
 import { env } from "process";
+import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
+import { getFullName, parseBassToJSON } from "@/utils/dataParse";
 
 const transporter = nodemailer.createTransport({
   service: "one",
-  host: "send.one.com",
+  host: process.env.EM_SMTP,
   // host: "mailout.one.com",
   port: 587,
   auth: {
@@ -43,19 +45,27 @@ export const appRouter = router({
     return [1, 2, 3];
   }),
 
-  sendMail: publicProcedure.query(async () => {
-    const mailOptions = {
-      from: process.env.EM_USR,
-      to: "target@email",
-      subject: "Vintage and Rare Instruments",
-      text: "That was easy!",
-      html: "<h1>Vintage and Rare Instruments</h1><h2>Thanks</h2>",
-      // attachments: []
-    };
+  sendMail: publicProcedure.input(z.object({
+    email: z.string().email(),
+    name: z.string(),
+    phone: z.string().optional(),
+    data: z.any(),
+    attachment: z.string()
+  })).mutation(async (input) => {
+
+    const sentData = input.input.data
+    delete sentData.image
 
     try {
       // Send email
-      const info = await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail({
+        from: process.env.EM_USR,
+        to: input.input.email,
+        subject: "Request for Certificate",
+        text: JSON.stringify(input.input.data),
+        html: "<b>Request for Certificate</b><br></br><p>" + JSON.stringify(sentData, null, 4) + "</p>",
+        attachments: [{ path: input.input.attachment}]
+      });
       console.log("Message sent: %s", info.messageId);
       return { success: true };
     } catch (error) {
@@ -91,142 +101,16 @@ export const appRouter = router({
       })
     )
     .mutation(async (input) => {
-      console.log("create bass start");
-      if (!process.env.PINATA_JWT)
-        return new TRPCError({
-          code: "BAD_REQUEST",
-          message: "PINATA Auth is not set",
-        });
+      checkPinataSetup();
 
       console.log("GotBASS : ", input);
-
-      const fullName = `${input.input.object.year} - ${input.input.object.brand} - ${input.input.object.model}`;
-      // PINATA BULLSHIT
-
-      const data = new FormData();
-      data.append("file", new Blob([input.input.image]));
-      data.append("pinataMetadata", JSON.stringify({ name: fullName }));
-      // STEP 1, pin Image
-      const resImage = await fetch(
-        "https://api.pinata.cloud/pinning/pinFileToIPFS",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.PINATA_JWT}`,
-          },
-          body: data,
-        }
-      );
-      const { IpfsHash: imageHash } = await resImage.json();
-      // STEP2 PIN JSON
       
-      const parsedData = {
-        description: `Vintage and Rare Bass Guitar - ${fullName} - ${input.input.object.serial}`,
-        name: fullName,
-        image: `ipfs://${imageHash}`,
-          attributes: [
-            {
-              trait_type: "Model",
-              value: input.input.object.model,
-            },
-            {
-              trait_type: "Year",
-              value: input.input.object.year,
-            },
-            {
-              trait_type: "Brand",
-              value: input.input.object.brand,
-            },
-            {
-              trait_type: "Serial",
-              value: input.input.object.serial,
-            },
-            {
-              trait_type: "Handedness",
-              value: input.input.object.handedness,
-            },
-            {
-              trait_type: "BodyMaterial",
-              value: input.input.object.bodyMaterial,
-            },
-            {
-              trait_type: "Finish",
-              value: input.input.object.finish,
-            },
-            {
-              trait_type: "FinishMaterial",
-              value: input.input.object.finishMaterial,
-            },
-            {
-              trait_type: "Radius",
-              value: input.input.object.radius,
-            },
-            {
-              trait_type: "Weight",
-              value: input.input.object.weight,
-            },
-            {
-              trait_type: "Tuners",
-              value: input.input.object.tuners,
-            },
-            {
-              trait_type: "ScaleLength",
-              value: input.input.object.scaleLength,
-            },
-            {
-              trait_type: "NutWidth",
-              value: input.input.object.nutWidth,
-            },
-            {
-              trait_type: "NeckProfile",
-              value: input.input.object.neckProfile,
-            },
-            {
-              trait_type: "NeckThickness",
-              value: input.input.object.neckThickness,
-            },
-            {
-              trait_type: "PotCodes",
-              value: input.input.object.potCodes,
-            },
-            {
-              trait_type: "Electronics",
-              value: input.input.object.electronics,
-            },
-            {
-              trait_type: "PickupImpedance",
-              value: input.input.object.pickupImpedance,
-            },
-            {
-              trait_type: "NeckFingerboard",
-              value: input.input.object.neckFingerboard,
-            },
-            {
-              trait_type: "Case",
-              value: input.input.object.case,
-            },
-            {
-              trait_type: "mods",
-              value: input.input.object.mods,
-            },
-          ],
-
-      }
-
-      const resMetadata = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS',{
-        method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.PINATA_JWT}`,
-            accept: 'application/json', 
-            'content-type': 'application/json'
-          },
-          body: JSON.stringify(parsedData),
-      })
-
-      const { IpfsHash: dataHash } = await resMetadata.json();
-
+      const fullName = getFullName(input.input.object);
+      const imageHash = await uploadFileToIPFS(input.input.image, fullName);
+      
+      const bassParsed = parseBassToJSON(input.input.object, imageHash, fullName);
+      const dataHash = await uploadJSONToIPFS(bassParsed);
       return dataHash;
-
     }),
 
   createGuitar: publicProcedure
