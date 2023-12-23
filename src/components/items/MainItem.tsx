@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import UserAvatar from "@/components/items/DetailAvatar";
 import { TbGuitarPickFilled } from "react-icons/tb";
 import attributesParse, { AttributeType } from "@/utils/attributesParse";
+import { zeroAddress } from "viem";
 
 export default function MainItemView(props: {
   instrument: InstrumentType;
@@ -27,6 +28,16 @@ export default function MainItemView(props: {
     address: contractAddressMapping[instrument as string as InstrumentType],
     abi: NFTAbi,
     functionName: "tokenURI",
+    args: [BigInt(id as unknown as number)],
+  });
+  const {
+    data: owner,
+    error: ownerError,
+    isLoading: isOwnerLoadingError,
+  } = useContractRead({
+    address: contractAddressMapping[instrument as string as InstrumentType],
+    abi: NFTAbi,
+    functionName: "ownerOf",
     args: [BigInt(id as unknown as number)],
   });
 
@@ -97,13 +108,13 @@ export default function MainItemView(props: {
                 <label className="label">
                   <span className="label-text">Current Owner</span>
                 </label>
-                <UserAvatar address="0x1234asbcda3d" variant="blue" />
+                <UserAvatar address={owner || zeroAddress} variant="blue" />
               </div>
               <div>
                 <label className="label">
                   <span className="label-text">Creator</span>
                 </label>
-                <UserAvatar address="0x2fd49be1afee78" variant="red" />
+                <UserAvatar address={owner || zeroAddress} variant="red" />
               </div>
             </div>
             <div className="flex flex-row items-center border-b-2 border-disabled-text/50 pb-4 gap-4">
@@ -221,7 +232,9 @@ function MainProperty(props: { label: string; value: string | number }) {
       )}
     >
       <div className="label-text text-center w-full pb-2">{props.label}</div>
-      <div className="text-sm sm:text-lg font-semibold">{props.value}</div>
+      <div className="text-sm sm:text-lg font-semibold capitalize">
+        {props.value}
+      </div>
     </div>
   );
 }
