@@ -19,7 +19,6 @@ const LoadingModal = forwardRef(function ForwardModal(
     errorData?: BaseError;
     refetchMint?: () => void;
     hasError?: boolean;
-    exec: () => void;
   },
   ref: ForwardedRef<HTMLDialogElement>
 ) {
@@ -33,7 +32,6 @@ const LoadingModal = forwardRef(function ForwardModal(
     errorData,
     refetchMint,
     hasError,
-    exec,
   } = props;
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
   const path = usePathname();
@@ -91,12 +89,6 @@ const LoadingModal = forwardRef(function ForwardModal(
                   </a>
                 </div>
               </div>
-              <button
-                className="btn bg-indigo-500 hover:bg-indigo-700 text-white"
-                onClick={exec}
-              >
-                retry db push
-              </button>
               {!mintData ? (
                 <>
                   {errorData ? (

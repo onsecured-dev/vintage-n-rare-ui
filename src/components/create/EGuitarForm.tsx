@@ -179,16 +179,6 @@ export default function ElectricGuitarForm() {
         errorData={mintError as BaseError | undefined}
         refetchMint={tryAgainMint}
         hasError={hasError || pushError}
-        exec={() => {
-          const allValues = { ...getValues(), image: null };
-          if (!mintReceipt) return;
-          pushToDB({
-            nftmetadataCID: cidData,
-            nftid: BigInt(mintReceipt.logs[0].topics[3] || "0x0").toString(),
-            nftType: "guitar",
-            nftData: JSON.stringify(allValues),
-          });
-        }}
       />
       <OrderNowModal
         name="order-now-modal"
