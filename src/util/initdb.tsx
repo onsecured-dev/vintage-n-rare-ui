@@ -349,7 +349,7 @@ export const addBrands = async() => {
 }
 
 export const initdb = async () => {
-  // await createInstrumentTypes();
-  // await addYears();
+  await addYears();
   await addBrands();
+  await createInstrumentTypes();
 };
