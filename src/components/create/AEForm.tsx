@@ -17,10 +17,7 @@ import LoadingModal from "./LoadingModal";
 import { OrderNowModal } from "./OrderNowModal";
 import classNames from "classnames";
 import { trpc } from "@/app/_trpc/client";
-import {
-  AmpEffectClientFormValues,
-  AmpEffectFormValues,
-} from "@/utils/formTypes";
+import { AmpEffectClientFormValues } from "@/utils/formTypes";
 
 export default function AmpsEffectForm() {
   const modalOrdRef = useRef<HTMLDialogElement>(null);
@@ -124,6 +121,10 @@ export default function AmpsEffectForm() {
   const { write: mint, data: mintData } = useContractWrite(config);
   const { isLoading: isMinting, data: mintReceipt } = useWaitForTransaction({
     hash: mintData?.hash,
+    onSuccess(data) {
+      console.log("mint success", data);
+      // reset();
+    },
   });
 
   register("image", {

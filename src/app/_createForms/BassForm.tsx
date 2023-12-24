@@ -35,10 +35,9 @@ export default function BassForm() {
   } = useForm<BassClientFormValues>({
     defaultValues: {
       image: null,
-      instrument: "",
-      model: "",
       year: new Date().getFullYear(),
       brand: "",
+      model: "",
       serial: "",
       handedness: "right",
       bodyMaterial: "",

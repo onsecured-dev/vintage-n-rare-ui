@@ -66,28 +66,29 @@ export type AcousticGuitarClientFormValues = AcousticGuitarFormValues & DefaultC
 
 export type ElectricGuitarFormValues = BaseMetadataFields & {
   finish: string;
-  handedness: "left" | "right";
-  bodyMaterial: string;
-  finishMaterial: string;
-  radius: string;
-  weight: string;
-  tuners: string;
-  scaleLength: string;
-  nutWidth: string;
-  neckProfile: string;
-  neckThickness: string;
-  electronics: string;
-  potCodes: string;
-  pickupImpedance: string;
-  bzRosewood: boolean;
-  case: string;
+  handedness: "left" | "right"; 
+  bodyMaterial: string; 
+  finishMaterial: string; 
+  radius: string; 
+  weight: string; 
+  tuners: string; 
+  scaleLength: string; 
+  nutWidth: string; 
+  neckProfile: string; 
+  neckThickness: string; 
+  neckFingerboard: string; 
+  electronics: string; 
+  potCodes: string; 
+  pickupImpedance: string; 
+  bzRosewood: boolean; 
+  case: string; 
 };
 
 export type ElectricGuitarClientFormValues = ElectricGuitarFormValues & DefaultClientFields & UserFields;
 
 export type AmpEffectFormValues = BaseMetadataFields & {
   instrument: string;
-  preamp: string;
+  preamp: string; 
   power: string;
   rectifier: string;
   circuit: string;

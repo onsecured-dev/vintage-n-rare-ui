@@ -4,28 +4,30 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model acousticguitar {
-  updatedAt                 DateTime @db.DateTime(0)
+  updatedAt                 DateTime @updatedAt
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
   active                    Boolean  @default(true)
   backAndSides              String
+  bodyMaterial              String
   bracePattern              String
   brand                     String
   bridge                    String
   case                      String
-  containsBrazilianRosewood String
+  containsBrazilianRosewood Boolean
   electronics               String
   fingerboardRadius         String
   finish                    String
   finishMaterial            String
   handedness                String
-  year                      String
+  year                      Int
   model                     String
   modificationsRepairs      String
   neckDepth                 String
@@ -40,28 +42,30 @@ model acousticguitar {
 }
 
 model ampfx {
-  NFTCID         String
-  NFTId          Int      @id
-  fullName       String
-  active         Boolean  @default(true)
-  brand          String
-  choke          String
-  circuit        String
-  finish         String
-  instrument     String
-  year           String
-  model          String
-  power          String
-  preamp         String
-  rectifier      String
-  reverbOther    String
-  serialNumber   String
-  speaker        String
-  speakerCodes   String
-  transformersOT String
-  transformersPT String
-  wattage        String
-  updatedAt      DateTime @db.DateTime(0)
+  NFTCID               String
+  NFTId                Int      @id
+  fullName             String
+  active               Boolean  @default(true)
+  year                 Int
+  brand                String
+  model                String
+  serialNumber         String
+  modificationsRepairs String
+  choke                String
+  circuit              String
+  finish               String
+  instrument           String
+  power                String
+  preamp               String
+  rectifier            String
+  reverbOther          String
+  speaker              String
+  speakerCodes         String
+  transformer          String
+  transformersOT       String
+  transformersPT       String
+  wattage              String
+  updatedAt            DateTime @updatedAt
 }
 
 model bass {
@@ -76,20 +80,21 @@ model bass {
   fingerboardRadius    String
   finish               String
   finishMaterial       String
+  handedness           String
   model                String
   modificationsRepairs String
-  neckDepth            String
   neckFingerboard      String
   neckProfile          String
+  neckThickness        String
   nutWidth             String
+  potCodes             String
   pickupImpedance      String
-  radius               String
   scaleLength          String
   serialNumber         String
   tuners               String
   weight               String
-  year                 String
-  updatedAt            DateTime @db.DateTime(0)
+  year                 Int
+  updatedAt            DateTime @updatedAt
 }
 
 model electricguitar {
@@ -101,13 +106,13 @@ model electricguitar {
   bodyMaterial              String
   brand                     String
   case                      String
-  containsBrazilianRosewood String
+  containsBrazilianRosewood Boolean
   electronics               String
   finish                    String
   finishMaterial            String
   handedness                String
-  instrumentType            String
-  year                      String
+  year                      Int
+  serialNumber              String
   model                     String
   modificationsRepairs      String
   neckFingerboard           String
@@ -120,7 +125,7 @@ model electricguitar {
   scaleLength               String
   tuners                    String
   weight                    String
-  updatedAt                 DateTime @db.DateTime(0)
+  updatedAt                 DateTime @updatedAt
 }
 
 model pending {
@@ -145,16 +150,16 @@ model instrumenttype {
 }
 
 model searchtable {
-  id        Int            @id
+  id        Int            @id @default(autoincrement())
   name      String
   // instrument
   // 2004 fendre bass p
   // 
-  updatedAt DateTime
+  updatedAt DateTime       @updatedAt
   yearsYear Int
   brandsId  Int
   typeId    Int
-  nftid     String         @unique
+  nftid     Int
   brands    brands         @relation(fields: [brandsId], references: [id], map: "SearchTable_brandsId_fkey")
   years     years          @relation(fields: [yearsYear], references: [year], map: "SearchTable_yearsYear_fkey")
   type      instrumenttype @relation(fields: [typeId], references: [id])

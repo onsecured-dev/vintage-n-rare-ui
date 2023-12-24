@@ -28,6 +28,7 @@ import nodemailer from "nodemailer";
 import { env } from "process";
 import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
 import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
+import { AcousticGuitarClientFormValues, AmpEffectClientFormValues, BassClientFormValues, ElectricGuitarClientFormValues } from "@/utils/formTypes";
 
 const transporter = nodemailer.createTransport({
   service: "one",
@@ -64,7 +65,6 @@ export const appRouter = router({
         from: process.env.EM_USR,
         to:"info@vintageandrare.io",
         subject: "Request for Certificate",
-        // text: JSON.stringify(input.input.data),
         html: buildHtmlFromObject(input.input.data),
         attachments: [{ path: input.input.attachment}]
       });
@@ -203,24 +203,24 @@ export const appRouter = router({
       const nftObject: any = {};
       // turn input.nft to nftObject
       // GuitarObject, BassObject, AmpFxObject, AcousticObject
-      let data = JSON.parse(input.nftData);
+      let data 
       switch (input.nftType) {
         case "guitar":
+          data = JSON.parse(input.nftData) as ElectricGuitarClientFormValues;
           let guitarObj: GuitarObject = {
             NFTCID: input.nftmetadataCID,
-            NFTId: input.nftid,
+            NFTId: parseInt(input.nftid),
             bodyMaterial: data.bodyMaterial,
             brand: data.brand,
             case: data.case,
-            containsBrazilianRosewood: data.containsBrazilianRosewood,
+            containsBrazilianRosewood: data.bzRosewood,
             electronics: data.electronics,
             finish: data.finish,
             finishMaterial: data.finishMaterial,
             handedness: data.handedness,
-            instrumentType: data.instrumentType,
             year: data.year,
             model: data.model,
-            modificationsRepairs: data.modificationsRepairs,
+            modificationsRepairs: data.mods,
             neckFingerboard: data.neckFingerboard,
             neckProfile: data.neckProfile,
             neckThickness: data.neckThickness,
@@ -228,6 +228,7 @@ export const appRouter = router({
             pickupImpedance: data.pickupImpedance,
             potCodes: data.potCodes,
             radius: data.radius,
+            serialNumber: data.serial,
             scaleLength: data.scaleLength,
             tuners: data.tuners,
             weight: data.weight,
@@ -235,26 +236,27 @@ export const appRouter = router({
           await createGuitar(guitarObj);
           break;
         case "bass":
+          data = JSON.parse(input.nftData) as BassClientFormValues;
           let bassObj: BassObject = {
-            id: data.id,
             NFTCID: input.nftmetadataCID,
-            NFTId: input.nftid,
+            NFTId: parseInt(input.nftid),
             bodyMaterial: data.bodyMaterial,
             brand: data.brand,
             case: data.case,
             electronics: data.electronics,
-            fingerboardRadius: data.fingerboardRadius,
+            fingerboardRadius: data.radius,
             finish: data.finish,
             finishMaterial: data.finishMaterial,
             model: data.model,
-            modificationsRepairs: data.modificationsRepairs,
-            neckDepth: data.neckDepth,
+            modificationsRepairs: data.mods,
             neckFingerboard: data.neckFingerboard,
             neckProfile: data.neckProfile,
+            neckThickness: data.neckThickness,
+            potCodes: data.potCodes,
+            pickupImpedance: data.pickupImpedance,
             nutWidth: data.nutWidth,
-            radius: data.radius,
             scaleLength: data.scaleLength,
-            serialNumber: data.serialNumber,
+            serialNumber: data.serial,
             tuners: data.tuners,
             weight: data.weight,
             year: data.year,
@@ -262,16 +264,17 @@ export const appRouter = router({
           await createBass(bassObj);
           break;
         case "acoustic":
+          data = JSON.parse(input.nftData) as AcousticGuitarClientFormValues;
           let acousticObj: AcousticObject = {
-            id: data.id,
             NFTCID: input.nftmetadataCID,
-            NFTId: input.nftid,
-            backAndSides: data.backAndSides,
+            NFTId: parseInt(input.nftid),
+            backAndSides: data.backSides,
+            bodyMaterial: data.bodyMaterial,
             bracePattern: data.bracePattern,
             brand: data.brand,
             bridge: data.bridge,
             case: data.case,
-            containsBrazilianRosewood: data.containsBrazilianRosewood,
+            containsBrazilianRosewood: data.bzRosewood,
             electronics: data.electronics,
             fingerboardRadius: data.fingerboardRadius,
             finish: data.finish,
@@ -279,24 +282,24 @@ export const appRouter = router({
             handedness: data.handedness,
             year: data.year,
             model: data.model,
-            modificationsRepairs: data.modificationsRepairs,
+            modificationsRepairs: data.mods,
             neckDepth: data.neckDepth,
             neckFingerboard: data.neckFingerboard,
             neckProfile: data.neckProfile,
             nutWidth: data.nutWidth,
             scaleLength: data.scaleLength,
-            serialNumber: data.serialNumber,
-            stringSpacingAtSaddle: data.stringSpacingAtSaddle,
+            serialNumber: data.serial,
+            stringSpacingAtSaddle: data.ssSaddle,
             top: data.top,
             tuners: data.tuners,
           };
-          await createAcoustic(nftObject);
+          await createAcoustic(acousticObj);
           break;
         case "ampfx":
+          data = JSON.parse(input.nftData) as AmpEffectClientFormValues;
           let ampfxObj: AmpFxObject = {
-            id: data.id,
             NFTCID: input.nftmetadataCID,
-            NFTId: input.nftid,
+            NFTId: parseInt(input.nftid),
             brand: data.brand,
             choke: data.choke,
             circuit: data.circuit,
@@ -308,14 +311,15 @@ export const appRouter = router({
             preamp: data.preamp,
             rectifier: data.rectifier,
             reverbOther: data.reverbOther,
-            serialNumber: data.serialNumber,
+            serialNumber: data.serial,
             speaker: data.speaker,
             speakerCodes: data.speakerCodes,
-            transformersOT: data.transformersOT,
-            transformersPT: data.transformersPT,
+            transformer: data.transformer,
+            transformersOT: data.ot,
+            transformersPT: data.pt,
             wattage: data.wattage,
           };
-          await createAmpFx(nftObject);
+          await createAmpFx(ampfxObj);
           break;
 
         default:

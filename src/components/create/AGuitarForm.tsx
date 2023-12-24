@@ -32,7 +32,6 @@ export default function AcousticGuitarForm() {
     formState: { errors, isValid },
   } = useForm<AcousticGuitarClientFormValues>({
     defaultValues: {
-      instrument: "",
       model: "",
       image: null,
       year: new Date().getFullYear(),

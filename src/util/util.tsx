@@ -44,7 +44,6 @@ export const NFTGuitarObject = z
     finishMaterial: z.string(),
     handedness: HandednessSchema,
     // image: z.string().transform((val) => Buffer.from(val.replace(/^data:image\/\w+;base64,/, ""), 'base64')),
-    instrumentType: z.string(),
     year: z.number(),
     model: z.string(),
     mods: z.string(),
@@ -126,17 +125,16 @@ export const NFTAmpFxObject = z
 
 export interface GuitarObject {
   NFTCID: string;
-  NFTId: string;
+  NFTId: number;
   bodyMaterial: string;
   brand: string;
   case: string;
-  containsBrazilianRosewood: string;
+  containsBrazilianRosewood: boolean;
   electronics: string;
   finish: string;
   finishMaterial: string;
   handedness: string;
-  instrumentType: string;
-  year: string;
+  year: number;
   model: string;
   modificationsRepairs: string;
   neckFingerboard: string;
@@ -146,14 +144,14 @@ export interface GuitarObject {
   pickupImpedance: string;
   potCodes: string;
   radius: string;
+  serialNumber: string;
   scaleLength: string;
   tuners: string;
   weight: string;
 }
 export interface BassObject {
-  id: string;
   NFTCID: string;
-  NFTId: string;
+  NFTId: number;
   bodyMaterial: string;
   brand: string;
   case: string;
@@ -163,33 +161,34 @@ export interface BassObject {
   finishMaterial: string;
   model: string;
   modificationsRepairs: string;
-  neckDepth: string;
   neckFingerboard: string;
   neckProfile: string;
+  neckThickness: string;
   nutWidth: string;
-  radius: string;
+  potCodes: string;
+  pickupImpedance: string;
   scaleLength: string;
   serialNumber: string;
   tuners: string;
   weight: string;
-  year: string;
+  year: number;
 }
 export interface AcousticObject {
-  id: string;
   NFTCID: string;
-  NFTId: string;
+  NFTId: number;
   backAndSides: string;
+  bodyMaterial: string;
   bracePattern: string;
   brand: string;
   bridge: string;
   case: string;
-  containsBrazilianRosewood: string;
+  containsBrazilianRosewood: boolean;
   electronics: string;
   fingerboardRadius: string;
   finish: string;
   finishMaterial: string;
   handedness: string;
-  year: string;
+  year: number;
   model: string;
   modificationsRepairs: string;
   neckDepth: string;
@@ -203,15 +202,14 @@ export interface AcousticObject {
   tuners: string;
 }
 export interface AmpFxObject {
-  id: string;
   NFTCID: string;
-  NFTId: string;
+  NFTId: number;
   brand: string;
   choke: string;
   circuit: string;
   finish: string;
   instrument: string;
-  year: string;
+  year: number;
   model: string;
   power: string;
   preamp: string;
@@ -220,6 +218,7 @@ export interface AmpFxObject {
   serialNumber: string;
   speaker: string;
   speakerCodes: string;
+  transformer: string;
   transformersOT: string;
   transformersPT: string;
   wattage: string;
@@ -328,47 +327,50 @@ export const categoryDetails = {
     "Speaker Codes",
     "Transformers OT",
     "Transformers PT",
-    "Wattage"
-  ]
-}
+    "Wattage",
+  ],
+};
 
-const capitalizeFirstLetter = (str:string) => {
+const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
+};
 
 export const buildHtmlFromObject = (obj: any) => {
   // For certificate emails
 
-  let html = '<h1>Vintage and Rare Instruments</h1><h3>Request for Certificate</h3><ul>';
-  
+  let html =
+    "<h1>Vintage and Rare Instruments</h1><h3>Request for Certificate</h3><ul>";
+
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
       switch (key) {
         case "name":
-          html += `</ul><hr><h4>Personal details</h4><ul><li><strong>${capitalizeFirstLetter(key)}:</strong> ${value}</li>`;
+          html += `</ul><hr><h4>Personal details</h4><ul><li><strong>${capitalizeFirstLetter(
+            key
+          )}:</strong> ${value}</li>`;
 
-          
           break;
 
         // case "instrument":
         //   // manually build instrument field
         //   html += `<li><strong>${capitalizeFirstLetter(key)}:</strong> ${obj['year'] + ' - ' + obj['brand'] + ' - ' + obj['model']}</li>`;
-      
+
         default:
-          html += `<li><strong>${capitalizeFirstLetter(key)}:</strong> ${value}</li>`;
+          html += `<li><strong>${capitalizeFirstLetter(
+            key
+          )}:</strong> ${value}</li>`;
           break;
       }
     }
   }
-  
-  html += '</ul>';
-  return html;
 
-}
+  html += "</ul>";
+  return html;
+};
 
 export const buildTextFromObject = (obj: any) => {
-  console.log('building text')
+  console.log("building text");
   let text = `Hello,\n\nThese are the order details:\n\n`;
 
   for (const key in obj) {
@@ -379,10 +381,8 @@ export const buildTextFromObject = (obj: any) => {
   }
 
   return text;
-
-}
+};
 
 // export const mailConfig = (to: string, data:any) => {
-
 
 // }

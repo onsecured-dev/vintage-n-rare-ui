@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import {
   GuitarObject,
@@ -12,47 +12,47 @@ export const createGuitar = async (guitar: GuitarObject) => {
     // findOrCreate brand
     let brand = await prisma.brands.findUnique({
       where: {
-        brand: guitar.brand
-      }
-    })
+        brand: guitar.brand,
+      },
+    });
 
     if (!brand) {
       brand = await prisma.brands.create({
         data: {
-          brand: guitar.brand
-        }
-      })
+          brand: guitar.brand,
+        },
+      });
     }
 
-    const result = await prisma.electricGuitar.create({
+    const result = await prisma.electricguitar.create({
       data: {
         fullName: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         ...guitar,
-        brand: brand.id,
+        brand: brand.id.toString(),
+        updatedAt: new Date(),
       },
     });
-
 
     // validate year
 
     // guitar type
 
     // save in searchtable
-    const res = await prisma.searchTable.create({
+    const res = await prisma.searchtable.create({
       data: {
         name: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         yearsYear: guitar.year,
         brandsId: brand.id,
         typeId: 1,
-        nftid: guitar.NFTId
-      }
-    })
+        nftid: guitar.NFTId.toString(),
+      },
+    });
 
     return result;
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const getAllElectricGuitars = async () => {
   try {
@@ -61,9 +61,9 @@ export const getAllElectricGuitars = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const  getElectricGuitarById = async (id: string) => {
+export const getElectricGuitarById = async (id: string) => {
   try {
     const result = await prisma.electricGuitar.findUnique({
       where: { id },
@@ -72,9 +72,12 @@ export const  getElectricGuitarById = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const getPagEGuitar = async (pageNumber: number = 1, resultsPerPage: number = 20) => {
+export const getPagEGuitar = async (
+  pageNumber: number = 1,
+  resultsPerPage: number = 20
+) => {
   try {
     const result = await prisma.electricGuitar.findMany({
       skip: (pageNumber - 1) * resultsPerPage,
@@ -84,23 +87,23 @@ export const getPagEGuitar = async (pageNumber: number = 1, resultsPerPage: numb
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const createBass = async(bass: BassObject) => {
+export const createBass = async (bass: BassObject) => {
   try {
     // findOrCreate brand
     let brand = await prisma.brands.findUnique({
       where: {
-        brand: bass.brand
-      }
-    })
+        brand: bass.brand,
+      },
+    });
 
     if (!brand) {
       brand = await prisma.brands.create({
         data: {
-          brand: bass.brand
-        }
-      })
+          brand: bass.brand,
+        },
+      });
     }
 
     const result = await prisma.bass.create({
@@ -110,7 +113,6 @@ export const createBass = async(bass: BassObject) => {
         brand: brand.id,
       },
     });
-
 
     // validate year
 
@@ -123,15 +125,15 @@ export const createBass = async(bass: BassObject) => {
         yearsYear: bass.year,
         brandsId: brand.id,
         typeId: 3,
-        nftid: bass.NFTId
-      }
-    })
+        nftid: bass.NFTId,
+      },
+    });
 
     return result;
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const getAllBass = async () => {
   try {
@@ -140,7 +142,7 @@ export const getAllBass = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const getBassById = async (id: string) => {
   try {
@@ -151,23 +153,23 @@ export const getBassById = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const  createAcoustic = async (acoustic: AcousticObject) => {
+export const createAcoustic = async (acoustic: AcousticObject) => {
   try {
     // findOrCreate brand
     let brand = await prisma.brands.findUnique({
       where: {
-        brand: acoustic.brand
-      }
-    })
+        brand: acoustic.brand,
+      },
+    });
 
     if (!brand) {
       brand = await prisma.brands.create({
         data: {
-          brand: acoustic.brand
-        }
-      })
+          brand: acoustic.brand,
+        },
+      });
     }
 
     const result = await prisma.acousticguitar.create({
@@ -177,7 +179,6 @@ export const  createAcoustic = async (acoustic: AcousticObject) => {
         brand: brand.id,
       },
     });
-
 
     // validate year
 
@@ -190,24 +191,24 @@ export const  createAcoustic = async (acoustic: AcousticObject) => {
         yearsYear: acoustic.year,
         brandsId: brand.id,
         typeId: 3,
-        nftid: acoustic.NFTId
-      }
-    })
+        nftid: acoustic.NFTId,
+      },
+    });
 
     return result;
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const getAllAcoustic= async () => {
+export const getAllAcoustic = async () => {
   try {
     const result = await prisma.Acoustic.findMany();
     return result;
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const getAcousticById = async (id: string) => {
   try {
@@ -218,23 +219,23 @@ export const getAcousticById = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const createAmpFx = async (ampFx: AmpFxObject) => {
   try {
     // findOrCreate brand
     let brand = await prisma.brands.findUnique({
       where: {
-        brand: ampFx.brand
-      }
-    })
+        brand: ampFx.brand,
+      },
+    });
 
     if (!brand) {
       brand = await prisma.brands.create({
         data: {
-          brand: ampFx.brand
-        }
-      })
+          brand: ampFx.brand,
+        },
+      });
     }
 
     const result = await prisma.ampFx.create({
@@ -244,7 +245,6 @@ export const createAmpFx = async (ampFx: AmpFxObject) => {
         brand: brand.id,
       },
     });
-
 
     // validate year
 
@@ -257,15 +257,15 @@ export const createAmpFx = async (ampFx: AmpFxObject) => {
         yearsYear: ampFx.year,
         brandsId: brand.id,
         typeId: 3,
-        nftid: ampFx.NFTId
-      }
-    })
+        nftid: ampFx.NFTId,
+      },
+    });
 
     return result;
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 export const getAllAmpFx = async () => {
   try {
     const result = await prisma.AmpFx.findMany();
@@ -273,7 +273,7 @@ export const getAllAmpFx = async () => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
 export const getAmpFxById = async (id: string) => {
   try {
@@ -284,60 +284,56 @@ export const getAmpFxById = async (id: string) => {
   } finally {
     await prisma.$disconnect();
   }
-}
+};
 
-export const getWords =async (words:string[]) => {
-
+export const getWords = async (words: string[]) => {
   try {
     const result = await prisma.Wordbank.findUnique({
       where: {
-        words: words[0]
+        words: words[0],
         // word: {
         //   OR: [
         //     { condition1: value1 },
-            
+
         //   ],
         // }
-      }
+      },
     });
     return result;
   } catch (error) {
-    console.log('Error :', error)
+    console.log("Error :", error);
   } finally {
     await prisma.$disconnect();
   }
-  
-}
+};
 
 export const searchDb = async (query: string | string[] | null) => {
-
   // check if query is string or array
   // if (typeof query === 'string') {
   //   return await searchQuery(query)
   // }
 
   if (!query) {
-    const res = await prisma.searchtable.findMany({})
-    return res
+    const res = await prisma.searchtable.findMany({});
+    return res;
   }
 
   const res = await prisma.searchtable.findMany({
     where: {
       name: {
         search: query,
-      }
-    }
-  })
-  return res
-}
+      },
+    },
+  });
+  return res;
+};
 
 export const searchQuery = async (query: string) => {
-
   // perform a findMany on each model and specify the common fields to return
   // use textSearch in column FullName
   let guitars = await prisma.electricGuitar.findMany({
     select: {
-      brand:true,
+      brand: true,
       model: true,
       year: true,
       NFTId: true,
@@ -345,15 +341,15 @@ export const searchQuery = async (query: string) => {
     where: {
       fullName: {
         search: query,
-      }
-    }
-  })
+      },
+    },
+  });
 
-  console.log('Guitars: ', guitars)
+  console.log("Guitars: ", guitars);
 
   let bass = await prisma.bass.findMany({
     select: {
-      brand:true,
+      brand: true,
       model: true,
       year: true,
       NFTId: true,
@@ -361,15 +357,15 @@ export const searchQuery = async (query: string) => {
     where: {
       fullName: {
         search: query,
-      }
-    }
-  })
+      },
+    },
+  });
 
-  console.log('bass: ', bass)
+  console.log("bass: ", bass);
 
   let acoustic = await prisma.acousticguitar.findMany({
     select: {
-      brand:true,
+      brand: true,
       model: true,
       year: true,
       NFTId: true,
@@ -377,16 +373,15 @@ export const searchQuery = async (query: string) => {
     where: {
       fullName: {
         search: query,
-      }
-    }
-  })
+      },
+    },
+  });
 
-  console.log('acoustic: ', acoustic)
-  
+  console.log("acoustic: ", acoustic);
 
   let ampFx = await prisma.ampfx.findMany({
     select: {
-      brand:true,
+      brand: true,
       model: true,
       year: true,
       NFTId: true,
@@ -394,16 +389,16 @@ export const searchQuery = async (query: string) => {
     where: {
       fullName: {
         search: query,
-      }
-    }
-  })
-  console.log('ampFx: ', ampFx)
-  console.log('Combined: \n', {
+      },
+    },
+  });
+  console.log("ampFx: ", ampFx);
+  console.log("Combined: \n", {
     ...guitars,
     ...bass,
     ...acoustic,
     ...ampFx,
-  })
+  });
 
   // return combined
   return {
@@ -411,5 +406,5 @@ export const searchQuery = async (query: string) => {
     ...bass,
     ...acoustic,
     ...ampFx,
-  }
-}
+  };
+};

@@ -18,11 +18,23 @@ const LoadingModal = forwardRef(function ForwardModal(
     mintData?: TransactionReceipt;
     errorData?: BaseError;
     refetchMint?: () => void;
+    hasError?: boolean;
+    exec: () => void;
   },
   ref: ForwardedRef<HTMLDialogElement>
 ) {
-  const { name, cid, close, mint, loading, mintData, errorData, refetchMint } =
-    props;
+  const {
+    name,
+    cid,
+    close,
+    mint,
+    loading,
+    mintData,
+    errorData,
+    refetchMint,
+    hasError,
+    exec,
+  } = props;
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
   const path = usePathname();
   const itemCreated = path.replace("/create/", "");
@@ -31,7 +43,13 @@ const LoadingModal = forwardRef(function ForwardModal(
     <dialog id={name} ref={ref} className="modal">
       <div className="modal-box dark:bg-action-bg bg-white">
         <div className="flex flex-col items-center py-10">
-          {cid === "loading" || loading ? (
+          {hasError ? (
+            <>
+              <div className="pt-4">
+                Something went wrong... please try again later
+              </div>
+            </>
+          ) : cid === "loading" || loading ? (
             <>
               <div className="loading loading-spinner w-[70px] text-primary-text" />
               <div className="pt-4">
@@ -73,6 +91,12 @@ const LoadingModal = forwardRef(function ForwardModal(
                   </a>
                 </div>
               </div>
+              <button
+                className="btn bg-indigo-500 hover:bg-indigo-700 text-white"
+                onClick={exec}
+              >
+                retry db push
+              </button>
               {!mintData ? (
                 <>
                   {errorData ? (

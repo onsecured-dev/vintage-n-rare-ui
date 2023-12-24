@@ -33,7 +33,6 @@ export default function ElectricGuitarForm() {
     formState: { errors, isValid },
   } = useForm<ElectricGuitarClientFormValues>({
     defaultValues: {
-      instrument: "",
       image: null,
       brand: "",
       model: "",
@@ -50,6 +49,7 @@ export default function ElectricGuitarForm() {
       neckProfile: "",
       serial: "",
       neckThickness: "",
+      neckFingerboard: "",
       electronics: "",
       potCodes: "",
       pickupImpedance: "",
@@ -66,7 +66,11 @@ export default function ElectricGuitarForm() {
     mutate: createGuitar,
     data: cidData,
     status: metadataStatus,
+    isError: hasError,
   } = trpc.createGuitar.useMutation();
+
+  const { mutate: pushToDB, isError: pushError } =
+    trpc.pushNFTtoDb.useMutation();
 
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
@@ -86,6 +90,7 @@ export default function ElectricGuitarForm() {
         image: base64,
         object: {
           ...data,
+          year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,
         },
@@ -125,7 +130,20 @@ export default function ElectricGuitarForm() {
   const { write: mint, data: mintData } = useContractWrite(config);
   const { isLoading: isMinting, data: mintReceipt } = useWaitForTransaction({
     hash: mintData?.hash,
+    onSuccess(data) {
+      console.log("success");
+      const allValues = { ...getValues(), image: null };
+
+      pushToDB({
+        nftmetadataCID: cidData,
+        nftid: BigInt(data.logs[0].topics[3] || "0x0").toString(),
+        nftType: "guitar",
+        nftData: JSON.stringify(allValues),
+      });
+    },
   });
+
+  console.log(getValues());
 
   register("image", {
     required: true,
@@ -160,6 +178,17 @@ export default function ElectricGuitarForm() {
         mint={mint}
         errorData={mintError as BaseError | undefined}
         refetchMint={tryAgainMint}
+        hasError={hasError || pushError}
+        exec={() => {
+          const allValues = { ...getValues(), image: null };
+          if (!mintReceipt) return;
+          pushToDB({
+            nftmetadataCID: cidData,
+            nftid: BigInt(mintReceipt.logs[0].topics[3] || "0x0").toString(),
+            nftType: "guitar",
+            nftData: JSON.stringify(allValues),
+          });
+        }}
       />
       <OrderNowModal
         name="order-now-modal"
@@ -283,6 +312,11 @@ export default function ElectricGuitarForm() {
             title="Neck Thickness"
             type="text"
             {...register("neckThickness")}
+          />
+          <Input
+            title="Neck Fingerboard"
+            type="text"
+            {...register("neckFingerboard")}
           />
           <Input title="Radius" type="text" {...register("radius")} />
 
