@@ -69,8 +69,13 @@ export default function AcousticGuitarForm() {
     data: cidData,
     status: metadataStatus,
   } = trpc.createAcoustic.useMutation();
+
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
+
+  const { mutate: pushToDB, isError: pushError } =
+    trpc.pushNFTtoDb.useMutation();
+
   const onSubmit: SubmitHandler<AcousticGuitarClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
@@ -86,6 +91,7 @@ export default function AcousticGuitarForm() {
         image: base64,
         object: {
           ...data,
+          year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,
         },
@@ -125,6 +131,17 @@ export default function AcousticGuitarForm() {
   const { write: mint, data: mintData } = useContractWrite(config);
   const { isLoading: isMinting, data: mintReceipt } = useWaitForTransaction({
     hash: mintData?.hash,
+    onSuccess(data) {
+      console.log("success");
+      const allValues = { ...getValues(), image: null };
+
+      pushToDB({
+        nftmetadataCID: cidData,
+        nftid: BigInt(data.logs[0].topics[3] || "0x0").toString(),
+        nftType: "acoustic",
+        nftData: JSON.stringify(allValues),
+      });
+    },
   });
 
   register("image", {

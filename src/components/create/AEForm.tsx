@@ -67,6 +67,9 @@ export default function AmpsEffectForm() {
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
 
+  const { mutate: pushToDB, isError: pushError } =
+    trpc.pushNFTtoDb.useMutation();
+
   const onSubmit: SubmitHandler<AmpEffectClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
     const baseImg = data.image[0];
@@ -82,6 +85,7 @@ export default function AmpsEffectForm() {
         image: base64,
         object: {
           ...data,
+          year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,
         },
@@ -93,13 +97,13 @@ export default function AmpsEffectForm() {
   const { data: nftData } = useContractReads({
     contracts: [
       {
-        address: electricBass,
+        address: ampsEffects,
         abi: NFTAbi,
         functionName: "creators",
         args: [address || zeroAddress],
       },
       {
-        address: electricBass,
+        address: ampsEffects,
         abi: NFTAbi,
         functionName: "publicFee",
       },
@@ -122,8 +126,15 @@ export default function AmpsEffectForm() {
   const { isLoading: isMinting, data: mintReceipt } = useWaitForTransaction({
     hash: mintData?.hash,
     onSuccess(data) {
-      console.log("mint success", data);
-      // reset();
+      console.log("success");
+      const allValues = { ...getValues(), image: null };
+
+      pushToDB({
+        nftmetadataCID: cidData,
+        nftid: BigInt(data.logs[0].topics[3] || "0x0").toString(),
+        nftType: "ampfx",
+        nftData: JSON.stringify(allValues),
+      });
     },
   });
 
