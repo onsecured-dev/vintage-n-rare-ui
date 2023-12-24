@@ -24,7 +24,7 @@ export const createGuitar = async (guitar: GuitarObject) => {
       });
     }
     const year = parseInt(guitar.year.toString());
-    const result = await prisma.electricguitar.create({
+    await prisma.electricguitar.create({
       data: {
         fullName: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         ...guitar,
@@ -39,7 +39,7 @@ export const createGuitar = async (guitar: GuitarObject) => {
     // guitar type
 
     // save in searchtable
-    const res = await prisma.searchtable.create({
+    await prisma.searchtable.create({
       data: {
         name: `${guitar.year} ${guitar.brand} ${guitar.model} `,
         yearsYear: year,
@@ -49,7 +49,9 @@ export const createGuitar = async (guitar: GuitarObject) => {
       },
     });
 
-    return result;
+    return {
+      success: true,
+    };
   } finally {
     await prisma.$disconnect();
   }
