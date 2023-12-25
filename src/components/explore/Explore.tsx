@@ -82,8 +82,9 @@ export default function Explore() {
           allParams.push(`sort=${encodeURI(vals)}`);
         router.push("/explore?" + allParams.join("&"));
       }}
-      totalItems={previewData.length}
-      loadedItems={previewData.length}
+      //@todo actually show the total number of items
+      totalItems={0}
+      loadedItems={0}
     >
       {sortedData.map(
         (item: { nftid: number; type: { name: string }; name: string }) => {
