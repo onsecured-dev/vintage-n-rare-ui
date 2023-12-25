@@ -131,12 +131,12 @@ function Category(props: {
           "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip"
         )}
       >
-        <Image
+        {/* <Image
           src={bg}
           alt="background image"
           fill
           className="absolute top-0 pointer-events-none w-full object-cover z-10"
-        />
+        /> */}
         {/* <div className="absolute top-0 left-[calc(50%-60px)] z-10">
           <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
         </div> */}
