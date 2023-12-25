@@ -32,11 +32,11 @@ export default function Explore() {
   const queryParam = searchParams.get("query") || "";
   const brandsParam = searchParams.get("brands") || "";
   const yearsParam = searchParams.get("years") || "";
-  const { data: allCards, error } = trpc.search.useQuery()
-  console.log({allCards, error})
+  const { data: allCards, error } = trpc.search.useQuery();
+  console.log({ allCards, error });
   const instrumentsFilter =
-  instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
-    
+    instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
+
   const sortedBy = searchParams.get("sort") || "";
   const typeSort = (a: any, b: any) => {
     if (sortedBy === "") return 0;
@@ -52,6 +52,10 @@ export default function Explore() {
         const instruments = vals.instrument.split(",");
         if (instruments.length > 0 && instruments[0].length > 0) {
           searchQuery.push(`instruments=${vals.instrument}`);
+        }
+        const years = vals.years.split(",");
+        if (years.length > 0 && years[0].length > 0) {
+          searchQuery.push(`years=${encodeURI(vals.years)}`);
         }
         const brands = vals.instrument.split(",");
         if (brands.length > 0 && brands[0].length > 0) {
