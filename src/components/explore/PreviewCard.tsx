@@ -103,7 +103,7 @@ export default function PreviewCard(props: {
             {((metadata?.attributes || []) as Array<any>).find(
               (x) =>
                 x.trait_type === "Serial" || x.trait_type === "SerialNumber"
-            ) || "Pending"}
+            )?.["value"] || "Pending"}
           </div>
           <LikeButton instrument={type} id={id} />
         </div>
