@@ -85,21 +85,23 @@ export default function Explore() {
       totalItems={previewData.length}
       loadedItems={previewData.length}
     >
-      {sortedData.map((item) => {
-        if (
-          instrumentsFilter.length > 0 &&
-          !instrumentsFilter.includes(item.type)
-        )
-          return null;
-        return (
-          <PreviewCard
-            id={item.nftid}
-            type={item.type.name as InstrumentType}
-            key={`explore-items-${item.nftid}-${item.type}`}
-            name={item.name}
-          />
-        );
-      })}
+      {sortedData.map(
+        (item: { nftid: number; type: { name: string }; name: string }) => {
+          if (
+            instrumentsFilter.length > 0 &&
+            !instrumentsFilter.includes(item.type.name)
+          )
+            return null;
+          return (
+            <PreviewCard
+              id={item.nftid}
+              type={item.type.name as InstrumentType}
+              key={`explore-items-${item.nftid}-${item.type}`}
+              name={item.name}
+            />
+          );
+        }
+      )}
     </CardWrapper>
   );
 }

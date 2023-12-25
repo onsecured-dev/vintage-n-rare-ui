@@ -176,17 +176,7 @@ export default function BassForm() {
         mint={mint}
         errorData={mintError as BaseError | undefined}
         refetchMint={tryAgainMint}
-        hasError = {pushError}
-        retryDBPush={() => {
-          const allValues = { ...getValues(), image: null };
-
-      pushToDB({
-        nftmetadataCID: cidData,
-        nftid: BigInt(mintReceipt.logs[0].topics[3] || "0x0").toString(),
-        nftType: "bass",
-        nftData: JSON.stringify(allValues),
-      });
-        }}
+        hasError={pushError}
       />
       <OrderNowModal
         name="order-now-modal"

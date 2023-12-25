@@ -6,6 +6,7 @@ import {
   AcousticObject,
   AmpFxObject,
 } from "../util/util";
+import { parse } from "path";
 
 export const createGuitar = async (guitar: GuitarObject) => {
   try {
@@ -69,7 +70,7 @@ export const getAllElectricGuitars = async () => {
 export const getElectricGuitarById = async (id: string) => {
   try {
     const result = await prisma.electricguitar.findUnique({
-      where: { id },
+      where: { NFTId: parseInt(id) },
     });
     return result;
   } finally {
@@ -152,7 +153,7 @@ export const getAllBass = async () => {
 export const getBassById = async (id: string) => {
   try {
     const result = await prisma.bass.findUnique({
-      where: { id },
+      where: { NFTId: parseInt(id) },
     });
     return result;
   } finally {
@@ -218,7 +219,7 @@ export const getAllAcoustic = async () => {
 export const getAcousticById = async (id: string) => {
   try {
     const result = await prisma.acousticguitar.findUnique({
-      where: { id },
+      where: { NFTId: parseInt(id) },
     });
     return result;
   } finally {
@@ -286,7 +287,7 @@ export const getAllAmpFx = async () => {
 export const getAmpFxById = async (id: string) => {
   try {
     const result = await prisma.ampfx.findUnique({
-      where: { id },
+      where: { NFTId: parseInt(id) },
     });
     return result;
   } finally {
