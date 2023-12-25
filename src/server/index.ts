@@ -155,8 +155,12 @@ export const appRouter = router({
       console.log("GotAcoustic : ", input);
       const fullName = getFullName(input.input.object);
       const imageHash = await uploadFileToIPFS(input.input.image, fullName);
-      const acousticParsed = parseAcousticToJSON(input.input.object, imageHash, fullName);
+      const acousticParsed = parseAcousticToJSON({
+        ...input.input.object,
+        bzRosewood: input.input.object.containsBrazilianRosewood
+      }, imageHash, fullName);
       const dataHash = await uploadJSONToIPFS(acousticParsed);
+      return dataHash
     }),
 
   createAmpFx: publicProcedure
@@ -247,6 +251,7 @@ export const appRouter = router({
             fingerboardRadius: data.radius,
             finish: data.finish,
             finishMaterial: data.finishMaterial,
+            handedness: data.handedness,
             model: data.model,
             modificationsRepairs: data.mods,
             neckFingerboard: data.neckFingerboard,
@@ -261,6 +266,7 @@ export const appRouter = router({
             weight: data.weight,
             year: data.year,
           };
+          console.log({HANDEDNESS: data.handedness})
           await createBass(bassObj);
           break;
         case "acoustic":
@@ -307,6 +313,7 @@ export const appRouter = router({
             instrument: data.instrument,
             year: data.year,
             model: data.model,
+            modificationsRepairs: data.mods,
             power: data.power,
             preamp: data.preamp,
             rectifier: data.rectifier,
@@ -330,12 +337,13 @@ export const appRouter = router({
   search: publicProcedure
     .input(z.object({ query: z.string() }).optional())
     .mutation(async ({ input }) => {
-      if (!input) {
-        return previewData;
-      }
       console.log("Searching For:\n", input.query);
+      if (!input || !input.query) {
+        return await searchDb(['']);
+      }
       // trim input spaces and separate into multiple words
       const words = input.query.split(/\s+/);
+      // words is always string array
       console.log(words);
       const res = await searchDb(words);
       console.log("db response: \n", res);

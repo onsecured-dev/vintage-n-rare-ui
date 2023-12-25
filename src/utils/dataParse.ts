@@ -126,6 +126,7 @@ export function parseAmpToJSON(amp: AmpEffectFormValues, imageHash: string, full
         trait_type: "SpeakerCodes",
         value: amp.speakerCodes,
       },
+      { trait_type: "Transformer", value: amp.transformer },
       {
         trait_type: "OT",
         value: amp.ot,
@@ -135,6 +136,7 @@ export function parseAmpToJSON(amp: AmpEffectFormValues, imageHash: string, full
         value: amp.pt,
       },
       { trait_type: "Wattage", value: amp.wattage },
+      { trait_type: "Modifications/Repairs", value: amp.mods },
     ],
   })
 }
@@ -154,6 +156,7 @@ export function parseAcousticToJSON(acoustic: AcousticGuitarFormValues, imageHas
             value: acoustic.bracePattern,
           },
           { trait_type: "Brand", value: acoustic.brand },
+          { trait_type: "Body Material", value: acoustic.bodyMaterial },
           { trait_type: "Bridge", value: acoustic.bridge },
           { trait_type: "Case", value: acoustic.case },
           {
@@ -210,6 +213,8 @@ export function parseElectricGuitarToJSON(electric: ElectricGuitarFormValues, im
         value: electric.bodyMaterial,
       },
       { trait_type: "Brand", value: electric.brand },
+      { trait_type: "Serial", value: electric.serial },
+      { trait_type: "Neck Fingerboard", value: electric.neckFingerboard },
       { trait_type: "Case", value: electric.case },
       {
         trait_type: "ContainsBrazilianRosewood",

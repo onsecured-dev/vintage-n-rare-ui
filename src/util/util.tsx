@@ -72,7 +72,7 @@ export const NFTAcousticObject = z
     brand: z.string(),
     bridge: z.string(),
     case: z.string(),
-    containsBrazilianRosewood: z.string(),
+    containsBrazilianRosewood: z.boolean(),
     electronics: z.string(),
     fingerboardRadius: z.string(),
     finish: z.string(),
@@ -90,7 +90,6 @@ export const NFTAcousticObject = z
     ssSaddle: z.string(),
     top: z.string(),
     tuners: z.string(),
-    bzRosewood: z.boolean(),
     fileType: z.string().regex(/^image\/(jpeg|png|gif|bmp|svg\+xml)$/),
     fileName: z.string().regex(/^[^\\/:\*\?"<>\|]+(\.[^\\/:\*\?"<>\|]+)*$/),
   })
@@ -159,6 +158,7 @@ export interface BassObject {
   fingerboardRadius: string;
   finish: string;
   finishMaterial: string;
+  handedness: string;
   model: string;
   modificationsRepairs: string;
   neckFingerboard: string;
@@ -211,6 +211,7 @@ export interface AmpFxObject {
   instrument: string;
   year: number;
   model: string;
+  modificationsRepairs: string;
   power: string;
   preamp: string;
   rectifier: string;
@@ -272,6 +273,7 @@ export const categoryDetails = {
     "Case",
     "Electronics",
     "Radius",
+    "Handedness",
     "Finish Material",
     "Neck Fingerboard",
     "Neck Profile",

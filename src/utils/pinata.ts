@@ -44,3 +44,8 @@ export async function uploadJSONToIPFS(data: Object){
   const { IpfsHash } = await resMetadata.json();
   return IpfsHash;
 }
+
+export function ipfsFetchURL(uri: string, replace?: string) {
+  let finalURI = replace ? uri.replace(replace, "") : uri;
+  return `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}ipfs/${finalURI}`
+}
