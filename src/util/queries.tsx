@@ -316,7 +316,7 @@ export const getAmpFxById = async (id: string) => {
 //   }
 // };
 
-export const searchDb = async (query: string[]) => {
+export const searchDb = async (query: string[], limit: number, cursor: number) => {
   
 
   const searchQuery = query.map((word:string) => ({
@@ -422,3 +422,20 @@ export const searchQuery = async (query: string) => {
     ...ampFx,
   };
 };
+
+export const allBrands = async () => {
+  return await prisma.brands.findMany({
+    select:{
+      brand: true,
+    },
+    distinct: ['brand']
+  })
+}
+export const allYears = async () => {
+  return await prisma.searchtable.findMany({
+    select:{
+      yearsYear: true,
+    },
+    distinct: ['yearsYear']
+  })
+}

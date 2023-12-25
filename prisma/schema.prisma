@@ -157,6 +157,7 @@ model instrumenttype {
 model searchtable {
   id        Int            @id @default(autoincrement())
   name      String
+  //@fulltext
   updatedAt DateTime       @updatedAt
   yearsYear Int
   brandsId  Int
@@ -169,6 +170,7 @@ model searchtable {
   @@index([brandsId], map: "SearchTable_brandsId_fkey")
   @@index([yearsYear], map: "SearchTable_yearsYear_fkey")
   @@index([typeId], map: "searchtable_typeId_fkey")
+  @@fulltext([name])
 }
 
 model wordbank {

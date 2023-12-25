@@ -27,7 +27,7 @@ const typeId = {
   "acoustic-guitar": "AG",
 };
 export default function PreviewCard(props: {
-  id: number;
+  id: number; // nftid
   type: InstrumentType;
   brand: string;
   model: string;
@@ -51,6 +51,10 @@ export default function PreviewCard(props: {
       },
     ],
   });
+
+  // const { data: nftURI} = useContractRead({
+    
+  // })
 
   const { data: metadata } = useQuery({
     queryKey: ["metadata", instrument?.[0]?.result || id],

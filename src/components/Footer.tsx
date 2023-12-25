@@ -1,10 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaFacebook, FaYoutube, FaXTwitter } from "react-icons/fa6";
-import { TiSocialYoutube } from "react-icons/ti";
-import { SlSocialInstagram } from "react-icons/sl";
+
+// import { trpc } from "../app/_trpc/client";
 
 import logo from "@/../public/Graphics/mainLogo.png";
+
+// const {
+//   mutate: subscribe,
+//   data: cidData,
+//   status: metadataStatus,
+// } = trpc.subscribe.useMutation();
 
 const Footer = () => {
   return (
@@ -124,11 +130,7 @@ const Footer = () => {
             </button>
           </div>
         </div>
-        {/* <p className="mt-2 whitespace-pre md:hidden">
-          Need support? Don't email us at:
-          {"\n"}
-          <a href="mailto:support@vintageandrare.com">support@vintageandrare.com</a>
-        </p> */}
+        
       </nav>
       <div className="pb-5 mt-2 mb-2 text-center text-sm text-slate-700 dark:text-white/50">
         <a

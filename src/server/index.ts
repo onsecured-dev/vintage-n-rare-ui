@@ -15,6 +15,8 @@ import {
   buildTextFromObject,
 } from "../util/util";
 import {
+  allBrands,
+  allYears,
   createAcoustic,
   createAmpFx,
   createBass,
@@ -335,25 +337,34 @@ export const appRouter = router({
     }),
 
   search: publicProcedure
-    .input(z.object({ query: z.string() }).optional())
-    .mutation(async ({ input }) => {
-      console.log("Searching For:\n", input.query);
+    .input(z.object({ query: z.string().optional(), cursorPointer: z.number().optional() }).optional())
+    .query(async ({ input }) => {
+      //   skip: 40,
+  // take: 10,
+      console.log("Searching For:\n", input?.query || 'not defined');
       if (!input || !input.query) {
-        return await searchDb(['']);
+        return await searchDb([''], 0, 0);
       }
       // trim input spaces and separate into multiple words
       const words = input.query.split(/\s+/);
       // words is always string array
       console.log(words);
-      const res = await searchDb(words);
+      const res = await searchDb(words, 0, 0);
       console.log("db response: \n", res);
       // check wordbank table
       // IntrumentPayloadDTO
       return res;
       // return await searchQuery(input)
     }),
+  getSeachInfo: publicProcedure.query( async() => {
 
-
+    const brands = await allBrands();
+    const years = await allYears();
+    return {
+      brands,
+      years
+    }
+  })
 });
 
 export type AppRouter = typeof appRouter;

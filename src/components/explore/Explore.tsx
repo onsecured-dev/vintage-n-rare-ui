@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import CardWrapper from "./CardWrapper";
 import PreviewCard, { type InstrumentType } from "./PreviewCard";
 import { previewData } from "@/data/placeholder";
+import { trpc } from "@/app/_trpc/client";
 
 export default function Explore() {
   const searchParams = useSearchParams();
@@ -29,8 +30,12 @@ export default function Explore() {
 
   const instrumentsParams = searchParams.get("instruments") || "";
   const queryParam = searchParams.get("query") || "";
+  const brandsParam = searchParams.get("brands") || "";
+  const yearsParam = searchParams.get("years") || "";
+  const { data: allCards, error } = trpc.search.useQuery()
+  console.log({allCards, error})
   const instrumentsFilter =
-    instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
+  instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
     
   const sortedBy = searchParams.get("sort") || "";
   const typeSort = (a: any, b: any) => {
@@ -47,6 +52,10 @@ export default function Explore() {
         const instruments = vals.instrument.split(",");
         if (instruments.length > 0 && instruments[0].length > 0) {
           searchQuery.push(`instruments=${vals.instrument}`);
+        }
+        const brands = vals.instrument.split(",");
+        if (brands.length > 0 && brands[0].length > 0) {
+          searchQuery.push(`brands=${encodeURI(vals.brands)}`);
         }
         const trimmedQuery = vals.query.trim();
         if (trimmedQuery.length > 0)
