@@ -66,7 +66,7 @@ export const appRouter = router({
       // Send email
       const info = await transporter.sendMail({
         from: process.env.EM_USR,
-        to:"info@vintageandrare.io",
+        to:process.env.NODE_ENV =="production" ? "info@vintageandrare.io" : input.input.data.email,
         subject: "Request for Certificate",
         html: buildHtmlFromObject(input.input.data),
         attachments: [{ path: input.input.attachment}]
