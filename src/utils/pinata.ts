@@ -45,6 +45,23 @@ export async function uploadJSONToIPFS(data: Object){
   return IpfsHash;
 }
 
+export async function updateFileMetadata(cid: string, name: string){
+  await fetch('https://api.pinata.cloud/pinning/hashMetadata',{
+        method: "PUT",
+          headers: {
+            Authorization: `Bearer ${process.env.PINATA_JWT}`,
+            accept: 'application/json', 
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            ipfsPinHash: cid,
+            name: name
+          }),
+  })
+  .then( () => console.log('update success'))
+  .catch( (e) => console.log("ERROR--",e))
+}
+
 export function ipfsFetchURL(uri: string, replace?: string) {
   let finalURI = replace ? uri.replace(replace, "") : uri;
   return `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}ipfs/${finalURI}`

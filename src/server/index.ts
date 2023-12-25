@@ -28,7 +28,7 @@ import { previewData } from "@/data/placeholder";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
 import { env } from "process";
-import { checkPinataSetup, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
+import { checkPinataSetup, updateFileMetadata, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
 import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
 import { AcousticGuitarClientFormValues, AmpEffectClientFormValues, BassClientFormValues, ElectricGuitarClientFormValues } from "@/utils/formTypes";
 
@@ -114,6 +114,7 @@ export const appRouter = router({
       
       const bassParsed = parseBassToJSON(input.input.object, imageHash, fullName);
       const dataHash = await uploadJSONToIPFS(bassParsed);
+      await updateFileMetadata(dataHash, fullName + " - " + input.input.object.serial + ".json");
       return dataHash;
     }),
 
@@ -137,6 +138,7 @@ export const appRouter = router({
       const imageHash = await uploadFileToIPFS(input.input.image, fullName);
       const guitarParsed = parseElectricGuitarToJSON(input.input.object, imageHash, fullName);
       const dataHash = await uploadJSONToIPFS(guitarParsed);
+      await updateFileMetadata(dataHash, fullName + " - " + input.input.object.serial + ".json");
       return dataHash;
 
     }),
@@ -162,6 +164,7 @@ export const appRouter = router({
         bzRosewood: input.input.object.containsBrazilianRosewood
       }, imageHash, fullName);
       const dataHash = await uploadJSONToIPFS(acousticParsed);
+      await updateFileMetadata(dataHash, fullName + " - " + input.input.object.serial + ".json");
       return dataHash
     }),
 
@@ -178,12 +181,14 @@ export const appRouter = router({
     )
     .mutation(async (input) => {
       checkPinataSetup();
-      console.log("GotAmpFx : ", input);
       const fullName = getFullName(input.input.object);
+      console.log("GotAmpFx : ", fullName);
       const imageHash = await uploadFileToIPFS(input.input.image, input.input.object.model);
+      console.log("Image Hash : ", imageHash);
       const ampParsed = parseAmpToJSON(input.input.object, imageHash, fullName);
       const dataHash = await uploadJSONToIPFS(ampParsed);
-
+      console.log("data Hash : ", dataHash);
+      await updateFileMetadata(dataHash, fullName + " - " + input.input.object.serial + ".json");
       return dataHash;
     }),
 
@@ -206,8 +211,6 @@ export const appRouter = router({
       // actually save the data to the database
       // "{alskdfja;d}"
       console.log("pushNFTtoDb input:\n", input);
-      const nftObject: any = {};
-      // turn input.nft to nftObject
       // GuitarObject, BassObject, AmpFxObject, AcousticObject
       let data 
       switch (input.nftType) {
