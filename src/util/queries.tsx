@@ -129,7 +129,7 @@ export const createBass = async (bass: BassObject) => {
         name: `${bass.year} ${bass.brand} ${bass.model} `,
         yearsYear: year,
         brandsId: brand.id,
-        typeId: 3,
+        typeId: 2,
         nftid: bass.NFTId,
       },
     });
@@ -245,7 +245,6 @@ export const createAmpFx = async (ampFx: AmpFxObject) => {
 
     const year = parseInt(ampFx.year.toString());
 
-
     const result = await prisma.ampfx.create({
       data: {
         fullName: `${ampFx.year} ${ampFx.brand} ${ampFx.model} `,
@@ -265,7 +264,7 @@ export const createAmpFx = async (ampFx: AmpFxObject) => {
         name: `${ampFx.year} ${ampFx.brand} ${ampFx.model} `,
         yearsYear: year,
         brandsId: brand.id,
-        typeId: 3,
+        typeId: 4,
         nftid: ampFx.NFTId,
       },
     });
@@ -316,10 +315,12 @@ export const getAmpFxById = async (id: string) => {
 //   }
 // };
 
-export const searchDb = async (query: string[], limit: number, cursor: number) => {
-  
-
-  const searchQuery = query.map((word:string) => ({
+export const searchDb = async (
+  query: string[],
+  limit: number,
+  cursor: number
+) => {
+  const searchQuery = query.map((word: string) => ({
     name: {
       search: word,
     },
@@ -327,10 +328,9 @@ export const searchDb = async (query: string[], limit: number, cursor: number) =
 
   // multiple queries using or
 
-
   const res = await prisma.searchtable.findMany({
     where: {
-      OR: searchQuery
+      OR: searchQuery,
     },
   });
 
@@ -425,17 +425,39 @@ export const searchQuery = async (query: string) => {
 
 export const allBrands = async () => {
   return await prisma.brands.findMany({
-    select:{
+    select: {
       brand: true,
     },
-    distinct: ['brand']
-  })
-}
+    distinct: ["brand"],
+  });
+};
 export const allYears = async () => {
   return await prisma.searchtable.findMany({
-    select:{
+    select: {
       yearsYear: true,
     },
-    distinct: ['yearsYear']
-  })
-}
+    distinct: ["yearsYear"],
+  });
+};
+
+export const latestInputs = async () => {
+  return await prisma.searchtable.findMany({
+    take: 10,
+    select: {
+      name: true,
+      yearsYear: true,
+      typeId: true,
+      nftid: true,
+      brands: {
+        select: {
+          brand: true,
+        },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+};

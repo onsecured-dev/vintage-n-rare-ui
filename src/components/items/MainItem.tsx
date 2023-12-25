@@ -45,12 +45,9 @@ export default function MainItemView(props: {
   const { data: metadata, status } = useQuery({
     queryKey: ["metadata", id, instrument],
     queryFn: () => {
-      if(!nftURI)
-        return;
-      const actualCID = ipfsFetchURL(nftURI, "ipfs://")
-      return fetch(
-        actualCID
-      ).then((res) => res.json());
+      if (!nftURI) return;
+      const actualCID = ipfsFetchURL(nftURI, "ipfs://");
+      return fetch(actualCID).then((res) => res.json());
     },
     enabled: !!nftURI && !uriError,
   });
@@ -59,17 +56,21 @@ export default function MainItemView(props: {
 
   console.log(metadata);
   const attributes = attributesParse(metadata.attributes);
-
+  console.log(attributes);
   return (
     <>
       <section className="max-w-7xl px-8 h-full w-full">
         <div className="w-full grid grid-cols-12 px-2 h-full">
           <div className="relative md:col-span-5 col-span-12 w-full aspect-[1/1.34] rounded-sm overflow-hidden">
-            {status == "success" ? <Image
-              src={ipfsFetchURL(metadata.image, "ipfs://")}
-              fill
-              alt={`item-${instrument}-${id}`}
-            /> : <div className="loading loading-spinner text-2xl text-primary-text"/>}
+            {status == "success" ? (
+              <Image
+                src={ipfsFetchURL(metadata.image, "ipfs://")}
+                fill
+                alt={`item-${instrument}-${id}`}
+              />
+            ) : (
+              <div className="loading loading-spinner text-2xl text-primary-text" />
+            )}
           </div>
           <div className="col-span-12 md:col-span-7 pl-0 md:pl-8 pt-8 md:pt-0">
             <div className="flex flex-col-reverse sm:flex-row items-center gap-4">

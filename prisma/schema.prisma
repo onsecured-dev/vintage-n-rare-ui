@@ -40,6 +40,8 @@ model acousticguitar {
   top                       String
   tuners                    String
   brands                    brands   @relation(fields: [brand], references: [id], map: "AcousticGuitar_brandsId_fkey")
+
+  @@index([brand])
 }
 
 model ampfx {
@@ -68,6 +70,8 @@ model ampfx {
   wattage              String
   updatedAt            DateTime @updatedAt
   brands               brands   @relation(fields: [brand], references: [id], map: "AmpFx_brandsId_fkey")
+
+  @@index([brand])
 }
 
 model bass {
@@ -98,6 +102,8 @@ model bass {
   year                 Int
   updatedAt            DateTime @updatedAt
   brands               brands   @relation(fields: [brand], references: [id], map: "Bass_brandsId_fkey")
+
+  @@index([brand])
 }
 
 model electricguitar {
@@ -129,6 +135,8 @@ model electricguitar {
   updatedAt                 DateTime @updatedAt
   serialNumber              String
   brands                    brands   @relation(fields: [brand], references: [id], map: "ElectricGuitar_brandsId_fkey")
+
+  @@index([brand])
 }
 
 model pending {

@@ -46,7 +46,6 @@ export default function CardWrapper(props: {
   const [searchString, setSearchString] = useState<string>("");
   const [brandsSelected, setBrandsSelected] = useImmer<Array<string>>([]);
   const [yearSelected, setYearsSelected] = useImmer<Array<number>>([]);
-  console.log({ allCategories });
   return (
     <div className="px-8">
       <div className="grid grid-cols-12">
@@ -210,7 +209,7 @@ export default function CardWrapper(props: {
             </button>
           </div>
         </div>
-        <div className="flex flex-row flex-wrap items-center justify-evenly gap-4 col-span-12 md:col-span-9 w-full">
+        <div className="flex flex-row flex-wrap items-start justify-evenly gap-4 col-span-12 md:col-span-9 w-full">
           <div className="flex flex-col sm:flex-row items-center justify-between pb-2 sm:pb-8 px-4 w-full gap-1">
             <div>
               Showing 1 - {loadedItems} of {totalItems.toLocaleString()} results

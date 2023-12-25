@@ -1,6 +1,6 @@
 "use client";
 
-import { electricBass } from "@/data/contracts";
+import { contractAddressMapping, electricBass } from "@/data/contracts";
 import classNames from "classnames";
 import { FaHeart } from "react-icons/fa";
 import { useContractReads } from "wagmi";
@@ -11,6 +11,7 @@ import { zeroAddress } from "viem";
 import shortAddress from "@/utils/w3String";
 import Link from "next/link";
 import LikeButton from "./LikeButton";
+import { ipfsFetchURL } from "@/utils/pinata";
 
 export type InstrumentType =
   | "electric-guitar"
@@ -29,22 +30,20 @@ const typeId = {
 export default function PreviewCard(props: {
   id: number; // nftid
   type: InstrumentType;
-  brand: string;
-  model: string;
-  year: number;
-  img: string;
+  name: string;
 }) {
-  const { type, id, brand, model, year, img } = props;
+  const { type, id, name } = props;
+  const contract = contractAddressMapping[type];
   const { data: instrument } = useContractReads({
     contracts: [
       {
-        address: electricBass,
+        address: contract,
         abi: NFTAbi,
         functionName: "tokenURI",
         args: [BigInt(id)],
       },
       {
-        address: electricBass,
+        address: contract,
         abi: NFTAbi,
         functionName: "ownerOf",
         args: [BigInt(id)],
@@ -52,20 +51,18 @@ export default function PreviewCard(props: {
     ],
   });
 
-  // const { data: nftURI} = useContractRead({
-    
-  // })
-
   const { data: metadata } = useQuery({
     queryKey: ["metadata", instrument?.[0]?.result || id],
     queryFn: () => {
-      const actualCID = instrument?.[0]?.result?.replace("ipfs://", "");
-      return fetch(`https://${actualCID}.ipfs.nftstorage.link/`).then((res) =>
-        res.json()
+      if (!instrument?.[0]?.result) return;
+      return fetch(ipfsFetchURL(instrument?.[0].result, "ipfs://")).then(
+        (res) => res.json()
       );
     },
     enabled: !!instrument?.[0]?.result,
   });
+
+  console.log({ metadata });
 
   return (
     <div
@@ -76,15 +73,19 @@ export default function PreviewCard(props: {
       )}
     >
       <div className="text-base font-bold whitespace-nowrap w-full overflow-hidden text-ellipsis">
-        {`${year} ${brand} ${model}`}
+        {`${name}`}
       </div>
       <div className="w-full px-2 py-3">
         <div className="relative w-full aspect-[1/1.34] ">
-          <Image
-            src={`/placeholders/${img}.jpeg`}
-            fill
-            alt={`NFT-${id}-${props.type}`}
-          />
+          {metadata ? (
+            <Image
+              src={ipfsFetchURL(metadata.image || "", "ipfs://")}
+              fill
+              alt={`NFT-${id}-${props.type}`}
+            />
+          ) : (
+            <div className="w-full h-full text-2xl loading loading-ring" />
+          )}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-1 px-2">
@@ -98,7 +99,11 @@ export default function PreviewCard(props: {
             <span className="text-white">
               #{typeId[type]} {id}
             </span>
-            &nbsp;{metadata?.serial || "A1B2C3D4"}
+            &nbsp;
+            {((metadata?.attributes || []) as Array<any>).find(
+              (x) =>
+                x.trait_type === "Serial" || x.trait_type === "SerialNumber"
+            ) || "Pending"}
           </div>
           <LikeButton instrument={type} id={id} />
         </div>

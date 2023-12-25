@@ -63,6 +63,7 @@ export async function updateFileMetadata(cid: string, name: string){
 }
 
 export function ipfsFetchURL(uri: string, replace?: string) {
+  if(!uri) return "";
   let finalURI = replace ? uri.replace(replace, "") : uri;
   return `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}ipfs/${finalURI}`
 }

@@ -21,6 +21,7 @@ import {
   createAmpFx,
   createBass,
   createGuitar,
+  latestInputs,
   searchDb,
   searchQuery,
 } from "../util/queries";
@@ -346,7 +347,7 @@ export const appRouter = router({
   // take: 10,
       console.log("Searching For:\n", input?.query || 'not defined');
       if (!input || !input.query) {
-        return await searchDb([''], 0, 0);
+        return await latestInputs();
       }
       // trim input spaces and separate into multiple words
       const words = input.query.split(/\s+/);

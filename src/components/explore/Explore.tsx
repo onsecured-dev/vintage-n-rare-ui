@@ -40,11 +40,13 @@ export default function Explore() {
   const sortedBy = searchParams.get("sort") || "";
   const typeSort = (a: any, b: any) => {
     if (sortedBy === "") return 0;
-    if (a.type === sortedBy && b.type !== sortedBy) return -1;
-    if (a.type !== sortedBy && b.type === sortedBy) return 1;
+    if (a.type.name === sortedBy && b.type.name !== sortedBy) return -1;
+    if (a.type.name !== sortedBy && b.type.name === sortedBy) return 1;
     return 0;
   };
-  const sortedData = previewData.sort(typeSort);
+  const sortedData = (allCards || []).sort(typeSort);
+
+  console.log({ sortedData });
   return (
     <CardWrapper
       onSearch={(vals) => {
@@ -91,13 +93,10 @@ export default function Explore() {
           return null;
         return (
           <PreviewCard
-            id={item.id}
-            type={item.type as InstrumentType}
-            key={`explore-items-${item.id}-${item.type}`}
-            brand={item.brand}
-            model={item.model}
-            year={item.year}
-            img={item.img}
+            id={item.nftid}
+            type={item.type.name as InstrumentType}
+            key={`explore-items-${item.nftid}-${item.type}`}
+            name={item.name}
           />
         );
       })}
