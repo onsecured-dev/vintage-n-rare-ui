@@ -148,11 +148,11 @@ export default function ElectricGuitarForm() {
   register("image", {
     required: true,
     validate: {
-      lessThan15MB: (fileList) => {
+      lessThan4MB: (fileList) => {
         if (!fileList || fileList.length !== 1) return false;
         return (
-          (fileList[0]?.size || 1000000000) / 1024 / 1024 < 10 ||
-          "File size must be less than 15MB"
+          (fileList[0]?.size || 4000000) / 1024 / 1024 <= 4.5 ||
+          "File size must be less than 4MB"
         );
       },
       imageFormat: (fileList) => {
@@ -204,6 +204,7 @@ export default function ElectricGuitarForm() {
             name="image"
             setValue={setValue}
             value={watch("image")}
+            error={errors.image?.message}
           />
           <Input
             title={`Name ${address ? "" : " *"}`}
