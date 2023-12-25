@@ -19,6 +19,7 @@ const LoadingModal = forwardRef(function ForwardModal(
     errorData?: BaseError;
     refetchMint?: () => void;
     hasError?: boolean;
+    retryDBPush?: () => void;
   },
   ref: ForwardedRef<HTMLDialogElement>
 ) {
@@ -32,6 +33,7 @@ const LoadingModal = forwardRef(function ForwardModal(
     errorData,
     refetchMint,
     hasError,
+    retryDBPush
   } = props;
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
   const path = usePathname();
@@ -46,6 +48,9 @@ const LoadingModal = forwardRef(function ForwardModal(
               <div className="pt-4">
                 Something went wrong... please try again later
               </div>
+              <button className="btn" onClick={retryDBPush}>
+                try again
+              </button>
             </>
           ) : cid === "loading" || loading ? (
             <>

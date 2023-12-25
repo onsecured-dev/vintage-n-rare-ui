@@ -14,6 +14,7 @@ import UserAvatar from "@/components/items/DetailAvatar";
 import { TbGuitarPickFilled } from "react-icons/tb";
 import attributesParse, { AttributeType } from "@/utils/attributesParse";
 import { zeroAddress } from "viem";
+import { ipfsFetchURL } from "@/utils/pinata";
 
 export default function MainItemView(props: {
   instrument: InstrumentType;
@@ -41,12 +42,14 @@ export default function MainItemView(props: {
     args: [BigInt(id as unknown as number)],
   });
 
-  const { data: metadata } = useQuery({
+  const { data: metadata, status } = useQuery({
     queryKey: ["metadata", id, instrument],
     queryFn: () => {
-      const actualCID = nftURI?.replace("ipfs://", "");
+      if(!nftURI)
+        return;
+      const actualCID = ipfsFetchURL(nftURI, "ipfs://")
       return fetch(
-        `https://salmon-persistent-parrotfish-346.mypinata.cloud/ipfs/${actualCID}/`
+        actualCID
       ).then((res) => res.json());
     },
     enabled: !!nftURI && !uriError,
@@ -62,14 +65,11 @@ export default function MainItemView(props: {
       <section className="max-w-7xl px-8 h-full w-full">
         <div className="w-full grid grid-cols-12 px-2 h-full">
           <div className="relative md:col-span-5 col-span-12 w-full aspect-[1/1.34] rounded-sm overflow-hidden">
-            <Image
-              src={`https://salmon-persistent-parrotfish-346.mypinata.cloud/ipfs/${metadata.image.replace(
-                "ipfs://",
-                ""
-              )}`}
+            {status == "success" ? <Image
+              src={ipfsFetchURL(metadata.image, "ipfs://")}
               fill
               alt={`item-${instrument}-${id}`}
-            />
+            /> : <div className="loading loading-spinner text-2xl text-primary-text"/>}
           </div>
           <div className="col-span-12 md:col-span-7 pl-0 md:pl-8 pt-8 md:pt-0">
             <div className="flex flex-col-reverse sm:flex-row items-center gap-4">

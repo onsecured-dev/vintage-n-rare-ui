@@ -91,6 +91,7 @@ export default function AcousticGuitarForm() {
         image: base64,
         object: {
           ...data,
+          containsBrazilianRosewood: data.bzRosewood,
           year: Number(data.year),
           fileName: baseImg.name,
           fileType: baseImg.type,

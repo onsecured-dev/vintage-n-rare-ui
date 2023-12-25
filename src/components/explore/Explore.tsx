@@ -28,8 +28,10 @@ export default function Explore() {
    */
 
   const instrumentsParams = searchParams.get("instruments") || "";
+  const queryParam = searchParams.get("query") || "";
   const instrumentsFilter =
     instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
+    
   const sortedBy = searchParams.get("sort") || "";
   const typeSort = (a: any, b: any) => {
     if (sortedBy === "") return 0;

@@ -18,7 +18,7 @@ model acousticguitar {
   backAndSides              String
   bodyMaterial              String
   bracePattern              String
-  brand                     String
+  brand                     Int
   bridge                    String
   case                      String
   containsBrazilianRosewood Boolean
@@ -39,6 +39,7 @@ model acousticguitar {
   stringSpacingAtSaddle     String
   top                       String
   tuners                    String
+  brands                    brands   @relation(fields: [brand], references: [id], map: "AcousticGuitar_brandsId_fkey")
 }
 
 model ampfx {
@@ -47,7 +48,7 @@ model ampfx {
   fullName             String
   active               Boolean  @default(true)
   year                 Int
-  brand                String
+  brand                Int
   model                String
   serialNumber         String
   modificationsRepairs String
@@ -66,6 +67,7 @@ model ampfx {
   transformersPT       String
   wattage              String
   updatedAt            DateTime @updatedAt
+  brands               brands   @relation(fields: [brand], references: [id], map: "AmpFx_brandsId_fkey")
 }
 
 model bass {
@@ -74,7 +76,7 @@ model bass {
   fullName             String
   active               Boolean  @default(true)
   bodyMaterial         String
-  brand                String
+  brand                Int
   case                 String
   electronics          String
   fingerboardRadius    String
@@ -95,16 +97,16 @@ model bass {
   weight               String
   year                 Int
   updatedAt            DateTime @updatedAt
+  brands               brands   @relation(fields: [brand], references: [id], map: "Bass_brandsId_fkey")
 }
 
 model electricguitar {
   NFTCID                    String
   NFTId                     Int      @id
   fullName                  String
-  // instrument
   active                    Boolean  @default(true)
   bodyMaterial              String
-  brand                     String
+  brand                     Int
   case                      String
   containsBrazilianRosewood Boolean
   electronics               String
@@ -112,7 +114,6 @@ model electricguitar {
   finishMaterial            String
   handedness                String
   year                      Int
-  serialNumber              String
   model                     String
   modificationsRepairs      String
   neckFingerboard           String
@@ -126,6 +127,8 @@ model electricguitar {
   tuners                    String
   weight                    String
   updatedAt                 DateTime @updatedAt
+  serialNumber              String
+  brands                    brands   @relation(fields: [brand], references: [id], map: "ElectricGuitar_brandsId_fkey")
 }
 
 model pending {
@@ -134,17 +137,19 @@ model pending {
 }
 
 model brands {
-  id          Int           @id @default(autoincrement())
-  brand       String        @unique(map: "Brands_brand_key")
-  // updatedAt   DateTime      @db.DateTime()
-  searchtable searchtable[]
-  wordbank    wordbank[]
+  id             Int              @id @default(autoincrement())
+  brand          String           @unique(map: "Brands_brand_key")
+  searchtable    searchtable[]
+  wordbank       wordbank[]
+  electricguitar electricguitar[]
+  bass           bass[]
+  ampfx          ampfx[]
+  acousticguitar acousticguitar[]
 }
 
 model instrumenttype {
   id          Int           @id @default(autoincrement())
   name        String        @unique(map: "InstrumentType_name_key")
-  // updatedAt   DateTime      @db.DateTime()
   searchtable searchtable[]
   wordbank    wordbank[]
 }
@@ -152,9 +157,6 @@ model instrumenttype {
 model searchtable {
   id        Int            @id @default(autoincrement())
   name      String
-  // instrument
-  // 2004 fendre bass p
-  // 
   updatedAt DateTime       @updatedAt
   yearsYear Int
   brandsId  Int
@@ -184,6 +186,5 @@ model wordbank {
 
 model years {
   year        Int           @id @default(autoincrement())
-  // updatedAt   DateTime
   searchtable searchtable[]
 }
