@@ -320,7 +320,7 @@ function SearchCheckbox(props: {
           checked={checked}
           onChange={onChange}
         />
-        <span className="label-text dark:text-white text-black text-xs lg:text-base">
+        <span className="label-text dark:text-white text-black text-xs lg:text-base capitalize">
           {name}
         </span>
       </label>
