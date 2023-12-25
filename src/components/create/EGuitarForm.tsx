@@ -351,7 +351,7 @@ export default function ElectricGuitarForm() {
               "disabled:hover:bg-gray-700/20 disabled:bg-gray-700/20 disabled:hover:dark:bg-gray-700/20"
             )}
             type="button"
-            disabled={!isValid}
+            disabled={!isValid || !watch("email") || !watch("name")}
             onClick={() => {
               modalOrdRef.current?.showModal();
               const image = getValues().image?.[0];
@@ -389,6 +389,14 @@ export default function ElectricGuitarForm() {
             >
               Create Metadata
             </button>
+          )}
+        </div>
+        <div className="w-full text-center whitespace-pre-wrap">
+          {watch("email").match(/.+@.+\..+/) ? null : (
+            <div className="text-red-500">* Email is required to order</div>
+          )}
+          {watch("name").length > 3 ? null : (
+            <div className="text-red-500">* Name is required to order</div>
           )}
         </div>
       </form>
