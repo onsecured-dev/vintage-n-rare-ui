@@ -359,7 +359,7 @@ export const appRouter = router({
       return res;
       // return await searchQuery(input)
     }),
-  getSeachInfo: publicProcedure.query( async() => {
+  getSearchInfo: publicProcedure.query( async() => {
 
     const brands = await allBrands();
     const years = await allYears();

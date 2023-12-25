@@ -19,6 +19,7 @@ type SearchParams = {
   query: string;
   instrument: string;
   brands: string;
+  years: string;
 };
 
 export default function CardWrapper(props: {
@@ -43,9 +44,9 @@ export default function CardWrapper(props: {
   const { data: allCategories } = trpc.getSearchInfo.useQuery();
   const [tagSelected, setTagSelected] = useImmer<Array<string>>([]);
   const [searchString, setSearchString] = useState<string>("");
-  const [brandsSelected,setBrandsSelected] = useImmer<Array<string>>([])
-  const [yearSelected,setYearsSelected] = useImmer<Array<number>>([])
-
+  const [brandsSelected, setBrandsSelected] = useImmer<Array<string>>([]);
+  const [yearSelected, setYearsSelected] = useImmer<Array<number>>([]);
+  console.log({ allCategories });
   return (
     <div className="px-8">
       <div className="grid grid-cols-12">
@@ -135,57 +136,61 @@ export default function CardWrapper(props: {
           <hr />
           <div className="collapse collapse-arrow duration-500">
             <input type="checkbox" defaultChecked />
-            <div className="collapse-title text-xl">Brands&nbsp;{brandsSelected.length > 0 ? `(${brandsSelected.length})`  :""}</div>
+            <div className="collapse-title text-xl">
+              Brands&nbsp;
+              {brandsSelected.length > 0 ? `(${brandsSelected.length})` : ""}
+            </div>
             <div className="collapse-content max-h-[180px] overflow-y-auto">
-              { 
-                allCategories?.brands.map( (brand: { brand: string}, index: number) => 
-                <SearchCheckbox
-                  key={`all-brands-${index}`}
-                  name={brand.brand}
-                  onChange={() =>
-                    setBrandsSelected((t) => {
-                      const index = t.indexOf(brand.brand);
-                      if (index > -1) {
-                        t.splice(index, 1);
+              {allCategories?.brands.map(
+                (brand: { brand: string }, index: number) => (
+                  <SearchCheckbox
+                    key={`all-brands-${index}`}
+                    name={brand.brand}
+                    onChange={() =>
+                      setBrandsSelected((t) => {
+                        const index = t.indexOf(brand.brand);
+                        if (index > -1) {
+                          t.splice(index, 1);
+                          return;
+                        }
+                        t.push(brand.brand);
                         return;
-                      }
-                      t.push(brand.brand);
-                      return;
-                    })
-                  }
-                  checked={brandsSelected.includes(brand.brand)}
-                />
+                      })
+                    }
+                    checked={brandsSelected.includes(brand.brand)}
+                  />
                 )
-
-              }
+              )}
             </div>
           </div>
           <hr />
           <div className="collapse collapse-arrow duration-500">
             <input type="checkbox" defaultChecked />
-            <div className="collapse-title text-xl">Years&nbsp;{brandsSelected.length > 0 ? `(${brandsSelected.length})`  :""}</div>
+            <div className="collapse-title text-xl">
+              Years&nbsp;
+              {yearSelected.length > 0 ? `(${yearSelected.length})` : ""}
+            </div>
             <div className="collapse-content max-h-[180px] overflow-y-auto">
-              { 
-                allCategories?.years.map( (years: { years: number}, index: number) => 
-                <SearchCheckbox
-                  key={`all-yearss-${index}`}
-                  name={years.years.toString()}
-                  onChange={() =>
-                    setYearsSelected((t) => {
-                      const index = t.indexOf(years.years);
-                      if (index > -1) {
-                        t.splice(index, 1);
+              {allCategories?.years.map(
+                (years: { yearsYear: number }, index: number) => (
+                  <SearchCheckbox
+                    key={`all-yearss-${index}`}
+                    name={years.yearsYear.toString()}
+                    onChange={() =>
+                      setYearsSelected((t) => {
+                        const index = t.indexOf(years.yearsYear);
+                        if (index > -1) {
+                          t.splice(index, 1);
+                          return;
+                        }
+                        t.push(years.yearsYear);
                         return;
-                      }
-                      t.push(years.years);
-                      return;
-                    })
-                  }
-                  checked={yearSelected.includes(years.years)}
-                />
+                      })
+                    }
+                    checked={yearSelected.includes(years.yearsYear)}
+                  />
                 )
-
-              }
+              )}
             </div>
           </div>
           <hr />
@@ -195,7 +200,8 @@ export default function CardWrapper(props: {
               onClick={() => {
                 onSearch({
                   instrument: tagSelected.join(","),
-                  brands: brandsSelected.join(','),
+                  brands: brandsSelected.join(","),
+                  years: yearSelected.join(","),
                   query: searchString,
                 });
               }}
