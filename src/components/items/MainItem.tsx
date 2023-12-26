@@ -179,8 +179,16 @@ function PropertyManager(props: {
   switch (props.instrument) {
     case InstrumentCategory.Guitar:
       return categoryDetails.Bass.map((item: any, index: number) => {
+        // remove spaces and special characters from item
+        const spacelessItem = item.replace(/\s/g, "");
+        const itemWithoutPunctuationOrSpecialCharacters = spacelessItem.replace(
+          /[^\w\s]|_/g,
+          ""
+        );
         const value = props.data.find(
-          (attr) => attr.trait_type === item
+          (attr) =>
+            attr.trait_type === item ||
+            attr.trait_type === itemWithoutPunctuationOrSpecialCharacters
         )?.value;
         return (
           <SecondaryProperty
@@ -243,11 +251,11 @@ function MainProperty(props: { label: string; value: string | number }) {
 function SecondaryProperty(props: { label: string; value: string }) {
   const { label, value } = props;
   return (
-    <li className="border-b-2 border-primary-border-dark py-4 pl-4">
-      <div className="flex flex-row items-center gap-4">
-        <div className="text-sm font-semibold w-1/3">{label}</div>
-        <div className="text-sm font-semibold w-1/3">-</div>
-        <div className="text-sm">{value}</div>
+    <li className="border-b-2 border-primary-border-dark py-4 pl-4 flex flex-col justify-center">
+      <div className="grid grid-cols-9 items-center gap-4">
+        <div className="text-sm font-semibold col-span-3">{label}</div>
+        <div className="text-sm font-semibold col-span-1"></div>
+        <div className="text-sm col-span-5">{value}</div>
       </div>
     </li>
   );
