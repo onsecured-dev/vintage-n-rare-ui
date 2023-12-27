@@ -16,7 +16,7 @@ export default function UserAvatar(props: {
             : "from-red-700 to-yellow-400"
         )}
       />
-      <div className="text-white text-sm font-semibold">
+      <div className="dark:text-white text-slate-700 text-sm font-semibold">
         {shortAddress(props.address)}
       </div>
     </div>
@@ -26,8 +26,8 @@ export function LinkAvatar(props: { name: string; href: string }) {
   return (
     <a href={props.href} target="_blank" rel="noopener nonreferrer">
       <div className="flex flex-row items-center gap-4 group">
-        <MdVerified className=" text-[40px] text-green-500  group-hover:text-white/70" />
-        <div className="text-white text-sm font-semibold underline underline-offset-2 group-hover:text-primary-text">
+        <MdVerified className=" text-[40px] text-green-500 group-hover:text-green-200 transition-colors duration-300" />
+        <div className="dark:text-white text-slate-700 text-sm font-semibold underline underline-offset-2 group-hover:text-primary-text">
           {props.name}
         </div>
       </div>

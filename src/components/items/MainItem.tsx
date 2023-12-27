@@ -84,7 +84,7 @@ export default function MainItemView(props: {
               <div role="tablist" className="tabs tabs-bordered">
                 <button
                   role="tab"
-                  className="tab tab-active font-semibold [--fallback-bc:theme(colors.primary-text)] text-white border-primary-text hover:text-primary-text"
+                  className="tab tab-active font-semibold [--fallback-bc:theme(colors.primary-text)] dark:text-white border-primary-text hover:text-primary-text"
                 >
                   Details
                 </button>
@@ -145,7 +145,7 @@ export default function MainItemView(props: {
               <MainProperty label="Brand" value={attributes.brand} />
               <MainProperty label="Model" value={attributes.model} />
               <MainProperty label="Year" value={attributes.year} />
-              <MainProperty label="Serial" value={attributes.serial} />
+              <MainProperty label="Serial" value={attributes.serial || "-"} />
               {instrument != InstrumentCategory.AmpsEffects ? (
                 <MainProperty
                   label="Handedness"
@@ -163,7 +163,7 @@ export default function MainItemView(props: {
               </h3>
             </div>
 
-            <ul className="grid xl:grid-cols-2 grid-cols-1">
+            <ul className="grid xl:grid-cols-2 grid-cols-1 gap-x-6">
               <PropertyManager
                 instrument={instrument as string}
                 data={metadata.attributes}
@@ -252,7 +252,8 @@ function MainProperty(props: { label: string; value: string | number }) {
     <div
       className={classNames(
         "rounded-2xl dark:card-bg bg-white text-center py-4",
-        "w-[calc(50%-16px)] lg:w-[calc(33.33%-16px)]"
+        "w-[calc(50%-16px)] lg:w-[calc(33.33%-16px)]",
+        "shadow-lg"
       )}
     >
       <div className="label-text text-center w-full pb-2">{props.label}</div>
@@ -268,8 +269,7 @@ function SecondaryProperty(props: { label: string; value: string }) {
   return (
     <li className="border-b-2 border-primary-border-dark py-4 pl-4 flex flex-col justify-center">
       <div className="grid grid-cols-9 items-center gap-4">
-        <div className="text-sm font-semibold col-span-3">{label}</div>
-        <div className="text-sm font-semibold col-span-1"></div>
+        <div className="text-sm font-semibold col-span-4">{label}</div>
         <div className="text-sm col-span-5">{value}</div>
       </div>
     </li>

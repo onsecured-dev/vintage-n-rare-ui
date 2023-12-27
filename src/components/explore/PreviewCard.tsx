@@ -96,7 +96,7 @@ export default function PreviewCard(props: {
               "text-disabled-text dark:text-white/60"
             )}
           >
-            <span className="text-white">
+            <span className="dark:text-white text-primary-text">
               #{typeId[type]} {id}
             </span>
             &nbsp;
