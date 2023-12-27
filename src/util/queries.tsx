@@ -5,6 +5,7 @@ import {
   BassObject,
   AcousticObject,
   AmpFxObject,
+  querySelectFields,
 } from "../util/util";
 import { parse } from "path";
 
@@ -130,7 +131,7 @@ export const createBass = async (bass: BassObject) => {
         name: `${bass.year} ${bass.brand} ${bass.model} `,
         yearsYear: year,
         brandsId: brand.id,
-        typeId: 2,
+        typeId: 3,
         nftid: bass.NFTId,
       },
     });
@@ -144,6 +145,17 @@ export const createBass = async (bass: BassObject) => {
 export const getAllBass = async () => {
   try {
     const result = await prisma.bass.findMany();
+    return result;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const getAllSearchTable = async () => {
+  try {
+    const result = await prisma.searchtable.findMany({
+
+    });
     return result;
   } finally {
     await prisma.$disconnect();
@@ -196,7 +208,7 @@ export const createAcoustic = async (acoustic: AcousticObject) => {
         name: `${acoustic.year} ${acoustic.brand} ${acoustic.model} `,
         yearsYear: acoustic.year,
         brandsId: brand.id,
-        typeId: 3,
+        typeId: 2,
         nftid: acoustic.NFTId,
       },
     });
@@ -321,6 +333,16 @@ export const searchDb = async (
   limit: number,
   cursor: number
 ) => {
+
+  console.log("searchDb start\nquery: ", query);
+
+  // if no query, return all searchtable entries
+
+  if (!query || (query.length <= 1 && query[0] == '')) return await prisma.searchtable.findMany({
+    take: 15,
+    select: querySelectFields
+  })
+
   const searchQuery = query.map((word: string) => ({
     name: {
       search: word,
@@ -333,6 +355,8 @@ export const searchDb = async (
     where: {
       OR: searchQuery,
     },
+    take: 15,
+    select: querySelectFields,
   });
 
   // check / filter for duplicates
@@ -442,6 +466,7 @@ export const allYears = async () => {
 };
 
 export const latestInputs = async () => {
+  console.log('latestInupts')
   return await prisma.searchtable.findMany({
     take: 10,
     select: {
