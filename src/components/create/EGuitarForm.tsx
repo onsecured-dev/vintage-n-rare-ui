@@ -367,6 +367,7 @@ export default function ElectricGuitarForm() {
                   name: getValues().name,
                   phone: getValues().phone,
                   data: getValues(),
+                  instrument: "electric-guitar",
                   attachment: base64,
                 });
               };

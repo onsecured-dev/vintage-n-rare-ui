@@ -295,6 +295,7 @@ export default function AmpsEffectForm() {
                   name: getValues().name,
                   phone: getValues().phone,
                   data: getValues(),
+                  instrument: "amps",
                   attachment: base64,
                 });
               };

@@ -351,6 +351,7 @@ export default function BassForm() {
                   name: getValues().name,
                   phone: getValues().phone,
                   data: getValues(),
+                  instrument: "electric-bass",
                   attachment: base64,
                 });
               };

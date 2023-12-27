@@ -55,19 +55,22 @@ export const appRouter = router({
     email: z.string().email(),
     name: z.string(),
     phone: z.string().optional(),
+    instrument: z.string().min(3),
     data: z.any(),
     attachment: z.string()
   })).mutation(async (input) => {
 
     const sentData = input.input.data
     delete sentData.image
+    const instrument = input.input.instrument.replace(/-/g, " ").trim();
+    const instrumentName = instrument.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 
     try {
       // Send email
       const info = await transporter.sendMail({
         from: process.env.EM_USR,
         to:process.env.NODE_ENV =="production" ? "info@vintageandrare.io" : input.input.data.email,
-        subject: "Request for Certificate",
+        subject: `Request for Certificate - ${instrumentName}`,
         html: buildHtmlFromObject(input.input.data),
         attachments: [{ path: input.input.attachment}]
       });

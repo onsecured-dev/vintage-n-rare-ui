@@ -371,6 +371,7 @@ export default function AcousticGuitarForm() {
                   name: getValues().name,
                   phone: getValues().phone,
                   data: getValues(),
+                  instrument: "acoustic-guitar",
                   attachment: base64,
                 });
               };
