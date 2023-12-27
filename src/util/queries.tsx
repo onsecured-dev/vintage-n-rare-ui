@@ -5,6 +5,7 @@ import {
   BassObject,
   AcousticObject,
   AmpFxObject,
+  querySelectFields,
 } from "../util/util";
 import { parse } from "path";
 
@@ -339,22 +340,7 @@ export const searchDb = async (
 
   if (!query || (query.length <= 1 && query[0] == '')) return await prisma.searchtable.findMany({
     take: 15,
-    select: {
-      name: true,
-      yearsYear: true,
-      typeId: true,
-      nftid: true,
-      brands: {
-        select: {
-          brand: true,
-        },
-      },
-      type: {
-        select: {
-          name: true,
-        },
-      },
-    },
+    select: querySelectFields
   })
 
   const searchQuery = query.map((word: string) => ({
@@ -370,22 +356,7 @@ export const searchDb = async (
       OR: searchQuery,
     },
     take: 15,
-    select: {
-      name: true,
-      yearsYear: true,
-      typeId: true,
-      nftid: true,
-      brands: {
-        select: {
-          brand: true,
-        },
-      },
-      type: {
-        select: {
-          name: true,
-        },
-      },
-    },
+    select: querySelectFields,
   });
 
   // check / filter for duplicates

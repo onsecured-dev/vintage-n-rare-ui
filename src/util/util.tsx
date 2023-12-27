@@ -388,3 +388,23 @@ export const buildTextFromObject = (obj: any) => {
 // export const mailConfig = (to: string, data:any) => {
 
 // }
+
+export const querySelectFields = {
+  name: true,
+  yearsYear: true,
+  typeId: true,
+  nftid: true,
+  brands: {
+    select: {
+      brand: true,
+    },
+  },
+  type: {
+    select: {
+      name: true,
+    },
+  },
+
+}
+
+
