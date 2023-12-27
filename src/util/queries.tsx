@@ -130,7 +130,7 @@ export const createBass = async (bass: BassObject) => {
         name: `${bass.year} ${bass.brand} ${bass.model} `,
         yearsYear: year,
         brandsId: brand.id,
-        typeId: 2,
+        typeId: 3,
         nftid: bass.NFTId,
       },
     });
@@ -144,6 +144,17 @@ export const createBass = async (bass: BassObject) => {
 export const getAllBass = async () => {
   try {
     const result = await prisma.bass.findMany();
+    return result;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const getAllSearchTable = async () => {
+  try {
+    const result = await prisma.searchtable.findMany({
+
+    });
     return result;
   } finally {
     await prisma.$disconnect();
@@ -196,7 +207,7 @@ export const createAcoustic = async (acoustic: AcousticObject) => {
         name: `${acoustic.year} ${acoustic.brand} ${acoustic.model} `,
         yearsYear: acoustic.year,
         brandsId: brand.id,
-        typeId: 3,
+        typeId: 2,
         nftid: acoustic.NFTId,
       },
     });
@@ -442,6 +453,7 @@ export const allYears = async () => {
 };
 
 export const latestInputs = async () => {
+  console.log('latestInupts')
   return await prisma.searchtable.findMany({
     take: 10,
     select: {
