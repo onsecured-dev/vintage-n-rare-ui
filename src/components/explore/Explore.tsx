@@ -40,13 +40,6 @@ export default function Explore() {
     instruments:
       instrumentsParams.length > 0 ? instrumentsParams.split(",") : undefined,
   };
-  console.log({
-    instrumentsParams,
-    queryParam,
-    brandsParam,
-    yearsParam,
-    processedQuery,
-  });
   const { data: allCards, error } = trpc.search.useQuery({
     query: queryParam || undefined,
     brands: brandsParam.length > 0 ? brandsParam.split(",") : undefined,
@@ -67,7 +60,6 @@ export default function Explore() {
   };
   const sortedData = (allCards || []).sort(typeSort);
 
-  console.log({ sortedData });
   return (
     <CardWrapper
       onSearch={(vals) => {
@@ -103,7 +95,6 @@ export default function Explore() {
           allParams.push(`sort=${encodeURI(vals)}`);
         router.push("/explore?" + allParams.join("&"));
       }}
-      //@todo actually show the total number of items
       totalItems={allCards?.length || 0}
       loadedItems={allCards?.length || 0}
     >
