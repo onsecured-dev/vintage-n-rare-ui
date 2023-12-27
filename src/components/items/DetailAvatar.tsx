@@ -1,5 +1,6 @@
 import shortAddress from "@/utils/w3String";
 import classNames from "classnames";
+import { MdVerified } from "react-icons/md";
 
 export default function UserAvatar(props: {
   address: string;
@@ -19,5 +20,17 @@ export default function UserAvatar(props: {
         {shortAddress(props.address)}
       </div>
     </div>
+  );
+}
+export function LinkAvatar(props: { name: string; href: string }) {
+  return (
+    <a href={props.href} target="_blank" rel="noopener nonreferrer">
+      <div className="flex flex-row items-center gap-4 group">
+        <MdVerified className=" text-[40px] text-green-500  group-hover:text-white/70" />
+        <div className="text-white text-sm font-semibold underline underline-offset-2 group-hover:text-primary-text">
+          {props.name}
+        </div>
+      </div>
+    </a>
   );
 }

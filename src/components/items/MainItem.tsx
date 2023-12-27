@@ -10,7 +10,7 @@ import NFTAbi from "@/data/abi/NFTAbi";
 import { slugToName } from "@/utils/w3String";
 import LikeButton from "@/components/explore/LikeButton";
 import { useQuery } from "@tanstack/react-query";
-import UserAvatar from "@/components/items/DetailAvatar";
+import UserAvatar, { LinkAvatar } from "@/components/items/DetailAvatar";
 import { TbGuitarPickFilled } from "react-icons/tb";
 import attributesParse, { AttributeType } from "@/utils/attributesParse";
 import { zeroAddress } from "viem";
@@ -116,6 +116,21 @@ export default function MainItemView(props: {
                   <span className="label-text">Creator</span>
                 </label>
                 <UserAvatar address={owner || zeroAddress} variant="red" />
+              </div>
+              <div>
+                <label className="label">
+                  <span className="label-text">Verification</span>
+                </label>
+                <LinkAvatar
+                  href={`https://${
+                    process.env.NODE_ENV == "development" ? "testnet." : ""
+                  }bscscan.com/token/${
+                    contractAddressMapping[
+                      instrument as string as InstrumentType
+                    ]
+                  }?a=${id}`}
+                  name="Chain Verification"
+                />
               </div>
             </div>
             <div className="flex flex-row items-center border-b-2 border-disabled-text/50 pb-4 gap-4">
