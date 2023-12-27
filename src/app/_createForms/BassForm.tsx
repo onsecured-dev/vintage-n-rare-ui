@@ -194,7 +194,7 @@ export default function BassForm() {
             <span className="font-bold text-xl">Upload Image</span>
             {"\n"}
             <span className="text-sm dark:text-white/70 text-black/70">
-              Image must be less than 15 MB in size
+              Image must be less than 4 MB in size
             </span>
           </label>
           <DragDropFileInput
