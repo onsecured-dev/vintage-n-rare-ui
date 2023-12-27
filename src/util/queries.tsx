@@ -332,6 +332,31 @@ export const searchDb = async (
   limit: number,
   cursor: number
 ) => {
+
+  console.log("searchDb start\nquery: ", query);
+
+  // if no query, return all searchtable entries
+
+  if (!query || (query.length <= 1 && query[0] == '')) return await prisma.searchtable.findMany({
+    take: 15,
+    select: {
+      name: true,
+      yearsYear: true,
+      typeId: true,
+      nftid: true,
+      brands: {
+        select: {
+          brand: true,
+        },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  })
+
   const searchQuery = query.map((word: string) => ({
     name: {
       search: word,
@@ -343,6 +368,23 @@ export const searchDb = async (
   const res = await prisma.searchtable.findMany({
     where: {
       OR: searchQuery,
+    },
+    take: 15,
+    select: {
+      name: true,
+      yearsYear: true,
+      typeId: true,
+      nftid: true,
+      brands: {
+        select: {
+          brand: true,
+        },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
