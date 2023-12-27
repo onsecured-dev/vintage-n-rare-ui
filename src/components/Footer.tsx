@@ -2,15 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaFacebook, FaYoutube, FaXTwitter } from "react-icons/fa6";
 
-// import { trpc } from "../app/_trpc/client";
-
 import logo from "@/../public/Graphics/mainLogo.png";
-
-// const {
-//   mutate: subscribe,
-//   data: cidData,
-//   status: metadataStatus,
-// } = trpc.subscribe.useMutation();
+import SubscribeInput from "./layout/Subscribe";
 
 const Footer = () => {
   return (
@@ -112,25 +105,7 @@ const Footer = () => {
           {/* <Web3Button label="Connect" icon="hide" /> */}
         </div>
         {/* <div className="h-0 md:h-56"></div> */}
-        <div className="form-control md:h-56 md:w-[30vw] lg:w-auto">
-          <label className="whitespace-pre-wrap pb-2 text-center md:text-left">
-            <span className="font-bold text-xl">Subscribe</span>
-            {"\n"}
-            <span className="text-sm dark:text-white/70 text-black/70">
-              Subscribe to our newsletter to get the latest news
-            </span>
-          </label>
-          <div className="join">
-            <input
-              className="join-item input input-bordered rounded-full bg-transparent border-black dark:border-white/50 md:max-w-[150px] lg:max-w-max"
-              type="email"
-            />
-            <button className="btn bg-primary-text hover:bg-primary-text/70 join-item rounded-r-full text-white">
-              Submit
-            </button>
-          </div>
-        </div>
-        
+        <SubscribeInput />
       </nav>
       <div className="pb-5 mt-2 mb-2 text-center text-sm text-slate-700 dark:text-white/50">
         <a

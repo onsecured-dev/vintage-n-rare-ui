@@ -82,6 +82,26 @@ export const appRouter = router({
     }
   }),
 
+  subscribe: publicProcedure.input(z.object({
+    email: z.string().email(),
+  })).mutation(async (input) => {
+      
+      try {
+        // Send email
+        const info = await transporter.sendMail({
+          from: process.env.EM_USR,
+          to:"semiinvader@gmail.com",
+          subject: `New Subscriber`,
+          html: `<p>New subcribed email: ${input.input.email}</p>`,
+        });
+      return { success: true };
+    } catch (error) {
+        console.error(error);
+      }
+    }
+  ),
+
+
   initDb: publicProcedure.query(async () => {
     await initdb();
     return 200;
