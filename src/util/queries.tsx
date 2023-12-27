@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 import {
   GuitarObject,
@@ -153,9 +153,7 @@ export const getAllBass = async () => {
 
 export const getAllSearchTable = async () => {
   try {
-    const result = await prisma.searchtable.findMany({
-
-    });
+    const result = await prisma.searchtable.findMany({});
     return result;
   } finally {
     await prisma.$disconnect();
@@ -328,20 +326,88 @@ export const getAmpFxById = async (id: string) => {
 //   }
 // };
 
+export const altSearch = async (
+  query?: string,
+  years?: number[],
+  brands?: string[],
+  instruments?: string[]
+) => {
+  console.log("alt", query, years, brands, instruments);
+  const andQuery: Prisma.searchtableWhereInput[] = [];
+  if ((query?.length || 0) > 0) {
+    andQuery.push({
+      name: {
+        contains: query,
+      },
+    });
+  }
+  if (years && years.length > 0) {
+    andQuery.push({
+      yearsYear: {
+        in: years,
+      },
+    });
+  }
+  if (brands && brands.length > 0) {
+    andQuery.push({
+      brands: {
+        brand: {
+          in: brands,
+        },
+      },
+    });
+  }
+  if (instruments && instruments.length > 0) {
+    andQuery.push({
+      type: {
+        name: {
+          in: instruments,
+        },
+      },
+    });
+  }
+  const res = await prisma.searchtable
+    .findMany({
+      select: {
+        name: true,
+        yearsYear: true,
+        typeId: true,
+        nftid: true,
+        brands: {
+          select: {
+            brand: true,
+          },
+        },
+        type: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      where: {
+        AND: andQuery,
+      },
+    })
+    .catch((err) => {
+      console.log("well this failed");
+    });
+  return res;
+};
+
 export const searchDb = async (
   query: string[],
   limit: number,
   cursor: number
 ) => {
-
   console.log("searchDb start\nquery: ", query);
 
   // if no query, return all searchtable entries
 
-  if (!query || (query.length <= 1 && query[0] == '')) return await prisma.searchtable.findMany({
-    take: 15,
-    select: querySelectFields
-  })
+  if (!query || (query.length <= 1 && query[0] == ""))
+    return await prisma.searchtable.findMany({
+      take: 15,
+      select: querySelectFields,
+    });
 
   const searchQuery = query.map((word: string) => ({
     name: {
@@ -466,7 +532,7 @@ export const allYears = async () => {
 };
 
 export const latestInputs = async () => {
-  console.log('latestInupts')
+  console.log("latestInupts");
   return await prisma.searchtable.findMany({
     take: 10,
     select: {

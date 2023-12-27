@@ -32,7 +32,28 @@ export default function Explore() {
   const queryParam = searchParams.get("query") || "";
   const brandsParam = searchParams.get("brands") || "";
   const yearsParam = searchParams.get("years") || "";
-  const { data: allCards, error } = trpc.search.useQuery();
+
+  const processedQuery = {
+    query: queryParam || undefined,
+    brands: brandsParam.length > 0 ? brandsParam.split(",") : undefined,
+    years: yearsParam.length > 0 ? yearsParam.split(",") : undefined,
+    instruments:
+      instrumentsParams.length > 0 ? instrumentsParams.split(",") : undefined,
+  };
+  console.log({
+    instrumentsParams,
+    queryParam,
+    brandsParam,
+    yearsParam,
+    processedQuery,
+  });
+  const { data: allCards, error } = trpc.search.useQuery({
+    query: queryParam || undefined,
+    brands: brandsParam.length > 0 ? brandsParam.split(",") : undefined,
+    years: yearsParam.length > 0 ? yearsParam.split(",") : undefined,
+    instruments:
+      instrumentsParams.length > 0 ? instrumentsParams.split(",") : undefined,
+  });
   console.log({ allCards, error });
   const instrumentsFilter =
     instrumentsParams.length > 0 ? instrumentsParams.split(",") : [];
@@ -59,7 +80,7 @@ export default function Explore() {
         if (years.length > 0 && years[0].length > 0) {
           searchQuery.push(`years=${encodeURI(vals.years)}`);
         }
-        const brands = vals.instrument.split(",");
+        const brands = vals.brands.split(",");
         if (brands.length > 0 && brands[0].length > 0) {
           searchQuery.push(`brands=${encodeURI(vals.brands)}`);
         }

@@ -17,6 +17,7 @@ import {
 import {
   allBrands,
   allYears,
+  altSearch,
   createAcoustic,
   createAmpFx,
   createBass,
@@ -344,24 +345,23 @@ export const appRouter = router({
     }),
 
   search: publicProcedure
-    .input(z.object({ query: z.string().optional(), cursorPointer: z.number().optional() }).optional())
+    .input(z.object({ 
+      query: z.string().optional(),
+      cursorPointer: z.number().optional(),
+      years: z.array(z.number()).optional(),
+      brands: z.array(z.string()).optional(),
+      instruments: z.array(z.string()).optional(),
+    }).optional())
     .query(async ({ input }) => {
       //   skip: 40,
   // take: 10,
-      console.log("Searching For:\n", input?.query || 'not defined');
-      if (!input || !input.query) {
+      console.log("Searching For:\n", input?.query || 'all');
+      if (!input) {
         return await latestInputs();
       }
-      // trim input spaces and separate into multiple words
-      const words = input.query.split(/\s+/);
-      // words is always string array
-      console.log(words);
-      const res = await searchDb(words, 0, 0);
-      console.log("db response: \n", res);
-      // check wordbank table
-      // IntrumentPayloadDTO
+
+      const res = await altSearch(input.query, input.years, input.brands, input.instruments);
       return res;
-      // return await searchQuery(input)
     }),
   getSearchInfo: publicProcedure.query( async() => {
 
