@@ -104,8 +104,8 @@ export default function Explore() {
         router.push("/explore?" + allParams.join("&"));
       }}
       //@todo actually show the total number of items
-      totalItems={0}
-      loadedItems={0}
+      totalItems={allCards?.length || 0}
+      loadedItems={allCards?.length || 0}
     >
       {sortedData.map(
         (item: { nftid: number; type: { name: string }; name: string }) => {
