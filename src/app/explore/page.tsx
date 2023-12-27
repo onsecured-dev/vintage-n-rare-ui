@@ -1,5 +1,6 @@
 import Explore from "@/components/explore/Explore";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
+import { Metadata } from "next";
 
 export default function ExplorePage() {
   return (
@@ -18,3 +19,8 @@ export default function ExplorePage() {
     </main>
   );
 }
+export const metadata: Metadata = {
+  title: "Explore | Vintage & Rare",
+  description:
+    "Search all Certificates of Ownership for vintage, boutique & high-end musical instruments & gear on the Binance Smart Chain",
+};

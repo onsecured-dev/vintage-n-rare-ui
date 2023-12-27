@@ -1,5 +1,6 @@
 import Categories from "@/components/Categories";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
+import type { Metadata } from "next";
 
 export default function CreatePage() {
   return (
@@ -13,3 +14,7 @@ export default function CreatePage() {
     </main>
   );
 }
+export const metadata: Metadata = {
+  title: "Create | Vintage & Rare",
+  description: "Select which instrument to create your certificate for",
+};

@@ -2,6 +2,7 @@ import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
 import Image from "next/image";
 import secured from "@/../public/Graphics/secured.webp";
 import vnr from "@/../public/Graphics/mainLogo.png";
+import { type Metadata } from "next";
 
 export default function AboutPage() {
   return (
@@ -98,3 +99,11 @@ export default function AboutPage() {
     </main>
   );
 }
+
+export const metadata: Metadata = {
+  title: "About | Vintage & Rare",
+  description: `Our mission is to establish and develop the ultimate network/community
+    designed for enthusiasts and retailers of vintage, rare and antique
+    musical instruments, as well as an online network for dedicated
+    builders of fine instruments.`,
+};

@@ -1,20 +1,11 @@
 // instrument -> electric-guitar / electric-bass / acoustic-guitar / amps-effects
 // id -> nft - id
 
-import LikeButton from "@/components/explore/LikeButton";
 import { InstrumentType } from "@/components/explore/PreviewCard";
-import UserAvatar from "@/components/items/DetailAvatar";
 import MainItemView from "@/components/items/MainItem";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
-import NFTAbi from "@/data/abi/NFTAbi";
-import { contractAddressMapping } from "@/data/contracts";
-import { previewData } from "@/data/placeholder";
-import { InstrumentCategory, categoryDetails } from "@/util/util";
-import shortAddress, { slugToName } from "@/utils/w3String";
-import classNames from "classnames";
-import Image from "next/image";
-import { TbGuitarPickFilled } from "react-icons/tb";
-import { useContractRead } from "wagmi";
+import { slugToName } from "@/utils/w3String";
+import type { Metadata, ResolvingMetadata } from "next";
 
 // @todo if 0, redirect a explore page with error message
 export default function InstrumentPage({
@@ -36,4 +27,27 @@ export default function InstrumentPage({
       <MainItemView instrument={instrument} id={parseInt(id)} />
     </main>
   );
+}
+
+type Props = {
+  params: { id: string; instrument: string };
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id;
+  const instrument = params.instrument.replace(/-/g, " ").trim();
+  const instrumentName = instrument
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  const title = `${instrumentName} #${id} | Vintage & Rare`;
+  const description = `View the ${instrumentName} #${id} certificate on Vintage & Rare.`;
+
+  return {
+    title,
+    description,
+  };
 }

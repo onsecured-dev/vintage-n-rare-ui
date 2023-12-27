@@ -1,5 +1,6 @@
 import BassForm from "@/app/_createForms/BassForm";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
+import type { Metadata } from "next";
 
 export default function CreatePage() {
   return (
@@ -16,3 +17,7 @@ export default function CreatePage() {
     </main>
   );
 }
+export const metadata: Metadata = {
+  title: "Create Electric Bass | Vintage & Rare",
+  description: "Create a certificate for an Electric Bass",
+};

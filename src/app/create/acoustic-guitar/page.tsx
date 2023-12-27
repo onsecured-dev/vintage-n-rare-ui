@@ -1,5 +1,6 @@
 import AGuitarForm from "@/components/create/AGuitarForm";
 import PageBreadcrumbs from "@/components/layout/PageBreadcrumbs";
+import type { Metadata } from "next";
 
 export default function CreatePage() {
   return (
@@ -16,3 +17,7 @@ export default function CreatePage() {
     </main>
   );
 }
+export const metadata: Metadata = {
+  title: "Create Acoustic Guitar | Vintage & Rare",
+  description: "Create a certificate for an Acoustic Guitar",
+};

@@ -53,7 +53,7 @@ export default function Home() {
 }
 
 export const metadata: Metadata = {
-  title: "Vintage&Rare NFT",
+  title: "Home | Vintage & Rare",
   description:
     "Create your Instrument's Certificate of Authenticity, powered by Vintage and Rare",
 };
