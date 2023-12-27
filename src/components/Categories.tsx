@@ -128,7 +128,7 @@ function Category(props: {
       <Link
         href={href}
         className={classNames(
-          "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip"
+          "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip dark:bg-transparent bg-slate-300"
         )}
       >
         {/* <Image
