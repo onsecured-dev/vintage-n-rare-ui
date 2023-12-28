@@ -6,6 +6,7 @@ import LoadingModal from "./LoadingModal";
 import { useRef } from "react";
 import {
   useAccount,
+  useContractRead,
   useContractReads,
   useContractWrite,
   usePrepareContractWrite,
@@ -22,6 +23,11 @@ import { AcousticGuitarClientFormValues } from "@/utils/formTypes";
 export default function AcousticGuitarForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
+  const { data: nftSupply } = useContractRead({
+    address: acousticGuitars,
+    abi: NFTAbi,
+    functionName: "totalSupply",
+  });
   const {
     register,
     handleSubmit,
@@ -204,6 +210,12 @@ export default function AcousticGuitarForm() {
             value={watch("image")}
             error={errors.image?.message}
           />
+          <div className="dark:text-white/90 text-black/70 flex justify-center flex-row items-center gap-4 py-4">
+            <div>Next NFT ID:</div>
+            <div className="font-bold">
+              #AG {((nftSupply || 0n) + 1n)?.toLocaleString()}
+            </div>
+          </div>
           <Input
             title={`Name ${address ? "" : " *"}`}
             type="text"
