@@ -5,6 +5,7 @@ import Input from "./Inputs";
 import { useRef } from "react";
 import {
   useAccount,
+  useContractRead,
   useContractReads,
   useContractWrite,
   usePrepareContractWrite,
@@ -22,7 +23,11 @@ import { ElectricGuitarClientFormValues } from "@/utils/formTypes";
 export default function ElectricGuitarForm() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalOrdRef = useRef<HTMLDialogElement>(null);
-
+  const { data: nftSupply } = useContractRead({
+    address: electricGuitars,
+    abi: NFTAbi,
+    functionName: "totalSupply",
+  });
   const {
     register,
     handleSubmit,
@@ -206,6 +211,12 @@ export default function ElectricGuitarForm() {
             value={watch("image")}
             error={errors.image?.message}
           />
+          <div className="dark:text-white/90 text-black/70 flex justify-center flex-row items-center gap-4 py-4">
+            <div>Next NFT ID:</div>
+            <div className="font-bold">
+              #EG {((nftSupply || 0n) + 1n)?.toLocaleString()}
+            </div>
+          </div>
           <Input
             title={`Name ${address ? "" : " *"}`}
             type="text"

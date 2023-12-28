@@ -4,12 +4,13 @@ import DragDropFileInput from "./DragDropFileInput";
 import Input from "./Inputs";
 import {
   useAccount,
+  useContractRead,
   useContractReads,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import { ampsEffects, electricBass } from "@/data/contracts";
+import { ampsEffects } from "@/data/contracts";
 import NFTAbi from "@/data/abi/NFTAbi";
 import { BaseError, zeroAddress } from "viem";
 import { useRef } from "react";
@@ -22,6 +23,11 @@ import { AmpEffectClientFormValues } from "@/utils/formTypes";
 export default function AmpsEffectForm() {
   const modalOrdRef = useRef<HTMLDialogElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { data: nftSupply } = useContractRead({
+    address: ampsEffects,
+    abi: NFTAbi,
+    functionName: "totalSupply",
+  });
   const {
     register,
     handleSubmit,
@@ -210,6 +216,12 @@ export default function AmpsEffectForm() {
             value={watch("image")}
             error={errors.image?.message}
           />
+          <div className="dark:text-white/90 text-black/70 flex justify-center flex-row items-center gap-4 py-4">
+            <div>Next NFT ID:</div>
+            <div className="font-bold">
+              #AM {((nftSupply || 0n) + 1n)?.toLocaleString()}
+            </div>
+          </div>
           <Input
             title={`Name ${address ? "" : " *"}`}
             type="text"
