@@ -73,7 +73,24 @@ export default function DrawerButton() {
             Amps
           </Link>
         </li>
-        <li className="py-2 text-center w-full text-lg">Explore</li>
+        <li className="py-2 text-center w-full text-lg">
+          <Link
+            onClick={() => setIsOpen(false)}
+            href="/explore"
+            className="w-full block text-center"
+          >
+            Explore
+          </Link>
+        </li>
+        <li className="py-2 text-center w-full text-lg">
+          <Link
+            onClick={() => setIsOpen(false)}
+            href="/about"
+            className="w-full block text-center"
+          >
+            About
+          </Link>
+        </li>
         <li className="flex flex-row items-center justify-center py-2">
           <ConnectKitButton />
         </li>
