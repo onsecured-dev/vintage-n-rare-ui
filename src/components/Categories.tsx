@@ -128,7 +128,7 @@ function Category(props: {
       <Link
         href={href}
         className={classNames(
-          "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip dark:bg-transparent bg-slate-300"
+          "relative flex-grow group rounded-3xl flex-1 my-2 items-center border-2 border-gray-600 h-40 overflow-clip bg-transparent "
         )}
       >
         {/* <Image
@@ -140,7 +140,12 @@ function Category(props: {
         {/* <div className="absolute top-0 left-[calc(50%-60px)] z-10">
           <Image src={icon} alt="Icon" width={602 / 5} height={173 / 5} />
         </div> */}
-        <p className="relative font-semibold text-xl text-white text-center transition-all duration-300 text-shadow z-20 group-hover:text-2xl  group-hover:text-white-shadow group-hover:bg-black/50 w-full h-full flex flex-col justify-center">
+        <p
+          className={classNames(
+            "relative font-semibold text-xl dark:text-white text-center transition-all duration-300 z-20 w-full h-full flex flex-col justify-center",
+            "group-hover:text-2xl  group-hover:text-white-shadow group-hover:dark:bg-black/50 group-hover:bg-slate-200"
+          )}
+        >
           {name}
         </p>
       </Link>

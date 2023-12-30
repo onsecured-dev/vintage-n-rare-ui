@@ -217,6 +217,11 @@ export default function ElectricGuitarForm() {
               #EG {((nftSupply || 0n) + 1n)?.toLocaleString()}
             </div>
           </div>
+          <p className="text-xs">
+            Your Name, Email and Phone Number will only be used by our Team to
+            get in contact with you and will not be visible on the Vintage and
+            Rare Platform.
+          </p>
           <Input
             title={`Name ${address ? "" : " *"}`}
             type="text"
