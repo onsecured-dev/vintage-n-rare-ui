@@ -144,7 +144,10 @@ export default function MainItemView(props: {
             <div className="flex flex-row items-center justify-start flex-wrap py-4 gap-6">
               <MainProperty label="Brand" value={attributes.brand} />
               <MainProperty label="Model" value={attributes.model} />
-              <MainProperty label="Year" value={attributes.year} />
+              <MainProperty
+                label="Year"
+                value={attributes.year || attributes.madeinyear}
+              />
               <MainProperty label="Serial" value={attributes.serial || "-"} />
               {instrument != InstrumentCategory.AmpsEffects ? (
                 <MainProperty
@@ -215,9 +218,7 @@ function PropertyManager(props: {
       });
     case InstrumentCategory.Bass:
       return categoryDetails.Bass.map((item: any, index: number) => {
-        const value = props.data.find(
-          (attr) => attr.trait_type === item
-        )?.value;
+        const value = props.data[index]?.value;
         return (
           <SecondaryProperty
             label={item}
@@ -227,21 +228,27 @@ function PropertyManager(props: {
         );
       });
     case InstrumentCategory.Acoustic:
-      return categoryDetails.Acoustic.map((item: any, index: number) => (
-        <SecondaryProperty
-          label={item}
-          value="N/A"
-          key={`inst-${item.name}-${item.name}`}
-        />
-      ));
+      return categoryDetails.Acoustic.map((item: any, index: number) => {
+        const value = props.data[index]?.value;
+        return (
+          <SecondaryProperty
+            label={item}
+            value={value || "N/A"}
+            key={`inst-${item.name}-${item.name}`}
+          />
+        );
+      });
     case InstrumentCategory.AmpsEffects:
-      return categoryDetails.AmpsEffects.map((item: any, index: number) => (
-        <SecondaryProperty
-          label={item}
-          value="N/A"
-          key={`inst-${item.name}-${item.name}`}
-        />
-      ));
+      return categoryDetails.AmpsEffects.map((item: any, index: number) => {
+        const value = props.data[index]?.value;
+        return (
+          <SecondaryProperty
+            label={item}
+            value="N/A"
+            key={`inst-${item.name}-${item.name}`}
+          />
+        );
+      });
     default:
       return <></>;
   }
