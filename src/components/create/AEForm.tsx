@@ -73,8 +73,11 @@ export default function AmpsEffectForm() {
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
 
-  const { mutate: pushToDB, isError: pushError } =
-    trpc.pushNFTtoDb.useMutation();
+  const {
+    mutate: pushToDB,
+    isError: pushError,
+    status: pushToDBStatus,
+  } = trpc.pushNFTtoDb.useMutation();
 
   const onSubmit: SubmitHandler<AmpEffectClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
@@ -173,7 +176,11 @@ export default function AmpsEffectForm() {
         cid={cidData || "loading"}
         ref={modalRef}
         mint={mint}
-        loading={isMinting || metadataStatus === "pending"}
+        loading={
+          isMinting ||
+          metadataStatus === "pending" ||
+          pushToDBStatus === "pending"
+        }
         mintData={mintReceipt}
         close={() => modalRef.current?.close()}
         errorData={mintError as BaseError | undefined}

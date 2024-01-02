@@ -33,7 +33,7 @@ const LoadingModal = forwardRef(function ForwardModal(
     errorData,
     refetchMint,
     hasError,
-    retryDBPush
+    retryDBPush,
   } = props;
   const nftId = BigInt(mintData?.logs[0]?.topics[3] || "0x0").toString();
   const path = usePathname();
@@ -58,6 +58,8 @@ const LoadingModal = forwardRef(function ForwardModal(
               <div className="pt-4">
                 {cid === "loading"
                   ? "Creating metadata, please wait"
+                  : mintData
+                  ? "Adding Data to Database"
                   : "Minting NFT, please wait"}
               </div>
             </>
@@ -122,7 +124,7 @@ const LoadingModal = forwardRef(function ForwardModal(
                     </button>
                   )}
                 </>
-              ) : (
+              ) : loading ? null : (
                 <div className="pt-4 whitespace-pre-wrap">
                   <span>
                     NFT Successfully Minted ID:&nbsp;
