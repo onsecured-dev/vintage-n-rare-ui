@@ -77,8 +77,11 @@ export default function BassForm() {
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
 
-  const { mutate: pushToDB, isError: pushError } =
-    trpc.pushNFTtoDb.useMutation();
+  const {
+    mutate: pushToDB,
+    isError: pushError,
+    status: pushToDBStatus,
+  } = trpc.pushNFTtoDb.useMutation();
 
   const onSubmit: SubmitHandler<BassClientFormValues> = (data) => {
     if (!data.image || data.image.length !== 1) return;
@@ -176,7 +179,11 @@ export default function BassForm() {
         cid={cidData || "loading"}
         close={() => modalRef.current?.close()}
         ref={modalRef}
-        loading={isMinting || metadataStatus === "pending"}
+        loading={
+          isMinting ||
+          metadataStatus === "pending" ||
+          pushToDBStatus === "pending"
+        }
         mintData={mintReceipt}
         mint={mint}
         errorData={mintError as BaseError | undefined}

@@ -74,8 +74,11 @@ export default function ElectricGuitarForm() {
     isError: hasError,
   } = trpc.createGuitar.useMutation();
 
-  const { mutate: pushToDB, isError: pushError } =
-    trpc.pushNFTtoDb.useMutation();
+  const {
+    mutate: pushToDB,
+    isError: pushError,
+    status: pushToDBStatus,
+  } = trpc.pushNFTtoDb.useMutation();
 
   const { mutate: sendMailInfo, status: mailInfoStatus } =
     trpc.sendMail.useMutation();
@@ -178,7 +181,11 @@ export default function ElectricGuitarForm() {
         cid={cidData || "loading"}
         close={() => modalRef.current?.close()}
         ref={modalRef}
-        loading={isMinting || metadataStatus === "pending"}
+        loading={
+          isMinting ||
+          metadataStatus === "pending" ||
+          pushToDBStatus === "pending"
+        }
         mintData={mintReceipt}
         mint={mint}
         errorData={mintError as BaseError | undefined}

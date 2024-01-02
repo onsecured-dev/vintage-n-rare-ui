@@ -174,7 +174,7 @@ export function parseAcousticToJSON(acoustic: AcousticGuitarFormValues, imageHas
             value: acoustic.finishMaterial,
           },
           { trait_type: "Handedness", value: acoustic.handedness },
-          { trait_type: "MadeInYear", value: acoustic.year },
+          { trait_type: "Year", value: acoustic.year },
           { trait_type: "Model", value: acoustic.model },
           {
             trait_type: "Modifications / Repairs",
