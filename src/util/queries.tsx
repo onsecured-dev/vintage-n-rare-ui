@@ -187,12 +187,14 @@ export const createAcoustic = async (acoustic: AcousticObject) => {
         },
       });
     }
+    const year = parseInt(acoustic.year.toString());
 
     const result = await prisma.acousticguitar.create({
       data: {
         fullName: `${acoustic.year} ${acoustic.brand} ${acoustic.model} `,
         ...acoustic,
         brand: brand.id,
+        year,
       },
     });
 
@@ -204,7 +206,7 @@ export const createAcoustic = async (acoustic: AcousticObject) => {
     const res = await prisma.searchtable.create({
       data: {
         name: `${acoustic.year} ${acoustic.brand} ${acoustic.model} `,
-        yearsYear: acoustic.year,
+        yearsYear: year,
         brandsId: brand.id,
         typeId: 2,
         nftid: acoustic.NFTId,
