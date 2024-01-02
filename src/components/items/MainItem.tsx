@@ -123,7 +123,7 @@ export default function MainItemView(props: {
                 </label>
                 <LinkAvatar
                   href={`https://${
-                    process.env.NODE_ENV == "development" ? "testnet." : ""
+                    process.env.NODE_ENV === "development" ? "testnet." : ""
                   }bscscan.com/token/${
                     contractAddressMapping[
                       instrument as string as InstrumentType
