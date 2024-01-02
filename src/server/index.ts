@@ -90,7 +90,7 @@ export const appRouter = router({
         // Send email
         const info = await transporter.sendMail({
           from: process.env.EM_USR,
-          to:"semiinvader@gmail.com",
+          to:process.env.EM_USR,
           subject: `New Subscriber`,
           html: `<p>New subcribed email: ${input.input.email}</p>`,
         });
