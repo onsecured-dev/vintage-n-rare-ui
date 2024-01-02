@@ -146,7 +146,9 @@ const LoadingModal = forwardRef(function ForwardModal(
                   <br />
                   <div className="w-full text-center">
                     <a
-                      href={`https://testnet.bscscan.com/tx/${mintData?.transactionHash}/`}
+                      href={`https://${
+                        process.env.NODE_ENV === "production" ? "" : "testnet."
+                      }bscscan.com/tx/${mintData?.transactionHash}/`}
                       className="btn btn-link text-center"
                     >
                       Check Transaction
