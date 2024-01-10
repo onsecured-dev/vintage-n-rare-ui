@@ -183,6 +183,7 @@ function PropertyManager(props: {
   instrument: string;
   data: Array<AttributeType>;
 }) {
+  const { instrument, data } = props;
   // @todo receive data
 
   // switch statement with key instrument categories guitar, bass, acoustic, amps-effects
@@ -194,7 +195,7 @@ function PropertyManager(props: {
   //       return <div>{item.label}</div>
   //     })
 
-  switch (props.instrument) {
+  switch (instrument) {
     case InstrumentCategory.Guitar:
       return categoryDetails.Bass.map((item: any, index: number) => {
         // remove spaces and special characters from item
@@ -203,7 +204,7 @@ function PropertyManager(props: {
           /[^\w\s]|_/g,
           ""
         );
-        const value = props.data.find(
+        const value = data.find(
           (attr) =>
             attr.trait_type === item ||
             attr.trait_type === itemWithoutPunctuationOrSpecialCharacters
@@ -229,7 +230,7 @@ function PropertyManager(props: {
       });
     case InstrumentCategory.Acoustic:
       return categoryDetails.Acoustic.map((item: any, index: number) => {
-        const value = props.data[index]?.value;
+        const value = data[index]?.value;
         return (
           <SecondaryProperty
             label={item}
@@ -240,12 +241,12 @@ function PropertyManager(props: {
       });
     case InstrumentCategory.AmpsEffects:
       return categoryDetails.AmpsEffects.map((item: any, index: number) => {
-        const value = props.data[index]?.value;
+        const value = data[index]?.value;
         return (
           <SecondaryProperty
             label={item}
-            value="N/A"
-            key={`inst-${item.name}-${item.name}`}
+            value={value || "-"}
+            key={`inst-${item.name}-${index}`}
           />
         );
       });
