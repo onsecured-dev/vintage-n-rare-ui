@@ -23,13 +23,9 @@ import {
   createBass,
   createGuitar,
   latestInputs,
-  searchDb,
-  searchQuery,
 } from "../util/queries";
-import { previewData } from "@/data/placeholder";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
-import { env } from "process";
 import { checkPinataSetup, updateFileMetadata, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
 import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
 import { AcousticGuitarClientFormValues, AmpEffectClientFormValues, BassClientFormValues, ElectricGuitarClientFormValues } from "@/utils/formTypes";

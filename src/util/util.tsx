@@ -229,7 +229,7 @@ export enum InstrumentCategory {
   Guitar = "electric-guitar",
   Bass = "electric-bass",
   Acoustic = "acoustic-guitar",
-  AmpsEffects = "amps-effects",
+  AmpsEffects = "amps",
 }
 
 export interface IntrumentPayload {
