@@ -15,6 +15,7 @@ import { TbGuitarPickFilled } from "react-icons/tb";
 import attributesParse, { AttributeType } from "@/utils/attributesParse";
 import { zeroAddress } from "viem";
 import { ipfsFetchURL } from "@/utils/pinata";
+import Link from "next/link";
 
 export default function MainItemView(props: {
   instrument: InstrumentType;
@@ -49,10 +50,31 @@ export default function MainItemView(props: {
       const actualCID = ipfsFetchURL(nftURI, "ipfs://");
       return fetch(actualCID).then((res) => res.json());
     },
-    enabled: !!nftURI && !uriError,
+    enabled: !!nftURI && nftURI !== "ipfs://" && !uriError,
   });
-
-  if (!metadata) return <></>;
+  console.log({ metadata, status });
+  if (!metadata && status === "pending")
+    return (
+      <>
+        <h3 className="text-3xl font-semibold py-10">
+          ...Loading <span className="loading loading-spinner" />
+        </h3>
+      </>
+    );
+  if (!metadata && status !== "pending") {
+    return (
+      <>
+        <h3 className="text-base font-semibold py-10 text-center">
+          It&apos;s possible that the item you&apos;re looking for doesn&apos;t
+          exist.
+        </h3>
+        <h4 className="">Try again with another ID</h4>
+        <Link className="btn btn-link" href="/explore">
+          Back to Explore
+        </Link>
+      </>
+    );
+  }
 
   console.log(metadata);
   const attributes = attributesParse(metadata.attributes);

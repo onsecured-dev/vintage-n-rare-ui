@@ -20,13 +20,20 @@ export type InstrumentType =
   | "amps"
   | "acoustic-guitar";
 
-const typeId = {
+export const typeId = {
   "electric-guitar": "EG",
   "electric-bass": "EB",
   "amps-effects": "AM",
   amps: "AM",
   "acoustic-guitar": "AG",
 };
+
+const typeIdValues = Object.values(typeId);
+const typeIdKeys = Object.keys(typeId);
+export const typeIdMapping = Object.fromEntries(
+  typeIdKeys.map((_, i) => [typeIdValues[i], typeIdKeys[i]])
+);
+
 export default function PreviewCard(props: {
   id: number; // nftid
   type: InstrumentType;

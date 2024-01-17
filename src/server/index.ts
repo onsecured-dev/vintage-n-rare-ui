@@ -371,11 +371,10 @@ export const appRouter = router({
     .query(async ({ input }) => {
       //   skip: 40,
   // take: 10,
-      console.log("Searching For:\n", input?.query || 'all');
+      console.log("Searching For:\n", input ?? 'all');
       if (!input) {
         return await latestInputs();
       }
-
       const res = await altSearch(input.query, input.years, input.brands, input.instruments);
       return res;
     }),
