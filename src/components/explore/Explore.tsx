@@ -110,22 +110,26 @@ export default function Explore() {
       totalItems={allCards?.length || 0}
       loadedItems={allCards?.length || 0}
     >
-      {sortedData.map(
-        (item: { nftid: number; type: { name: string }; name: string }) => {
-          if (
-            instrumentsFilter.length > 0 &&
-            !instrumentsFilter.includes(item.type.name)
-          )
-            return null;
-          return (
-            <PreviewCard
-              id={item.nftid}
-              type={item.type.name as InstrumentType}
-              key={`explore-items-${item.nftid}-${item.type}`}
-              name={item.name}
-            />
-          );
-        }
+      {sortedData.length > 0 ? (
+        sortedData.map(
+          (item: { nftid: number; type: { name: string }; name: string }) => {
+            if (
+              instrumentsFilter.length > 0 &&
+              !instrumentsFilter.includes(item.type.name)
+            )
+              return null;
+            return (
+              <PreviewCard
+                id={item.nftid}
+                type={item.type.name as InstrumentType}
+                key={`explore-items-${item.nftid}-${item.type}`}
+                name={item.name}
+              />
+            );
+          }
+        )
+      ) : (
+        <div>No results, try again</div>
       )}
     </CardWrapper>
   );
