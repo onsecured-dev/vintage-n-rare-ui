@@ -2,9 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import CardWrapper from "./CardWrapper";
-import PreviewCard, { type InstrumentType } from "./PreviewCard";
+import PreviewCard, { type InstrumentType, typeIdMapping } from "./PreviewCard";
 import { previewData } from "@/data/placeholder";
 import { trpc } from "@/app/_trpc/client";
+
+const idRegex = /(eg|ag|am|eb)\s*[-_\s]?(\d+)/gi;
 
 export default function Explore() {
   const searchParams = useSearchParams();
@@ -33,19 +35,22 @@ export default function Explore() {
   const brandsParam = searchParams.get("brands") || "";
   const yearsParam = searchParams.get("years") || "";
 
+  const isSpecificId = queryParam.match(idRegex);
+  console.log({ isSpecificId });
   const processedQuery = {
     query: queryParam || undefined,
     brands: brandsParam.length > 0 ? brandsParam.split(",") : undefined,
-    years: yearsParam.length > 0 ? yearsParam.split(",") : undefined,
+    years:
+      yearsParam.length > 0
+        ? yearsParam
+            .split(",")
+            .map((v) => (isNaN(parseInt(v)) ? 0 : parseInt(v)))
+        : undefined,
     instruments:
       instrumentsParams.length > 0 ? instrumentsParams.split(",") : undefined,
   };
-  const { data: allCards, error } = trpc.search.useQuery({
-    query: queryParam || undefined,
-    brands: brandsParam.length > 0 ? brandsParam.split(",") : undefined,
-    years: yearsParam.length > 0 ? yearsParam.split(",") : undefined,
-    instruments:
-      instrumentsParams.length > 0 ? instrumentsParams.split(",") : undefined,
+  const { data: allCards, error } = trpc.search.useQuery(processedQuery, {
+    enabled: (isSpecificId?.length || 0) == 0,
   });
   console.log({ allCards, error });
   const instrumentsFilter =
@@ -59,6 +64,13 @@ export default function Explore() {
     return 0;
   };
   const sortedData = (allCards || []).sort(typeSort);
+
+  if (isSpecificId && isSpecificId.length > 0) {
+    const id = isSpecificId[0].replace(idRegex, "$1-$2");
+    const type = typeIdMapping[id.replace(idRegex, "$1").toUpperCase()];
+    const idNum = parseInt(id.replace(idRegex, "$2"));
+    router.push(`/${type}/${idNum}`);
+  }
 
   return (
     <CardWrapper
