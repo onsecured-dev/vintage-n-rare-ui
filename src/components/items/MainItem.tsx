@@ -7,15 +7,18 @@ import classNames from "classnames";
 import { useContractRead } from "wagmi";
 import { InstrumentType } from "@/components/explore/PreviewCard";
 import NFTAbi from "@/data/abi/NFTAbi";
-import { slugToName } from "@/utils/w3String";
 import LikeButton from "@/components/explore/LikeButton";
 import { useQuery } from "@tanstack/react-query";
 import UserAvatar, { LinkAvatar } from "@/components/items/DetailAvatar";
 import { TbGuitarPickFilled } from "react-icons/tb";
-import attributesParse, { AttributeType } from "@/utils/attributesParse";
+import attributesParse, {
+  AttributeType,
+  attributesToDB,
+} from "@/utils/attributesParse";
 import { zeroAddress } from "viem";
 import { ipfsFetchURL } from "@/utils/pinata";
 import Link from "next/link";
+import { trpc } from "@/app/_trpc/client";
 
 export default function MainItemView(props: {
   instrument: InstrumentType;
@@ -52,7 +55,27 @@ export default function MainItemView(props: {
     },
     enabled: !!nftURI && nftURI !== "ipfs://" && !uriError,
   });
-  console.log({ metadata, status });
+
+  const {
+    data: searchInfo,
+    status: searchStatus,
+    refetch: getInfo,
+  } = trpc.checkSearchTableExistence.useQuery({
+    id: id,
+    type: instrument,
+  });
+
+  const {
+    mutate: pushToDB,
+    isError: pushError,
+    status: pushToDBStatus,
+  } = trpc.pushNFTtoDb.useMutation({
+    onSuccess: () => {
+      getInfo();
+    },
+  });
+
+  console.log({ metadata, status, searchInfo });
   if (!metadata && status === "pending")
     return (
       <>
@@ -76,9 +99,8 @@ export default function MainItemView(props: {
     );
   }
 
-  console.log(metadata);
   const attributes = attributesParse(metadata.attributes);
-  console.log(attributes);
+  console.log({ metadata, attributes });
   return (
     <>
       <section className="max-w-7xl px-8 h-full w-full">
@@ -95,12 +117,42 @@ export default function MainItemView(props: {
             )}
           </div>
           <div className="col-span-12 md:col-span-7 pl-0 md:pl-8 pt-8 md:pt-0">
+            {(searchInfo?.id || 0) == 0 && searchStatus !== "loading" ? (
+              <div className="w-full pb-2 flex flex-row items-center justify-between">
+                <div className="py-1 px-2 bg-red-500 text-white rounded-xl w-fit">
+                  Hidden In Explorer!
+                </div>
+                <button
+                  className="btn btn-primary btn-sm"
+                  disabled={pushToDBStatus === "loading"}
+                  onClick={() => {
+                    console.log("add again");
+                    pushToDB({
+                      nftmetadataCID: nftURI,
+                      nftid: id.toString(),
+                      nftType: instrument,
+                      nftData: JSON.stringify(
+                        attributesToDB(metadata.attributes)
+                      ),
+                      dataAsIs: true,
+                    });
+                  }}
+                >
+                  {pushToDBStatus === "loading" ? (
+                    <span className="loading loading-spinner" />
+                  ) : (
+                    "Add to Explorer"
+                  )}
+                </button>
+              </div>
+            ) : null}
             <div className="flex flex-col-reverse sm:flex-row items-center gap-4">
               <LikeButton instrument={metadata.type} id={metadata.id} />
               <h2 className="text-3xl font-semibold capitalize">
                 {metadata.name}
               </h2>
             </div>
+
             {/* TAB LIST */}
             <div className="flex flex-row items-end pt-8 ">
               <div role="tablist" className="tabs tabs-bordered">

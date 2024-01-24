@@ -22,12 +22,13 @@ import {
   createAmpFx,
   createBass,
   createGuitar,
+  getSearchIdByIdAndType,
   latestInputs,
 } from "../util/queries";
 import { initdb } from "@/util/initdb";
 import nodemailer from "nodemailer";
 import { checkPinataSetup, updateFileMetadata, uploadFileToIPFS, uploadJSONToIPFS } from "@/utils/pinata";
-import { getFullName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
+import { getFullName, getTypeIdByName, parseAcousticToJSON, parseAmpToJSON, parseBassToJSON, parseElectricGuitarToJSON } from "@/utils/dataParse";
 import { AcousticGuitarClientFormValues, AmpEffectClientFormValues, BassClientFormValues, ElectricGuitarClientFormValues } from "@/utils/formTypes";
 
 const transporter = nodemailer.createTransport({
@@ -97,22 +98,21 @@ export const appRouter = router({
     }
   ),
 
+  checkSearchTableExistence: publicProcedure.input(z.object({id: z.number().gt(0), type: z.string().min(3)})).query(async (input) => {
+    const actualType = getTypeIdByName(input.input.type);
+    if(actualType == 0){
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid Type" });
+    }
+    if(input.input.id == 0){
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid ID" });
+    }
+    return await getSearchIdByIdAndType(input.input.id, actualType);
+  }),
 
   initDb: publicProcedure.query(async () => {
     await initdb();
     return 200;
   }),
-
-  getGuitars: publicProcedure
-    .input(
-      z.object({
-        year: z.number().lte(new Date().getFullYear()),
-        brand: z.string().min(5),
-      })
-    )
-    .query(async ({ input }) => {
-      console.log("do stuff with input", input);
-    }),
 
   createBass: publicProcedure
     .input(
@@ -224,6 +224,7 @@ export const appRouter = router({
         nftmetadataCID: z.string(), // typeof == `Qm{base58 stuff}`
         nftType: z.string(),
         nftData: z.string(),
+        dataAsIs: z.boolean().optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -235,36 +236,49 @@ export const appRouter = router({
       // GuitarObject, BassObject, AmpFxObject, AcousticObject
       let data 
       switch (input.nftType) {
+        case "electric-guitar":
         case "guitar":
-          data = JSON.parse(input.nftData) as ElectricGuitarClientFormValues;
-          let guitarObj: GuitarObject = {
-            NFTCID: input.nftmetadataCID,
-            NFTId: parseInt(input.nftid),
-            bodyMaterial: data.bodyMaterial,
-            brand: data.brand,
-            case: data.case,
-            containsBrazilianRosewood: data.bzRosewood,
-            electronics: data.electronics,
-            finish: data.finish,
-            finishMaterial: data.finishMaterial,
-            handedness: data.handedness,
-            year: data.year,
-            model: data.model,
-            modificationsRepairs: data.mods,
-            neckFingerboard: data.neckFingerboard,
-            neckProfile: data.neckProfile,
-            neckThickness: data.neckThickness,
-            nutWidth: data.nutWidth,
-            pickupImpedance: data.pickupImpedance,
-            potCodes: data.potCodes,
-            radius: data.radius,
-            serialNumber: data.serial,
-            scaleLength: data.scaleLength,
-            tuners: data.tuners,
-            weight: data.weight,
-          };
+          let guitarObj: GuitarObject;
+          if(input.dataAsIs){
+            guitarObj = {
+              ...JSON.parse(input.nftData),
+              NFTCID: input.nftmetadataCID,
+              NFTId: parseInt(input.nftid),
+            } as GuitarObject;
+          }
+          else{
+            data = JSON.parse(input.nftData) as ElectricGuitarClientFormValues;
+            guitarObj=
+            {
+              NFTCID: input.nftmetadataCID,
+              NFTId: parseInt(input.nftid),
+              bodyMaterial: data.bodyMaterial,
+              brand: data.brand,
+              case: data.case,
+              containsBrazilianRosewood: data.bzRosewood,
+              electronics: data.electronics,
+              finish: data.finish,
+              finishMaterial: data.finishMaterial,
+              handedness: data.handedness,
+              year: data.year,
+              model: data.model,
+              modificationsRepairs: data.mods,
+              neckFingerboard: data.neckFingerboard,
+              neckProfile: data.neckProfile,
+              neckThickness: data.neckThickness,
+              nutWidth: data.nutWidth,
+              pickupImpedance: data.pickupImpedance,
+              potCodes: data.potCodes,
+              radius: data.radius,
+              serialNumber: data.serial,
+              scaleLength: data.scaleLength,
+              tuners: data.tuners,
+              weight: data.weight,
+            };
+          }
           await createGuitar(guitarObj);
           break;
+        case "electric-bass":
         case "bass":
           data = JSON.parse(input.nftData) as BassClientFormValues;
           let bassObj: BassObject = {
@@ -295,6 +309,7 @@ export const appRouter = router({
           console.log({HANDEDNESS: data.handedness})
           await createBass(bassObj);
           break;
+        case "acoustic-guitar":
         case "acoustic":
           data = JSON.parse(input.nftData) as AcousticGuitarClientFormValues;
           let acousticObj: AcousticObject = {
@@ -327,6 +342,7 @@ export const appRouter = router({
           };
           await createAcoustic(acousticObj);
           break;
+        case "amp":
         case "ampfx":
           data = JSON.parse(input.nftData) as AmpEffectClientFormValues;
           let ampfxObj: AmpFxObject = {

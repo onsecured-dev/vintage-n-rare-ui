@@ -29,7 +29,7 @@ model acousticguitar {
   handedness                String
   year                      Int
   model                     String
-  modificationsRepairs      String
+  modificationsRepairs      String   @db.MediumText
   neckDepth                 String
   neckFingerboard           String
   neckProfile               String
@@ -53,7 +53,7 @@ model ampfx {
   brand                Int
   model                String
   serialNumber         String
-  modificationsRepairs String
+  modificationsRepairs String   @db.MediumText
   choke                String
   circuit              String
   finish               String
@@ -88,7 +88,7 @@ model bass {
   finishMaterial       String
   handedness           String
   model                String
-  modificationsRepairs String
+  modificationsRepairs String   @db.MediumText
   neckFingerboard      String
   neckProfile          String
   neckThickness        String
@@ -121,7 +121,7 @@ model electricguitar {
   handedness                String
   year                      Int
   model                     String
-  modificationsRepairs      String
+  modificationsRepairs      String   @db.MediumText
   neckFingerboard           String
   neckProfile               String
   neckThickness             String
