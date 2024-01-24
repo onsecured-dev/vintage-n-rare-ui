@@ -1,5 +1,20 @@
 import { AcousticGuitarFormValues, AmpEffectFormValues, BassFormValues, ElectricGuitarFormValues, GenericFields } from './formTypes';
 
+export function getTypeIdByName(name: string){
+  switch(name){
+    case 'electric-guitar':
+      return 1;
+    case 'acoustic-guitar':
+      return 2;
+    case 'electric-bass':
+      return 3;
+    case 'amp':
+      return 4;
+    default:
+      return 0;
+  }
+}
+
 export function getFullName( data: GenericFields ){
   return `${data.year} ${data.brand} ${data.model}`;
 }

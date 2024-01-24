@@ -7,7 +7,6 @@ import {
   AmpFxObject,
   querySelectFields,
 } from "../util/util";
-import { parse } from "path";
 
 export const createGuitar = async (guitar: GuitarObject) => {
   try {
@@ -554,4 +553,19 @@ export const latestInputs = async () => {
       },
     },
   });
+};
+
+export const getSearchIdByIdAndType = async (id: number, type: number) => {
+  const searcht = await prisma.searchtable.findFirst({
+    select: {
+      id: true,
+    },
+    where: {
+      nftid: id,
+      typeId: type,
+    },
+  });
+
+  console.log({ request: { id, type }, searcht });
+  return searcht;
 };
